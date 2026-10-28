@@ -1,0 +1,61 @@
+# macOS and Windows
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+
+# Local editor state
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+*.swp
+*.swo
+*~
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+
+# Dependencies and virtual environments
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Generated output and caches
+/dist/
+/build/
+/out/
+/target/
+.next/
+.nuxt/
+.output/
+.turbo/
+.cache/
+.parcel-cache/
+*.tsbuildinfo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Test reports and logs
+coverage/
+.coverage
+.coverage.*
+htmlcov/
+playwright-report/
+test-results/
+*.log
+
+# Temporary files
+/tmp/
+/temp/
