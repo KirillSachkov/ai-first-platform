@@ -1,6 +1,6 @@
 ---
 name: setup-matt-pocock-skills
-description: "Configure this repo for the engineering skills: set up its issue tracker, triage label vocabulary, and domain doc layout. Run once before first use of the other engineering skills."
+description: "Configure this repo for the engineering skills: set up its issue tracker, workflow, classification choice, triage labels, and domain docs."
 disable-model-invocation: true
 ---
 
@@ -10,6 +10,8 @@ Scaffold the per-repo configuration that the engineering skills assume:
 
 - **Issue tracker**: where issues live (GitHub by default; local markdown is also supported out of the box)
 - **Triage labels**: the strings used for the five canonical triage roles
+- **Workflow**: project-owned session mode and explicit classification state
+- **Change classification**: shared mechanics enabled only by an accepted project policy
 - **Domain docs**: where `GLOSSARY.md` and ADRs live, and the consumer rules for reading them
 
 This is a prompt-driven skill, not a deterministic script. Explore, present what you found, confirm with the user, then write.
@@ -21,8 +23,10 @@ This is a prompt-driven skill, not a deterministic script. Explore, present what
 Look at the current repo to understand its starting state. Read whatever exists; don't assume:
 
 - `git remote -v` and `.git/config`: is this a GitHub repo? Which one?
-- `AGENTS.md` and `CLAUDE.md` at the repo root: does either exist? Is there already an `## Agent skills` section in either?
-- `GLOSSARY.md` and `GLOSSARY-MAP.md` at the repo root
+- Root `AGENTS.md`, `WORKFLOW.md`, and any legacy `CLAUDE.md`: which rules exist, overlap, or conflict?
+- The installed runtime versions and their native `AGENTS.md` support; verify support before removing a legacy entry point.
+- Session isolation, existing launch commands, and the classification declaration and referenced policy, if present.
+- `GLOSSARY.md` and `GLOSSARY-MAP.md` at the repo root, and the legacy `CONTEXT.md` / `CONTEXT-MAP.md`. If a legacy file exists, offer to `git mv` it to its `GLOSSARY` name and rewrite those names in `docs/agents/domain.md`.
 - `docs/adr/` and any `src/*/docs/adr/` directories
 - `docs/agents/`: does this skill's prior output already exist?
 - `.scratch/`: a sign that a local-markdown issue tracker convention is already in use
@@ -48,6 +52,8 @@ Default posture: these skills were designed for GitHub. If a `git remote` points
 
 Record the choice in `docs/agents/issue-tracker.md`. The GitHub and GitLab templates carry a "PRs as a request surface" flag, defaulted **off**. Leave it off and don't raise it: a user who wants external PRs in the triage queue can flip the flag in the file later.
 
+A GitHub or GitLab tracker needs a reachable repo. When the user picks one and no `git remote` points at that host, get the repo URL from them and wire it up (`git init` if needed, `git remote add origin <url>`) before going further. Done when `gh repo view` / `glab repo view` prints the project from inside this directory; if it can't, stop and tell the user what's missing.
+
 **Section B: Triage label vocabulary.** Skip this section entirely if the `triage` skill isn't installed (exploration told you), since an uninstalled skill needs no labels.
 
 If it is installed, ask exactly one question:
@@ -60,31 +66,47 @@ The defaults are the five canonical roles, each label string equal to its name: 
 
 Offer **multi-context** (a root `GLOSSARY-MAP.md` pointing to per-context `GLOSSARY.md` files) only when exploration found monorepo signals. Then confirm which layout they want.
 
+**Section D: Workflow and change classification.**
+
+Assess this section on every setup, including repeat runs. `WORKFLOW.md` owns `Session mode: main` or
+`Session mode: worktree`, based on the accepted project procedure. Preserve accepted isolation rules;
+ask only when the project needs a new choice. Root `AGENTS.md` routes assigned work to that workflow.
+
+Read [classification setup](classification-setup.md). Report the current state and recommend `enabled`,
+`disabled`, or `deferred` from actual project behavior and agreed design. Reuse an approved state and
+policy without requesting the same decision. An absent declaration requires an explicit project choice;
+setup never silently enables classification or creates new authority.
+
 ### 3. Confirm and edit
 
 Show the user a draft of:
 
-- The `## Agent skills` block to add to whichever of `CLAUDE.md` / `AGENTS.md` is being edited (see step 4 for selection rules)
+- The `## Agent skills` block in canonical root `AGENTS.md`, including its workflow pointer.
+- `WORKFLOW.md` session mode and classification declaration; the risk policy when enabled.
+- Any legacy instruction migration, including unique content and verification of native runtime support.
 - The contents of `docs/agents/issue-tracker.md`, `docs/agents/domain.md`, and `docs/agents/triage-labels.md` (the last only when `triage` is installed)
 
 Let them edit before writing.
 
 ### 4. Write
 
-**Pick the file to edit:**
+**Canonical instructions:**
 
-- If `CLAUDE.md` exists, edit it.
-- Else if `AGENTS.md` exists, edit it.
-- If neither exists, ask the user which one to create; don't pick for them.
+Create or update root `AGENTS.md`. Preserve applicable unique instructions from a legacy `CLAUDE.md`
+by migrating them into `AGENTS.md` or the appropriate project contract. Compare contents before removal.
+After verifying native `AGENTS.md` loading in each supported runtime, remove the legacy bridge.
+If support remains unverified, preserve the required compatibility entry point and report that limit.
 
-Never create `AGENTS.md` when `CLAUDE.md` already exists (or vice versa); always edit the one that's already there.
-
-If an `## Agent skills` block already exists in the chosen file, update its contents in-place rather than appending a duplicate. Don't overwrite user edits to the surrounding sections.
+`WORKFLOW.md` owns the accepted session mode and classification declaration. Migrate duplicate declarations
+there; keep one source for each rule. Root `AGENTS.md` links to the workflow without restating those values.
+Update an existing `## Agent skills` block in place and preserve unrelated content.
 
 The block:
 
 ```markdown
 ## Agent skills
+
+For assigned project work, read `WORKFLOW.md` for session mode, classification, checks, and delivery gates.
 
 ### Issue tracker
 
@@ -101,6 +123,8 @@ The block:
 
 Include the `### Triage labels` sub-block, and write `docs/agents/triage-labels.md`, only when `triage` is installed and Section B ran. When it isn't, both are omitted.
 
+When Section B ran on GitHub or GitLab, create each configured label the tracker lacks (`gh label create` / `glab label create`).
+
 Then write the docs files using the seed templates in this skill folder as a starting point:
 
 - [issue-tracker-github.md](./issue-tracker-github.md): GitHub issue tracker
@@ -111,6 +135,18 @@ Then write the docs files using the seed templates in this skill folder as a sta
 
 For "other" issue trackers, write `docs/agents/issue-tracker.md` from scratch using the user's description.
 
+Write the accepted classification state in `WORKFLOW.md` using [classification setup](classification-setup.md).
+For enabled projects, write or retain the accepted policy and verify that `classify-change` is installed.
+For the accepted implementation route, install `implement`, `implement-spec`, `tdd`, `code-review`,
+and `classify-change` together. Route software/tooling implementation assignments, including an agreed
+result from conversation, to `implement` in `WORKFLOW.md`; it owns task capture and task-graph routing.
+Preserve project checks and gates when replacing an older direct route. Verify both entrypoints are
+model-invocable in Claude and Codex; preserve manual metadata for the other owner-invoked skills.
+An installation change outside the assigned setup remains a recommendation. Remove active
+`orchestrate` dependencies only within an assigned migration.
+
 ### 5. Done
 
-Tell the user the setup is complete and which engineering skills will now read from these files. Mention they can edit `docs/agents/*.md` directly later; re-running this skill is only necessary if they want to switch issue trackers or restart from scratch.
+Report the canonical instruction file, session mode, classification state and reason, policy path when enabled,
+and any unresolved runtime migration. Name the skills that consume these files. Re-running setup reassesses
+the existing configuration; changes to accepted authority or gates still require the owner’s decision.
