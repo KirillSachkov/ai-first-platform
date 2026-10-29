@@ -1,22 +1,27 @@
 # Project skills
 
 The 27 installed skill directories come from [mattpocock/skills](https://github.com/mattpocock/skills),
-with approved shared adaptations from [workspace/pipeline](https://github.com/KirillSachkov/workspace/tree/5cdf9b286b6b3244fd498e6f12ed58f0684a4ee8/pipeline).
+with approved shared adaptations from [workspace/pipeline](https://github.com/KirillSachkov/workspace/tree/490520af93abc3c73ae1a035566a106082dbff3e/pipeline).
 The upstream MIT license remains in `LICENSE.mattpocock`.
 
 ## Source identity
 
-- Workspace: `5cdf9b286b6b3244fd498e6f12ed58f0684a4ee8` (immutable source, 2026-10-29).
+- Workspace: `490520af93abc3c73ae1a035566a106082dbff3e` (immutable source, 2026-10-29).
 - Upstream full sync: `a496f5513d4a4cf889bc48e189e579f4b0bdf6aa`; no selective pins.
 - Previous installation: release `v1.3.1`, commit `24fe0ef7737efae15c87225755e9f6f5965e4888`.
 - Pre-adoption project HEAD: `b6e0dd4eee1bde622eb9e2e50ab9458bb24224a3`.
 - Project policy/integration base: `ecd1c4a4b8c82bf57482e3280b88f7543baec107`.
+- Wizard correction adoption base: `2ff8644b3c1d9d9dd8b95211752084f4b710b756`; prior workspace `5cdf9b286b6b3244fd498e6f12ed58f0684a4ee8`.
 - Assignment: [workspace #26](https://github.com/KirillSachkov/workspace/issues/26).
 
 This existing README is the installation provenance record; there is no separate `PIPELINE.md`.
 The selected set remains unchanged. No project-owned skills were replaced or added.
 The workspace-only `classify-change` and upstream excluded groups remain uninstalled.
 The shared fixes use `glab mr list -F json` (issues use `-O json`) and wizard `${e}` Readline markers.
+The corrected wizard saves single-line dotenv data (never source/eval), preserves apostrophes
+and defaults, rejects unsupported values before mutation, atomically replaces the resolved
+symlink target while preserving modes, and ignores exported `CDPATH` during path resolution.
+Only `wizard/template.sh` changed between the two workspace revisions.
 
 ## Runtime and project contracts
 
@@ -84,5 +89,5 @@ This table is the complete selected set and excludes this README and the unchang
 | `triage` | `40d36a83b7d09c053a12cc647fba2b1dd2af09f5f71551525eed907d90027147` |
 | `wait-what` | `d89d9b5abee5ecf9179e331b329382314312c4cbc7f0ab17571d7e69377e0146` |
 | `wayfinder` | `62a0ab7262d40119da048328a71aeadaeaa21a4049ee9268d14500921bb6e257` |
-| `wizard` | `8837bba1c11a174e7fec8c12c9ae0c605ae522dd53a9cb905ad6b591e248b6a2` |
+| `wizard` | `11cfb2012e7edb66e47e738257db0f06c6db7b76b17e41eee22854b1324459cc` |
 | `writing-for-agents` | `dc53f07d1f662137317789b9b5d74cfcc26dbcfc15038a7faf676c844d8638e8` |
