@@ -1,17 +1,17 @@
-## Project brief
+## Project context
 
-Read `customer-requirements.md` for the minimal project brief, including the customer's goals and initial scope, before planning or implementing project work.
+Before planning or implementing project work, read [customer-requirements.md](customer-requirements.md) for the original brief and [docs/first-version.md](docs/first-version.md) for the agreed delivery scope. Explicit changes in the agreed scope take precedence over the original brief.
 
-## Agent skills
+## Domain and architecture
 
-### Issue tracker
+Before domain design, code exploration, implementation, or review, read [docs/agents/domain.md](docs/agents/domain.md) for the glossary, domain model, and relevant architectural decisions.
 
-Track issues in GitHub Issues. See `docs/agents/issue-tracker.md`.
+## Contribution workflow
 
-### Triage labels
+Before making changes, read [README.md](README.md) for the repository's branch and pull request workflow and available development checks.
 
-Use the standard triage labels. See `docs/agents/triage-labels.md`.
+## Issue tracker
 
-### Domain docs
+Track work in GitHub Issues. Before reading or updating issues, pull requests, or a Wayfinder map, read [docs/agents/issue-tracker.md](docs/agents/issue-tracker.md) for tracker operations.
 
-Use the single-context layout with `DOMAIN.md` for domain terminology. See `docs/agents/domain.md`.
+When triaging issues or changing triage labels, use the mappings in [docs/agents/triage-labels.md](docs/agents/triage-labels.md).
