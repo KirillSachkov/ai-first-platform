@@ -1,0 +1,15 @@
+# Frontend
+
+React SPA organised by Feature-Sliced Design; `pnpm boundaries` (Steiger) checks layers and slice public APIs.
+
+## Placing code
+
+- `src/app/` holds providers, styles and TanStack Router file routes in `src/app/routes/`. A route file only mounts a page from `@/pages/<page>`; loaders and UI live in the page.
+- `pages` are screens, `widgets` are composite blocks, `features` are user actions (invite an employee, connect an agent), `entities` are domain objects (employee, invitation, project, repository, agent-connection), `shared` is domain-free code.
+- Each slice exposes its public API through `index.ts`; import other slices only through it. Layers import only from layers below them.
+- shadcn/ui components go to `src/shared/ui/` (`components.json` points the CLI there).
+
+## API client
+
+- The backend is reached through same-origin `/api` with `$api` from `@/shared/api`; the Vite dev server proxies it to the backend.
+- `src/shared/api/schema.gen.ts` is generated from `apps/api/openapi/openapi.json`. After any backend endpoint change, run `pnpm api:generate` from the repository root and commit both files; `pnpm check` fails while they drift.
