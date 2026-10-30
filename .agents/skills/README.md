@@ -56,6 +56,10 @@ The active project configuration remains in `docs/agents/`; setup templates are 
 - `triage/SKILL.md`
 - `wait-what/SKILL.md`
 
+`pr/SKILL.md` also carries a project report-style adaptation (owner request, 2026-10-30): the
+Language section, self-explanatory diagram rules, and the check and deviation tables. Retain it
+when syncing from upstream or workspace.
+
 ## Installed content identity
 
 SHA-256 per directory: sorted relative file paths, each encoded as UTF-8 followed by NUL,
@@ -76,7 +80,7 @@ This table is the complete selected set and excludes this README and the unchang
 | `implement` | `506278c0e0668f34163bd96558b46b91b7f1b3ff026fb2b34e34f56f17f958b7` |
 | `implement-spec` | `cefadffcdf910bfcea11c64e59f8a48b16b8fe9a3b2043629c4ed9eb2cbe84c5` |
 | `improve-codebase-architecture` | `d02da163afa2ba2422433ba35ecae21659bef7d8bba5d2341ca1fa55573f7b3f` |
-| `pr` | `35738cc3e1b92ae318e251fb4c77d9176d65356d0290e9ebbf16b0a7b748d2bd` |
+| `pr` | `801da86316dc48fedbf7e04217b5f6c56ec8aee855c642e29a924b5e5b8b5b82` |
 | `prototype` | `c4efd5e0f1c302b6225be83e8e42abdb05e13fde900484e4e2240e90b4e83eb6` |
 | `research` | `f2d6425b15cf3100d5c3eb4305a8e817174b8e5fa1fde6e06ad4b61321c32a60` |
 | `retro` | `fdd75be29ab7d6a9062092ccbac214cb57fa047c27b72b9f8b9ec258bbb83c1f` |

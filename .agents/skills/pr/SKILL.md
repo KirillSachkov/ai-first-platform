@@ -21,6 +21,16 @@ Use this template for writing the PR body:
 - **Before:** <screenshot/output/failing test run>
   **After:** <screenshot/output/passing test run>
 
+| Check | Result | What it proves |
+| --- | --- | --- |
+| <command or manual step> | <passed/failed, key output> | <behaviour it confirms> |
+
+## Deviations and open items
+
+| What | Decision | Why |
+| --- | --- | --- |
+| <departure from the task or a deferred item> | <what was done instead> | <reason> |
+
 ## Merge Danger
 
 **Door:** <one-way or two-way>
@@ -32,9 +42,16 @@ Use this template for writing the PR body:
 <optional: potential ramifications of merge>
 ```
 
-## Sections
+## Language
 
-Skip all preambles and keep prose brief. Use the user's domain language from `DOMAIN.md`.
+The body is a report to the owner. Write it in the project's language, in the plain style of the
+owner's communication rules: one idea per sentence, a named actor, concrete facts (numbers, names,
+paths, commands). Each sentence carries a fact the reviewer needs. Use the domain language from `DOMAIN.md`.
+
+Carry facts in structure: a table for checks, deviations or comparisons, a code block for exact
+output, a diagram for flow or structure. Prose only connects them and stays a sentence or two per visual.
+
+## Sections
 
 ### Summary
 
@@ -149,6 +166,17 @@ function expandSkill(command: string): string {
 }
 ```
 
+#### Diagrams read on their own
+
+A reader who has not seen the code must follow every diagram without help:
+
+- Start at the real trigger: the person or system that begins the flow, such as a user opening a page.
+- Name each participant by what it is (browser, Vite dev server, api), with a port or path as a detail.
+- Show every hop that changes the request, such as a proxy rewriting a path, with a note on the change.
+
+Before publishing, read the diagram without the code. Redraw it until you can say who starts the
+flow and what each arrow carries.
+
 #### Guidance
 
 Place each visual next to the short text it supports. Keep only the calls, files, props, states, and boundaries needed to answer the user's current question or the options to resolve the current discussion point.
@@ -162,6 +190,13 @@ Concrete evidence that the change works. Show a before and after.
 Screenshots are S-tier - when the environment is set up for it and the change is visual.
 
 Execution-based evidence is A-tier. Test results, console output. Show the exact test that now fails and passes, using pseudocode.
+
+List every check run on the final head in the table: automated commands and manual steps alike.
+
+### Deviations and open items
+
+Include this section when the change departs from the task or defers part of it. One row per item;
+omit the section when there is none.
 
 ### Merge Danger
 
