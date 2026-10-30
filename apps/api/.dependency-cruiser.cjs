@@ -130,8 +130,8 @@ module.exports = {
       name: "shared-is-technical",
       severity: "error",
       comment:
-        "src/shared/ holds technical code only (database, messaging, config, http, health, request " +
-        "context) " +
+        "src/shared/ holds technical code only (async, database, messaging, config, http, health, " +
+        "request context) " +
         "and must not depend on modules, the edge layer or system endpoints. Domain code belongs " +
         "in its module.",
       from: { path: "^src/shared/" },

@@ -1,7 +1,8 @@
 #!/bin/sh
 # Runs once when the postgres volume is initialized.
 # POSTGRES_USER owns every module schema and applies migrations. The application role only reads
-# and writes data in schemas and tables that POSTGRES_USER creates later.
+# and writes data in schemas and tables that POSTGRES_USER creates later; apps/api/src/migrate.ts
+# revokes it from the migration history tables.
 set -eu
 
 psql -v ON_ERROR_STOP=1 \

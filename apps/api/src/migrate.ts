@@ -27,8 +27,12 @@ try {
     });
     // Default privileges give the application role data access to every table the owner creates;
     // the migration history is not application data.
+    const appRole = sql.identifier(config.appRole);
     await db.execute(
-      sql`REVOKE ALL ON TABLE ${sql.identifier(schema)}.${sql.identifier(table)} FROM ${sql.identifier(config.appRole)}`,
+      sql`REVOKE ALL ON TABLE ${sql.identifier(schema)}.${sql.identifier(table)} FROM ${appRole}`,
+    );
+    await db.execute(
+      sql`REVOKE ALL ON SEQUENCE ${sql.identifier(schema)}.${sql.identifier(`${table}_id_seq`)} FROM ${appRole}`,
     );
     console.log(`Migrated schema ${schema}`);
   }

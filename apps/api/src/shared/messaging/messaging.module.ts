@@ -20,7 +20,7 @@ import { withTimeout } from "../async/with-timeout.js";
 export class RabbitMqConnection implements OnModuleInit, OnApplicationShutdown {
   private readonly logger = new Logger("RabbitMQ");
   private connection: RecoveringChannelModel | undefined;
-  private readinessChannel: Channel | undefined;
+  private healthCheckChannel: Channel | undefined;
   private shuttingDown = false;
 
   constructor(@Inject(CONFIG) private readonly config: Config) {}
@@ -30,7 +30,7 @@ export class RabbitMqConnection implements OnModuleInit, OnApplicationShutdown {
       recovery: {
         waitForConnect: false,
         maxDelay: 5_000,
-        setup: (model: ChannelModel) => this.openReadinessChannel(model),
+        setup: (model: ChannelModel) => this.openHealthCheckChannel(model),
       },
     });
     connection.on("connect", () => this.logger.log("Connected"));
@@ -42,9 +42,9 @@ export class RabbitMqConnection implements OnModuleInit, OnApplicationShutdown {
     this.connection = connection;
   }
 
-  /** The open channel that readiness probes use, or undefined while disconnected. */
-  get channelForReadiness(): Channel | undefined {
-    return this.readinessChannel;
+  /** The open channel that health checks use, or undefined while disconnected. */
+  get channelForHealthCheck(): Channel | undefined {
+    return this.healthCheckChannel;
   }
 
   async onApplicationShutdown(): Promise<void> {
@@ -54,17 +54,21 @@ export class RabbitMqConnection implements OnModuleInit, OnApplicationShutdown {
 
   // Called after every (re)connect. A channel can also close on its own while the connection
   // stays up; reopen it then, since connection recovery would not.
-  private async openReadinessChannel(model: ChannelModel): Promise<void> {
+  private async openHealthCheckChannel(model: ChannelModel): Promise<void> {
     const channel = await model.createChannel();
     channel.on("error", (error: Error) => this.logger.warn(`Channel error: ${error.message}`));
     channel.on("close", () => {
-      if (this.readinessChannel === channel) this.readinessChannel = undefined;
+      if (this.healthCheckChannel === channel) this.healthCheckChannel = undefined;
       if (this.shuttingDown) return;
-      this.openReadinessChannel(model).catch((error: Error) =>
-        this.logger.warn(`Could not reopen channel: ${error.message}`),
-      );
+      // The pause keeps a broker that keeps closing channels from causing a tight loop. Reopening
+      // fails when the whole connection dropped; recovery then reopens the channel in setup.
+      setTimeout(() => {
+        this.openHealthCheckChannel(model).catch((error: Error) =>
+          this.logger.debug(`Channel not reopened: ${error.message}`),
+        );
+      }, 1_000).unref();
     });
-    this.readinessChannel = channel;
+    this.healthCheckChannel = channel;
   }
 }
 
@@ -73,7 +77,7 @@ export class RabbitMqHealth {
   constructor(@Inject(RabbitMqConnection) private readonly connection: RabbitMqConnection) {}
 
   async ping(timeoutMs: number): Promise<void> {
-    const channel = this.connection.channelForReadiness;
+    const channel = this.connection.channelForHealthCheck;
     if (channel === undefined) throw new Error("no open channel");
     // A round trip on the open channel; the built-in exchange always exists.
     await withTimeout(channel.checkExchange("amq.topic"), timeoutMs);

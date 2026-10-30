@@ -55,13 +55,14 @@ function createPool(
       inject: [CONFIG],
       useFactory: (config: Config) => createPool(config, "Database", {}),
     },
-    // Readiness probes get their own single connection with a hard query timeout, so a hanging
-    // database cannot tie up the connections that features use.
+    // Health checks get their own single connection, so a hanging database cannot tie up the
+    // connections that features use. The query timeout is only a backstop that frees the
+    // connection; DependencyChecks applies the timeout that decides the reported status.
     {
       provide: HEALTH_POOL,
       inject: [CONFIG],
       useFactory: (config: Config) =>
-        createPool(config, "DatabaseHealth", { max: 1, queryTimeoutMs: 2_000 }),
+        createPool(config, "DatabaseHealth", { max: 1, queryTimeoutMs: 5_000 }),
     },
     {
       provide: DATABASE,
