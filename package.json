@@ -1,0 +1,31 @@
+{
+  "name": "ai-first-platform",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.16.1",
+  "engines": {
+    "node": ">=26"
+  },
+  "scripts": {
+    "dev": "pnpm --parallel --filter @platform/api --filter @platform/web dev",
+    "infra:up": "docker compose up --detach --wait postgres rabbitmq",
+    "db:generate": "pnpm --filter @platform/api db:generate",
+    "db:migrate": "pnpm --filter @platform/api db:migrate",
+    "api:generate": "pnpm --filter @platform/api openapi:generate && pnpm --filter @platform/web api:generate",
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm boundaries && pnpm api:check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "pnpm --recursive --if-present lint",
+    "typecheck": "pnpm --recursive --if-present typecheck",
+    "boundaries": "pnpm --recursive --if-present boundaries",
+    "api:check": "pnpm --filter @platform/api openapi:check && pnpm --filter @platform/web api:check",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "prettier": "@platform/prettier-config",
+  "devDependencies": {
+    "@platform/prettier-config": "workspace:*",
+    "oxlint": "1.90.0",
+    "prettier": "3.9.10"
+  }
+}
