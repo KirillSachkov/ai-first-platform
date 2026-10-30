@@ -28,12 +28,14 @@ try {
     // Default privileges give the application role data access to every table the owner creates;
     // the migration history is not application data.
     const appRole = sql.identifier(config.appRole);
-    await db.execute(
-      sql`REVOKE ALL ON TABLE ${sql.identifier(schema)}.${sql.identifier(table)} FROM ${appRole}`,
+    const history = sql`${sql.identifier(schema)}.${sql.identifier(table)}`;
+    await db.execute(sql`REVOKE ALL ON TABLE ${history} FROM ${appRole}`);
+    const { rows } = await db.execute<{ sequence: string | null }>(
+      sql`SELECT pg_get_serial_sequence(${`"${schema}"."${table}"`}, 'id') AS sequence`,
     );
-    await db.execute(
-      sql`REVOKE ALL ON SEQUENCE ${sql.identifier(schema)}.${sql.identifier(`${table}_id_seq`)} FROM ${appRole}`,
-    );
+    const sequence = rows[0]?.sequence;
+    if (sequence)
+      await db.execute(sql`REVOKE ALL ON SEQUENCE ${sql.raw(sequence)} FROM ${appRole}`);
     console.log(`Migrated schema ${schema}`);
   }
 } finally {
