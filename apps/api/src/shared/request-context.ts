@@ -7,6 +7,6 @@ export type RequestContext = Readonly<{
   /** Set when an agent connection made the request on the employee's behalf. */
   agentConnectionId: string | null;
   isAdministrator: boolean;
-  /** Projects the employee currently participates in. */
+  /** Projects where the employee currently has a project membership. */
   projectIds: readonly string[];
 }>;

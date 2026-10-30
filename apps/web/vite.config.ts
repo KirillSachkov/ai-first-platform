@@ -27,7 +27,7 @@ export default defineConfig(({ mode }) => {
       // prefix, so no CORS, cookies stay first-party and no API URL is built into the bundle.
       proxy: {
         "/api": {
-          target: env["API_PROXY_TARGET"] ?? "http://127.0.0.1:3100",
+          target: env["API_PROXY_TARGET"] ?? "http://127.0.0.1:3000",
           rewrite: (path) => path.replace(/^\/api/, ""),
         },
       },

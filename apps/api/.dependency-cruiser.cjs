@@ -2,8 +2,8 @@
 // Each rule's comment is the message an agent sees on a violation: it says why and where code goes.
 
 /**
- * Allowed synchronous dependencies between modules: a module may call the `*.contract.ts`
- * of the modules listed for it. The graph must stay acyclic: Employees -> Access -> Projects.
+ * Allowed synchronous dependencies between modules: a module may use the contracts/ of the
+ * modules listed for it. The graph must stay acyclic: Employees -> Access -> Projects.
  * Events (`*.events.ts`) are asynchronous and any module may subscribe to them.
  */
 const syncGraph = {
@@ -20,12 +20,16 @@ const syncGraphRules = Object.entries(syncGraph).map(([module, allowed]) => ({
     `Module '${module}' may synchronously call only: ${allowed.join(", ") || "no other module"}. ` +
     "Change data in another module by publishing an integration event from this module " +
     "(contracts/<module>.events.ts) and handling it there; never add a synchronous call that " +
-    "creates a cycle. Security checks (sign-in, account activity, access) belong to src/edge, " +
-    "which passes the resulting RequestContext to features. Changing the graph needs an ADR.",
+    "creates a cycle. Security checks (sign-in, account activity, access) belong to src/edge " +
+    "(ADR-0004), not to calls between modules. Changing the graph needs an ADR.",
   from: { path: `^src/modules/${module}/` },
   to: {
-    path: "^src/modules/[^/]+/contracts/[^/]+\\.contract\\.ts$",
-    pathNot: [`^src/modules/${module}/`, ...allowed.map((m) => `^src/modules/${m}/`)],
+    path: "^src/modules/[^/]+/contracts/",
+    pathNot: [
+      "^src/modules/[^/]+/contracts/[^/]+\\.events\\.ts$",
+      `^src/modules/${module}/`,
+      ...allowed.map((m) => `^src/modules/${m}/`),
+    ],
   },
 }));
 
@@ -126,7 +130,8 @@ module.exports = {
       name: "shared-is-technical",
       severity: "error",
       comment:
-        "src/shared/ holds technical code only (database, messaging, config, http, request context) " +
+        "src/shared/ holds technical code only (database, messaging, config, http, health, request " +
+        "context) " +
         "and must not depend on modules, the edge layer or system endpoints. Domain code belongs " +
         "in its module.",
       from: { path: "^src/shared/" },

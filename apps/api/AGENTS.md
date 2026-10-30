@@ -1,13 +1,13 @@
 # Backend
 
-Modular monolith: `src/modules/<module>/` per domain module, `src/edge/` for request entry, `src/shared/` for technical code. `pnpm boundaries` enforces the layout; its violation messages say where code belongs. Rationale: ADR-0002–0004 in `docs/adr/`.
+Modular monolith: `src/modules/<module>/` per domain module, `src/edge/` for request entry, `src/system/` for technical endpoints, `src/shared/` for technical code. `pnpm boundaries` enforces the layout; its violation messages say where code belongs. Rationale: ADR-0002–0004 in `docs/adr/`.
 
 ## Adding a feature
 
-- Create `src/modules/<module>/features/<feature>/` with `<feature>.endpoint.ts` (HTTP and zod schemas), `<feature>.handler.ts` and `<feature>.schemas.ts`, then register both classes in `<module>.module.ts`. Follow `src/system/get-system-status/`.
+- Create `src/modules/<module>/features/<feature>/` with `<feature>.endpoint.ts` (route, access, OpenAPI), `<feature>.handler.ts` (logic) and `<feature>.schemas.ts` (zod input and output), then register both classes in `<module>.module.ts`. Follow `src/system/get-system-status/`.
 - **Commands** change state: load and save through domain entities and repository ports declared in `domain/` and implemented in `infrastructure/`. **Queries** may read the module's own tables with Drizzle directly in the slice: reads carry no invariants, so the domain layer adds nothing there.
 - A change that another module must react to is an integration event published by the owning module (outbox → RabbitMQ → inbox), never a synchronous write into another module or a shared transaction. Synchronous calls are for reads and checks along the graph in `.dependency-cruiser.cjs`.
-- Sign-in, account activity and access are checked synchronously in `src/edge/` before the feature runs. An endpoint declares its access with a decorator from `src/shared/http/` and receives `RequestContext` as input.
+- Sign-in, account activity and access are checked synchronously in `src/edge/` before the feature runs. An endpoint declares its access with a decorator from `src/shared/http/`; until a sign-in method exists, only `@PublicEndpoint()` is defined and the edge rejects every other endpoint. Features will take `RequestContext` (`src/shared/request-context.ts`) as input.
 
 ## Gotchas
 

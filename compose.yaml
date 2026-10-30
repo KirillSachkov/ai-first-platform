@@ -22,7 +22,13 @@ services:
     ports:
       - "127.0.0.1:${POSTGRES_HOST_PORT:-5433}:5432"
     healthcheck:
-      test: ["CMD-SHELL", 'pg_isready --username "$$POSTGRES_USER" --dbname "$$POSTGRES_DB"']
+      # Over TCP: while the entrypoint initializes a fresh volume, a temporary server answers on the
+      # Unix socket only, and dependants connecting by hostname would be refused.
+      test:
+        [
+          "CMD-SHELL",
+          'pg_isready --host 127.0.0.1 --username "$$POSTGRES_USER" --dbname "$$POSTGRES_DB"',
+        ]
       interval: 2s
       timeout: 3s
       retries: 30
@@ -52,6 +58,7 @@ services:
     command: ["pnpm", "--filter", "@platform/api", "db:migrate"]
     environment:
       MIGRATIONS_DATABASE_URL: postgres://${POSTGRES_USER:?set in .env}:${POSTGRES_PASSWORD:?set in .env}@postgres:5432/${POSTGRES_DB:?set in .env}
+      POSTGRES_APP_USER: ${POSTGRES_APP_USER:?set in .env}
     depends_on:
       postgres:
         condition: service_healthy

@@ -12,6 +12,7 @@ const configSchema = z.object({
 
 const migrationsConfigSchema = z.object({
   MIGRATIONS_DATABASE_URL: z.url({ protocol: /^postgres(ql)?$/ }),
+  POSTGRES_APP_USER: z.string().min(1),
 });
 
 export type Config = Readonly<{
@@ -36,8 +37,12 @@ export function parseConfig(env: NodeJS.ProcessEnv): Config {
 }
 
 /** Settings of the one-shot migration run (src/migrate.ts), which connects as the schema owner. */
-export function parseMigrationsConfig(env: NodeJS.ProcessEnv): { databaseUrl: string } {
-  return { databaseUrl: parse(migrationsConfigSchema, env).MIGRATIONS_DATABASE_URL };
+export function parseMigrationsConfig(env: NodeJS.ProcessEnv): {
+  databaseUrl: string;
+  appRole: string;
+} {
+  const { MIGRATIONS_DATABASE_URL, POSTGRES_APP_USER } = parse(migrationsConfigSchema, env);
+  return { databaseUrl: MIGRATIONS_DATABASE_URL, appRole: POSTGRES_APP_USER };
 }
 
 function parse<Schema extends z.ZodType>(schema: Schema, env: NodeJS.ProcessEnv): z.infer<Schema> {

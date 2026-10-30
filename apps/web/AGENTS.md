@@ -4,7 +4,7 @@ React SPA organised by Feature-Sliced Design; `pnpm boundaries` (Steiger) checks
 
 ## Placing code
 
-- `src/app/` holds providers, styles and TanStack Router file routes in `src/app/routes/`. A route file only mounts a page from `@/pages/<page>`; loaders and UI live in the page.
+- `src/app/` holds providers, styles and TanStack Router file routes in `src/app/routes/`. A route file only mounts a page from `@/pages/<page>` or redirects; loaders and UI live in the page.
 - `pages` are screens, `widgets` are composite blocks, `features` are user actions (invite an employee, connect an agent), `entities` are domain objects (employee, invitation, project, repository, agent-connection), `shared` is domain-free code.
 - Each slice exposes its public API through `index.ts`; import other slices only through it. Layers import only from layers below them.
 - shadcn/ui components go to `src/shared/ui/` (`components.json` points the CLI there).
