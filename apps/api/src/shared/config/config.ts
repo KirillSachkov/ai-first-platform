@@ -3,15 +3,15 @@ import { z } from "zod";
 // Every backend setting comes from the environment and is validated here once, at startup.
 // Secrets and connection URLs have no defaults: a missing value stops the process.
 const configSchema = z.object({
-  DATABASE_URL: z.url({ protocol: /^postgres(ql)?$/ }),
-  RABBITMQ_URL: z.url({ protocol: /^amqps?$/ }),
+  DATABASE_URL: z.url({ protocol: /^postgres(?:ql)?$/u }),
+  RABBITMQ_URL: z.url({ protocol: /^amqps?$/u }),
   HTTP_HOST: z.string().min(1).default("127.0.0.1"),
   HTTP_PORT: z.coerce.number().int().min(1).max(65_535).default(3000),
   LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"]).default("info"),
 });
 
 const migrationsConfigSchema = z.object({
-  MIGRATIONS_DATABASE_URL: z.url({ protocol: /^postgres(ql)?$/ }),
+  MIGRATIONS_DATABASE_URL: z.url({ protocol: /^postgres(?:ql)?$/u }),
   POSTGRES_APP_USER: z.string().min(1),
 });
 
@@ -47,7 +47,9 @@ export function parseMigrationsConfig(env: NodeJS.ProcessEnv): {
 
 function parse<Schema extends z.ZodType>(schema: Schema, env: NodeJS.ProcessEnv): z.infer<Schema> {
   const result = schema.safeParse(env);
-  if (result.success) return result.data;
+  if (result.success) {
+    return result.data;
+  }
   const problems = result.error.issues.map(
     (issue) => `  - ${issue.path.join(".") || "(root)"}: ${issue.message}`,
   );

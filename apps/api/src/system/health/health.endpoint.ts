@@ -5,11 +5,8 @@ import type { z } from "zod";
 
 import { DependencyChecks } from "../../shared/health/dependency-checks.js";
 import { PublicEndpoint } from "../../shared/http/endpoint-access.js";
-import {
-  livenessResponseSchema,
-  readinessResponseSchema,
-  type ReadinessResponse,
-} from "./health.schemas.js";
+import { livenessResponseSchema, readinessResponseSchema } from "./health.schemas.js";
+import type { ReadinessResponse } from "./health.schemas.js";
 
 @ApiTags("system")
 @Controller("health")

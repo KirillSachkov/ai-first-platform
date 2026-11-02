@@ -3,14 +3,14 @@ import { Inject, Injectable } from "@nestjs/common";
 import { DatabaseHealth } from "../database/database.module.js";
 import { RabbitMqHealth } from "../messaging/messaging.module.js";
 
-export type DependencyStatus = "ok" | "unavailable";
-export type DependencyReport = Readonly<{ status: DependencyStatus; error?: string }>;
+type DependencyStatus = "ok" | "unavailable";
+type DependencyReport = Readonly<{ status: DependencyStatus; error?: string }>;
 export type DependencyReports = Readonly<{
   database: DependencyReport;
   rabbitmq: DependencyReport;
 }>;
 
-const CHECK_TIMEOUT_MS = 2_000;
+const CHECK_TIMEOUT_MS = 2000;
 
 /** Probes every external dependency the backend needs to serve requests. */
 @Injectable()

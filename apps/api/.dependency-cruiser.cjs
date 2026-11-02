@@ -26,9 +26,9 @@ const syncGraphRules = Object.entries(syncGraph).map(([module, allowed]) => ({
   to: {
     path: "^src/modules/[^/]+/contracts/",
     pathNot: [
-      "^src/modules/[^/]+/contracts/[^/]+\\.events\\.ts$",
+      String.raw`^src/modules/[^/]+/contracts/[^/]+\.events\.ts$`,
       `^src/modules/${module}/`,
-      ...allowed.map((m) => `^src/modules/${m}/`),
+      ...allowed.map((other) => `^src/modules/${other}/`),
     ],
   },
 }));
@@ -42,7 +42,7 @@ module.exports = {
         "Only a module's contracts/ is public. Call the module through a token from its " +
         "contracts/<module>.contract.ts, or subscribe to contracts/<module>.events.ts. If the " +
         "contract lacks what you need, add it to the contract and implement it inside the module.",
-      from: { path: "^src/", pathNot: ["^src/modules/", "^src/app\\.module\\.ts$"] },
+      from: { path: "^src/", pathNot: ["^src/modules/", String.raw`^src/app\.module\.ts$`] },
       to: { path: "^src/modules/[^/]+/", pathNot: "^src/modules/[^/]+/contracts/" },
     },
     {
@@ -50,10 +50,13 @@ module.exports = {
       severity: "error",
       comment:
         "src/app.module.ts only registers modules: import a module's <module>.module.ts, nothing deeper.",
-      from: { path: "^src/app\\.module\\.ts$" },
+      from: { path: String.raw`^src/app\.module\.ts$` },
       to: {
         path: "^src/modules/[^/]+/",
-        pathNot: ["^src/modules/[^/]+/contracts/", "^src/modules/[^/]+/[^/]+\\.module\\.ts$"],
+        pathNot: [
+          "^src/modules/[^/]+/contracts/",
+          String.raw`^src/modules/[^/]+/[^/]+\.module\.ts$`,
+        ],
       },
     },
     {

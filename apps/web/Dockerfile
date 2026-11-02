@@ -6,7 +6,7 @@ RUN npm install --global pnpm@12.16.1 && mkdir /pnpm /workspace && chown node:no
 USER node
 WORKDIR /workspace
 
-COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml .pnpmfile.cjs ./
 COPY --chown=node:node packages ./packages
 COPY --chown=node:node apps/web/package.json ./apps/web/package.json
 RUN --mount=type=cache,id=ai-first-platform-pnpm,target=/pnpm/store,uid=1000,gid=1000 \

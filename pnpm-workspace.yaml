@@ -6,13 +6,28 @@ saveExact: true
 strictPeerDependencies: true
 # Fresh releases wait a day before install, which limits exposure to compromised versions.
 minimumReleaseAge: 1440
+# Refuses a version published with weaker provenance than an earlier one, a sign of a hijacked account.
+trustPolicy: no-downgrade
+trustPolicyExclude:
+  # Maintenance releases of an older major, published without provenance after a newer major had it.
+  # Not a takeover: same maintainers, long-standing versions. Remove when the dependants move on.
+  - chokidar@4.0.3 # via steiger
+  - semver@6.3.1 # via @babel/core in @tanstack/router-plugin
 allowBuilds:
   # Telemetry postinstall of @nestjs/swagger; not needed.
   "@scarf/scarf": false
   esbuild: true
 peerDependencyRules:
   allowedVersions:
-    # openapi-typescript 7 declares typescript ^5 but runs on the TypeScript 6 API unchanged.
-    "openapi-typescript>typescript": "6"
-    # Steiger reads tsconfig through tsconfck, which declares typescript ^5 and works with 6.
-    "tsconfck>typescript": "6"
+    # TypeScript 7 ships no classic JavaScript compiler API. .pnpmfile.cjs gives the tools that call it
+    # the TypeScript 6 API from @typescript/typescript6; these peers only see the version.
+    "openapi-typescript>typescript": "7"
+    "tsconfck>typescript": "7"
+    # Optional peer used only by the Swagger CLI plugin, which the project does not use.
+    "@nestjs/swagger>typescript": "7"
+packageExtensions:
+  # The published types import @steiger/toolkit, which the package lists only as a devDependency;
+  # without it steiger.config.ts sees the recommended config as an error type.
+  "@feature-sliced/steiger-plugin@0.8.1":
+    dependencies:
+      "@steiger/toolkit": "0.2.4"
