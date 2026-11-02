@@ -5,5 +5,5 @@
     "emitDecoratorMetadata": true,
     "noEmit": true
   },
-  "include": ["src", "scripts"]
+  "include": ["src", "scripts", "test", "vitest.config.ts"]
 }

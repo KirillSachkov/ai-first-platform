@@ -70,6 +70,8 @@
     "vitest/no-focused-tests": "error",
     "vitest/no-disabled-tests": "error",
     "vitest/expect-expect": "error",
+    // vitest/prefer-describe-function-title asks for `describe(fn, ...)`; the title is then a function.
+    "vitest/valid-title": ["error", { "allowArguments": true }],
 
     // Rule options.
     "typescript/no-extraneous-class": ["error", { "allowWithDecorator": true }],

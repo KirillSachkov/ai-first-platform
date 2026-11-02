@@ -1,5 +1,5 @@
 import { StandardSchemaValidationPipe } from "@nestjs/common";
-import type { NestApplicationOptions } from "@nestjs/common";
+import type { NestApplicationOptions, Type } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { FastifyAdapter } from "@nestjs/platform-fastify";
 import type { NestFastifyApplication } from "@nestjs/platform-fastify";
@@ -10,12 +10,17 @@ import { Logger } from "nestjs-pino";
 import { AppModule } from "./app.module.js";
 import type { Config } from "./shared/config/config.js";
 
+type CreateAppOptions = NestApplicationOptions & {
+  /** Modules to register in addition to the application's own; for tests only. */
+  extraModules?: readonly Type[];
+};
+
 export async function createApp(
   config: Config,
-  options: NestApplicationOptions = {},
+  { extraModules = [], ...options }: CreateAppOptions = {},
 ): Promise<NestFastifyApplication> {
   const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule.forRoot(config),
+    AppModule.forRoot(config, extraModules),
     new FastifyAdapter(),
     { bufferLogs: true, ...options },
   );

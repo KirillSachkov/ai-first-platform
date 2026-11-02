@@ -16,6 +16,11 @@ trustPolicyExclude:
 allowBuilds:
   # Telemetry postinstall of @nestjs/swagger; not needed.
   "@scarf/scarf": false
+  # Optional native speedups of ssh2 (via testcontainers' Docker client); the JavaScript fallback is enough.
+  cpu-features: false
+  ssh2: false
+  # Postinstall of protobufjs (via testcontainers) only prints a version notice.
+  protobufjs: false
   esbuild: true
 peerDependencyRules:
   allowedVersions:
