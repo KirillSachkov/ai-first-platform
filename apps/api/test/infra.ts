@@ -23,6 +23,14 @@ export type TestInfra = Readonly<{
   rabbitmq: RabbitMqServer;
 }>;
 
+/** A connection URL such as `postgres://user:password@host:port/path`, with the credentials encoded. */
+export function connectionUrl(
+  url: Readonly<{ scheme: string; user: Credentials; host: string; port: number; path: string }>,
+): string {
+  const credentials = `${encodeURIComponent(url.user.name)}:${encodeURIComponent(url.user.password)}`;
+  return `${url.scheme}://${credentials}@${url.host}:${url.port}/${url.path}`;
+}
+
 declare module "vitest" {
   interface ProvidedContext {
     infra: TestInfra;

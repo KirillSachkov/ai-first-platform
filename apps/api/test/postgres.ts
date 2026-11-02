@@ -2,12 +2,17 @@
 import { Client } from "pg";
 
 import { moduleMigrations } from "../src/migrate-modules.js";
-import { namePrefix } from "./infra.js";
+import { connectionUrl, namePrefix } from "./infra.js";
 import type { Credentials, PostgresServer } from "./infra.js";
 
 export function postgresUrl(server: PostgresServer, user: Credentials, database: string): string {
-  const credentials = `${encodeURIComponent(user.name)}:${encodeURIComponent(user.password)}`;
-  return `postgres://${credentials}@${server.host}:${server.port}/${database}`;
+  return connectionUrl({
+    scheme: "postgres",
+    user,
+    host: server.host,
+    port: server.port,
+    path: database,
+  });
 }
 
 /** Runs `work` with an owner connection to `database`, by default the maintenance database. */
