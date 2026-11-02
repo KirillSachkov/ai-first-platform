@@ -10,7 +10,9 @@
     "openapi:generate": "tsx scripts/openapi.ts",
     "openapi:check": "tsx scripts/openapi.ts --check",
     "lint": "oxlint",
-    "boundaries": "depcruise src --output-type err-long"
+    "boundaries": "depcruise src --output-type err-long",
+    "test": "vitest run",
+    "test:unit": "vitest run --project unit"
   },
   "dependencies": {
     "@nestjs/common": "12.3.2",
@@ -31,11 +33,15 @@
   "devDependencies": {
     "@platform/oxlint-config": "workspace:*",
     "@platform/typescript-config": "workspace:*",
+    "@testcontainers/postgresql": "12.2.1",
+    "@testcontainers/rabbitmq": "12.2.1",
     "@types/node": "26.6.6",
     "@types/pg": "8.23.1",
     "dependency-cruiser": "18.7.0",
     "drizzle-kit": "0.31.11",
+    "testcontainers": "12.2.1",
     "tsx": "4.23.15",
-    "typescript": "7.0.2"
+    "typescript": "7.0.2",
+    "vitest": "5.0.5"
   }
 }

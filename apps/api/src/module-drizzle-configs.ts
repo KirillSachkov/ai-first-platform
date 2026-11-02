@@ -1,4 +1,8 @@
 import { glob } from "node:fs/promises";
+import path from "node:path";
+
+/** The apps/api directory. Drizzle-kit configs use paths relative to it. */
+export const apiRoot = path.resolve(import.meta.dirname, "..");
 
 /**
  * Paths, relative to apps/api, of every module's drizzle-kit config. Like app.module.ts, this is
@@ -7,8 +11,10 @@ import { glob } from "node:fs/promises";
  */
 export async function moduleDrizzleConfigs(): Promise<string[]> {
   const paths: string[] = [];
-  for await (const path of glob("src/modules/*/infrastructure/drizzle.config.ts")) {
-    paths.push(path);
+  for await (const configPath of glob("src/modules/*/infrastructure/drizzle.config.ts", {
+    cwd: apiRoot,
+  })) {
+    paths.push(configPath);
   }
   return paths.toSorted();
 }

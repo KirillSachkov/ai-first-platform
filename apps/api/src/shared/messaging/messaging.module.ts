@@ -37,6 +37,11 @@ export class RabbitMqConnection implements OnModuleInit, OnApplicationShutdown {
     this.connection = connection;
   }
 
+  /** Resolves once the first connection and its setup are done. Startup does not wait for it. */
+  async connected(): Promise<void> {
+    await this.connection?.waitForConnect();
+  }
+
   /** The open channel that health checks use, or undefined while disconnected. */
   get channelForHealthCheck(): Channel | undefined {
     return this.healthCheckChannel;
