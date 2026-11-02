@@ -102,7 +102,7 @@ Levels:
 
 - **Local loop**: one test file.
 - **Before a PR**: `pnpm verify`.
-- **PR in CI**: static checks and gitleaks on the diff always. `api` and `web` tests, `@smoke` E2E, and audit run only for changed parts (`scripts/changed-parts.mjs`). One required check: `ci-ok`.
+- **PR in CI**: static checks and gitleaks on the diff always. `api` and `web` tests, `@smoke` E2E, `pnpm smoke` (when the smoke script or its lock changes), and audit run only for changed parts (`scripts/changed-parts.mjs`). One required check: `ci-ok`.
 - **`main` in CI**: everything, all E2E, smoke, audit, gitleaks over the whole history.
 
 The `main` branch is protected by a ruleset (#24): changes reach it only through a PR with a green `ci-ok`. No pre-commit hooks exist; commit as often as the loop needs.

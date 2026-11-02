@@ -1,6 +1,7 @@
-// Decides which parts of the repository a change affects: which app tests, E2E, and the dependency
-// audit to run. `pnpm verify` imports it. The CI `changes` job pipes the list of changed files into
-// it and gets `part=true|false` lines for $GITHUB_OUTPUT. Markdown files never trigger tests.
+// Decides which parts of the repository a change affects: which app tests, E2E, smoke, and the
+// dependency audit to run. `pnpm verify` imports it. The CI `changes` job pipes the list of changed
+// files into it and gets `part=true|false` lines for $GITHUB_OUTPUT. Markdown files never trigger
+// tests.
 import { text } from "node:stream/consumers";
 
 const lockfile = "pnpm-lock.yaml";
@@ -26,6 +27,9 @@ const stackFiles = new Set([
   "scripts/with-stack-lock.mjs",
 ]);
 const stackDirectories = ["e2e/", "infra/"];
+// The smoke script and its lock. A pull request runs `pnpm smoke` only when they change; otherwise
+// smoke waits for main.
+const smokeFiles = new Set(["scripts/smoke.mjs", "scripts/with-stack-lock.mjs"]);
 
 export function changedParts(files) {
   const code = files.filter((file) => !file.endsWith(".md"));
@@ -37,7 +41,8 @@ export function changedParts(files) {
   const stack = code.some(
     (file) => stackFiles.has(file) || stackDirectories.some((dir) => file.startsWith(dir)),
   );
-  return { api, web, e2e: api || web || stack, lockfile: code.includes(lockfile) };
+  const smoke = code.some((file) => smokeFiles.has(file));
+  return { api, web, e2e: api || web || stack, smoke, lockfile: code.includes(lockfile) };
 }
 
 if (import.meta.main) {
