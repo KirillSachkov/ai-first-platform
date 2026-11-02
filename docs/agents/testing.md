@@ -34,7 +34,7 @@ Start a new test from the sample of its kind. Specs cite these samples as prior 
 
 Substitute only time, randomness, and external services. Use real PostgreSQL, RabbitMQ, migrations, Drizzle, repositories, and our own modules.
 
-- Time comes through an injectable clock. None exists yet: add a `Clock` token with the first feature whose output depends on time. Unit tests use `vi.useFakeTimers()`.
+- Time comes through the injectable clock: code reads it with `@Inject(CLOCK)` from `src/shared/time/clock.ts`, never with `new Date()`. An integration test fixes it with `useTestApp({ clock })`; sample: [`get-system-status.int.test.ts`](../../apps/api/src/system/get-system-status/get-system-status.int.test.ts). Unit tests use `vi.useFakeTimers()`.
 - External services sit behind module ports; the test supplies the port implementation.
 - Frontend component tests answer HTTP with MSW handlers from `apps/web/test/msw.ts`. `http` is typed by the OpenAPI schema, so a response that breaks the schema does not compile. Use `response.untyped(...)` only for statuses the schema does not declare, with a comment.
 - E2E tests substitute nothing. They create their own data through the public API with values from `uniqueValue()` ([`e2e/support/unique-value.ts`](../../e2e/support/unique-value.ts)) and never reset the database.

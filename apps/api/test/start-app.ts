@@ -8,6 +8,7 @@ import { AppModule } from "../src/app.module.js";
 import { createNestApp } from "../src/nest-app.js";
 import { parseConfig } from "../src/shared/config/config.js";
 import { RabbitMqConnection } from "../src/shared/messaging/messaging.module.js";
+import type { Clock } from "../src/shared/time/clock.js";
 import type { TestInfra } from "./infra.js";
 import { postgresUrl } from "./postgres.js";
 import { amqpUrl } from "./rabbitmq.js";
@@ -16,6 +17,8 @@ import { amqpUrl } from "./rabbitmq.js";
 export type TestAppOptions = Readonly<{
   /** Modules that exist only for the test, for example an endpoint without declared access. */
   extraModules?: readonly Type[];
+  /** Fixes the time the application sees; by default the system clock. */
+  clock?: Clock;
 }>;
 
 // The root of the application under test: the application's own modules plus the test's modules.
@@ -30,7 +33,7 @@ class TestRootModule {}
 export async function startApp(
   { postgres, rabbitmq }: TestInfra,
   name: string,
-  { extraModules = [] }: TestAppOptions,
+  { extraModules = [], clock }: TestAppOptions,
 ): Promise<NestFastifyApplication> {
   const config = parseConfig({
     DATABASE_URL: postgresUrl(postgres, postgres.app, name),
@@ -38,7 +41,7 @@ export async function startApp(
     LOG_LEVEL: "silent",
   });
   const app = await createNestApp(
-    { module: TestRootModule, imports: [AppModule.forRoot(config), ...extraModules] },
+    { module: TestRootModule, imports: [AppModule.forRoot(config, clock), ...extraModules] },
     { logger: false },
   );
   await app.init();
