@@ -17,6 +17,13 @@
         "typescript/consistent-indexed-object-style": "off",
         "unicorn/no-abusive-eslint-disable": "off"
       }
+    },
+    {
+      // Vitest setup files register hooks for every test file, outside any describe block.
+      "files": ["test/*-setup.ts"],
+      "rules": {
+        "vitest/require-top-level-describe": "off"
+      }
     }
   ]
 }

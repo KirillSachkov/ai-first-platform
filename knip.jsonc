@@ -23,7 +23,8 @@
     },
     "apps/web": {
       // Steiger has no knip plugin; `pnpm boundaries` loads this config.
-      "entry": ["steiger.config.ts"],
+      // Type-check files hold compile-time assertions; only `pnpm lint` reads them.
+      "entry": ["steiger.config.ts", "test/*.type-check.ts"],
       "ignoreIssues": {
         // Generators decide what these files export.
         "src/**/*.gen.ts": ["exports", "types"],
