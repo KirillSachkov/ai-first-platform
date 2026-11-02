@@ -109,7 +109,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      # The workflow starts the stack itself; the Playwright global setup does nothing.
+      # The workflow builds and starts the stack itself: the Playwright global setup does nothing,
+      # and `pnpm smoke` reuses the built images instead of building again without the cache.
       E2E_STACK: external
     steps:
       - name: Pull infrastructure images in the background

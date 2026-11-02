@@ -11,9 +11,18 @@ if (!existsSync(".env")) {
 process.loadEnvFile(".env");
 const web = `http://127.0.0.1:${process.env.WEB_HOST_PORT ?? "5173"}`;
 
+// E2E_STACK=external: CI has built the images and started the stack (see global-setup.ts in e2e/).
+// Rebuilding here would ignore the CI layer cache, so smoke only waits for the running stack.
+const up = [
+  "up",
+  ...(process.env.E2E_STACK === "external" ? [] : ["--build"]),
+  "--detach",
+  "--wait",
+];
+
 try {
-  await step("docker compose up --build --wait", () => {
-    compose("up", "--build", "--detach", "--wait");
+  await step(`docker compose ${up.join(" ")}`, () => {
+    compose(...up);
   });
 
   await step("backend is ready through the web proxy", async () => {
