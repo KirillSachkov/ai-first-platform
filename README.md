@@ -40,7 +40,10 @@ pnpm install
 ### Проверки
 
 - `pnpm check` — форматирование, oxlint с проверкой типов и ошибками компилятора TypeScript 7, границы модулей backend (dependency-cruiser) и слоёв frontend (Steiger), расхождение описания OpenAPI и клиента frontend с кодом, неиспользуемые файлы, экспорты и зависимости (knip). Правила oxlint и причины исключений — в `packages/oxlint-config/`.
-- `pnpm smoke` — поднимает стек, проверяет готовность и сквозной запрос через прокси frontend, затем останавливает PostgreSQL и проверяет, что backend сообщает о недоступности и восстанавливается.
+- `pnpm test:e2e` — поднимает стек через Docker Compose и запускает E2E-тесты Playwright из `e2e/` в браузере. Быстрый набор для PR: `pnpm test:e2e --grep @smoke`. Перед первым запуском установите браузер: `pnpm --filter @platform/e2e exec playwright install chromium`.
+- `pnpm smoke` — поднимает стек и проверяет готовность через прокси frontend. Затем останавливает PostgreSQL и проверяет, что backend отвечает 503 и восстанавливается без перезапуска.
+- Обе команды требуют `.env` (`cp .env.example .env`) и оставляют стек запущенным. Остановите его командой `docker compose down`.
+- Все worktree используют один стек Compose. Поэтому `pnpm test:e2e` и `pnpm smoke` берут общую для машины блокировку `/tmp/ai-first-platform-stack.lock`. Вторая команда ждёт, пока первая завершится. Блокировка снимается при выходе, в том числе при ошибке и Ctrl+C. Блокировку завершённого процесса следующий запуск снимает сам.
 - `pnpm api:generate` — обновляет описание OpenAPI и клиент frontend после изменения endpoint-ов.
 - `pnpm db:generate` — создаёт миграции модулей после изменения их схем Drizzle.
 
