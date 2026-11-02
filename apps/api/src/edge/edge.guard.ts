@@ -1,13 +1,9 @@
-import {
-  type CanActivate,
-  type ExecutionContext,
-  Inject,
-  Injectable,
-  UnauthorizedException,
-} from "@nestjs/common";
+import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
+import type { CanActivate, ExecutionContext } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 
-import { ENDPOINT_ACCESS, type EndpointAccess } from "../shared/http/endpoint-access.js";
+import { ENDPOINT_ACCESS } from "../shared/http/endpoint-access.js";
+import type { EndpointAccess } from "../shared/http/endpoint-access.js";
 
 /**
  * Edge layer (ADR-0004). For a protected endpoint it will, in order: authenticate the session
@@ -25,7 +21,9 @@ export class EdgeGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    if (access === "public") return true;
+    if (access === "public") {
+      return true;
+    }
     throw new UnauthorizedException();
   }
 }

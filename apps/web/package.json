@@ -8,8 +8,7 @@
     "build": "vite build",
     "api:generate": "openapi-typescript ../api/openapi/openapi.json --output src/shared/api/schema.gen.ts",
     "api:check": "openapi-typescript ../api/openapi/openapi.json --output src/shared/api/schema.gen.ts --check",
-    "lint": "oxlint --deny-warnings --report-unused-disable-directives",
-    "typecheck": "tsc --noEmit",
+    "lint": "oxlint",
     "boundaries": "steiger ./src"
   },
   "dependencies": {
@@ -35,7 +34,7 @@
     "openapi-typescript": "7.13.0",
     "steiger": "0.8.1",
     "tailwindcss": "4.3.3",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "vite": "8.3.5"
   }
 }

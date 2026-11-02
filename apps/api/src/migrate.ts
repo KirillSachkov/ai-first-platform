@@ -3,9 +3,9 @@
 import { sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
-import type { Config as DrizzleKitConfig } from "drizzle-kit";
 import { pathToFileURL } from "node:url";
 import { Pool } from "pg";
+import { z } from "zod";
 
 import { moduleDrizzleConfigs } from "./module-drizzle-configs.js";
 import { parseMigrationsConfig } from "./shared/config/config.js";
@@ -14,11 +14,21 @@ const config = parseMigrationsConfig(process.env);
 const pool = new Pool({ connectionString: config.databaseUrl });
 const db = drizzle({ client: pool });
 
+// The parts of a module's drizzle-kit config that the migration run needs.
+const drizzleConfigModuleSchema = z.object({
+  default: z.object({
+    out: z.string(),
+    migrations: z.object({ schema: z.string(), table: z.string() }),
+  }),
+});
+
 try {
+  // Modules migrate one at a time, in a stable order, so a failure names the module and stops the run.
+  /* oxlint-disable eslint/no-await-in-loop -- sequential by design, see above */
   for (const configPath of await moduleDrizzleConfigs()) {
-    const { default: kit } = (await import(pathToFileURL(configPath).href)) as {
-      default: DrizzleKitConfig & { out: string; migrations: { schema: string; table: string } };
-    };
+    const { default: kit } = drizzleConfigModuleSchema.parse(
+      await import(pathToFileURL(configPath).href),
+    );
     const { schema, table } = kit.migrations;
     await migrate(db, {
       migrationsFolder: kit.out,
@@ -34,10 +44,12 @@ try {
       sql`SELECT pg_get_serial_sequence(${`"${schema}"."${table}"`}, 'id') AS sequence`,
     );
     const sequence = rows[0]?.sequence;
-    if (sequence)
+    if (typeof sequence === "string" && sequence !== "") {
       await db.execute(sql`REVOKE ALL ON SEQUENCE ${sql.raw(sequence)} FROM ${appRole}`);
+    }
     console.log(`Migrated schema ${schema}`);
   }
+  /* oxlint-enable eslint/no-await-in-loop */
 } finally {
   await pool.end();
 }

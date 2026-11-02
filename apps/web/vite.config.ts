@@ -20,15 +20,15 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: { tsconfigPaths: true },
     server: {
-      host: env["WEB_HOST"] ?? "127.0.0.1",
+      host: env.WEB_HOST ?? "127.0.0.1",
       port: 5173,
       strictPort: true,
       // The browser calls same-origin /api; the dev server forwards it to the backend without the
       // prefix, so no CORS, cookies stay first-party and no API URL is built into the bundle.
       proxy: {
         "/api": {
-          target: env["API_PROXY_TARGET"] ?? "http://127.0.0.1:3000",
-          rewrite: (path) => path.replace(/^\/api/, ""),
+          target: env.API_PROXY_TARGET ?? "http://127.0.0.1:3000",
+          rewrite: (path) => path.replace(/^\/api/u, ""),
         },
       },
     },

@@ -1,7 +1,10 @@
-import { type NestApplicationOptions, StandardSchemaValidationPipe } from "@nestjs/common";
+import { StandardSchemaValidationPipe } from "@nestjs/common";
+import type { NestApplicationOptions } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
-import { FastifyAdapter, type NestFastifyApplication } from "@nestjs/platform-fastify";
-import { DocumentBuilder, type OpenAPIObject, SwaggerModule } from "@nestjs/swagger";
+import { FastifyAdapter } from "@nestjs/platform-fastify";
+import type { NestFastifyApplication } from "@nestjs/platform-fastify";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import type { OpenAPIObject } from "@nestjs/swagger";
 import { Logger } from "nestjs-pino";
 
 import { AppModule } from "./app.module.js";
@@ -16,7 +19,9 @@ export async function createApp(
     new FastifyAdapter(),
     { bufferLogs: true, ...options },
   );
-  if (options.logger !== false) app.useLogger(app.get(Logger));
+  if (options.logger !== false) {
+    app.useLogger(app.get(Logger));
+  }
   // Validates every @Body/@Query/@Param that declares a zod `schema`.
   app.useGlobalPipes(new StandardSchemaValidationPipe());
   app.enableShutdownHooks();

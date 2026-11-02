@@ -39,7 +39,7 @@ pnpm install
 
 ### Проверки
 
-- `pnpm check` — форматирование, oxlint, проверка типов, границы модулей backend (dependency-cruiser) и слоёв frontend (Steiger), расхождение описания OpenAPI и клиента frontend с кодом.
+- `pnpm check` — форматирование, oxlint с проверкой типов и ошибками компилятора TypeScript 7, границы модулей backend (dependency-cruiser) и слоёв frontend (Steiger), расхождение описания OpenAPI и клиента frontend с кодом, неиспользуемые файлы, экспорты и зависимости (knip). Правила oxlint и причины исключений — в `packages/oxlint-config/`.
 - `pnpm smoke` — поднимает стек, проверяет готовность и сквозной запрос через прокси frontend, затем останавливает PostgreSQL и проверяет, что backend сообщает о недоступности и восстанавливается.
 - `pnpm api:generate` — обновляет описание OpenAPI и клиент frontend после изменения endpoint-ов.
 - `pnpm db:generate` — создаёт миграции модулей после изменения их схем Drizzle.

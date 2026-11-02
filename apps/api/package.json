@@ -9,8 +9,7 @@
     "db:migrate": "tsx --env-file-if-exists=../../.env src/migrate.ts",
     "openapi:generate": "tsx scripts/openapi.ts",
     "openapi:check": "tsx scripts/openapi.ts --check",
-    "lint": "oxlint --deny-warnings --report-unused-disable-directives",
-    "typecheck": "tsc --noEmit",
+    "lint": "oxlint",
     "boundaries": "depcruise src --output-type err-long"
   },
   "dependencies": {
@@ -37,6 +36,6 @@
     "dependency-cruiser": "18.7.0",
     "drizzle-kit": "0.31.11",
     "tsx": "4.23.15",
-    "typescript": "6.0.3"
+    "typescript": "7.0.2"
   }
 }

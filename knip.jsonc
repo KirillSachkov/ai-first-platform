@@ -1,0 +1,29 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
+  "workspaces": {
+    "apps/api": {
+      "entry": [
+        // Module contracts are the public API other modules call (ADR-0003); they exist before their first caller.
+        "src/modules/*/contracts/*.ts",
+        // Features will take RequestContext as input (apps/api/AGENTS.md); no feature exists yet.
+        "src/shared/request-context.ts",
+      ],
+      "drizzle": {
+        // Each module keeps its own drizzle-kit config (ADR-0003); src/migrate.ts and scripts/db-generate.ts load them.
+        "config": ["src/modules/*/infrastructure/drizzle.config.ts"],
+      },
+    },
+    "apps/web": {
+      // Steiger has no knip plugin; `pnpm boundaries` loads this config.
+      "entry": ["steiger.config.ts"],
+      "ignoreIssues": {
+        // Generators decide what these files export.
+        "src/**/*.gen.ts": ["exports", "types"],
+      },
+    },
+    "packages/oxlint-config": {
+      // The shared oxlint config loads it through jsPlugins.
+      "entry": ["plugins/*.mjs"],
+    },
+  },
+}

@@ -3,5 +3,5 @@ export const PROJECTS = Symbol("ProjectsContract");
 
 export interface ProjectsContract {
   /** True when every given project exists. */
-  projectsExist(projectIds: readonly string[]): Promise<boolean>;
+  projectsExist: (projectIds: readonly string[]) => Promise<boolean>;
 }

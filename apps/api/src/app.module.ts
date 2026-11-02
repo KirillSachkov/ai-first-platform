@@ -1,4 +1,5 @@
-import { type DynamicModule, Module } from "@nestjs/common";
+import { Module } from "@nestjs/common";
+import type { DynamicModule } from "@nestjs/common";
 import { LoggerModule } from "nestjs-pino";
 
 import { EdgeModule } from "./edge/edge.module.js";
@@ -6,7 +7,8 @@ import { AccessModule } from "./modules/access/access.module.js";
 import { AgentConnectionsModule } from "./modules/agent-connections/agent-connections.module.js";
 import { EmployeesModule } from "./modules/employees/employees.module.js";
 import { ProjectsModule } from "./modules/projects/projects.module.js";
-import { CONFIG, type Config } from "./shared/config/config.js";
+import { CONFIG } from "./shared/config/config.js";
+import type { Config } from "./shared/config/config.js";
 import { ConfigModule } from "./shared/config/config.module.js";
 import { DatabaseModule } from "./shared/database/database.module.js";
 import { MessagingModule } from "./shared/messaging/messaging.module.js";
