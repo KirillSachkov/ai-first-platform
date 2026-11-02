@@ -1,0 +1,7 @@
+{
+  "extends": "@platform/typescript-config/node.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": ["tests", "support", "playwright.config.ts", "global-setup.ts"]
+}

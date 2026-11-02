@@ -22,7 +22,8 @@
     "api:check": "pnpm --filter @platform/api openapi:check && pnpm --filter @platform/web api:check",
     "test": "pnpm --recursive --if-present test",
     "test:unit": "pnpm --recursive --if-present test:unit",
-    "smoke": "node scripts/smoke.mjs"
+    "test:e2e": "node scripts/with-stack-lock.mjs pnpm --filter @platform/e2e exec playwright test",
+    "smoke": "node scripts/with-stack-lock.mjs node scripts/smoke.mjs"
   },
   "prettier": "@platform/prettier-config",
   "devDependencies": {

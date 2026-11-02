@@ -1,6 +1,7 @@
-// Smoke check of the local stack: starts it with Docker Compose, checks readiness and the
-// end-to-end request through the web proxy, then stops PostgreSQL to check that the backend
-// reports it as unavailable and recovers without a restart. Leaves the stack running.
+// Smoke check of the local stack: starts it with Docker Compose, checks readiness through the
+// web proxy, then stops PostgreSQL to check that the backend reports it as unavailable and
+// recovers without a restart. Leaves the stack running. Page checks live in the Playwright E2E
+// tests (e2e/). `pnpm smoke` runs it under the stack lock (with-stack-lock.mjs).
 import { execFileSync } from "node:child_process";
 import { existsSync } from "node:fs";
 
@@ -15,23 +16,10 @@ try {
     compose("up", "--build", "--detach", "--wait");
   });
 
-  await step("web serves the SPA", async () => {
-    const response = await fetch(`${web}/`);
-    expect(response.ok, `GET / returned ${response.status}`);
-    expect((await response.text()).includes('<div id="root">'), "GET / did not return index.html");
-  });
-
   await step("backend is ready through the web proxy", async () => {
     const body = await getJson("/api/health/ready", 200);
     expect(body.dependencies.database.status === "ok", "database is not ok");
     expect(body.dependencies.rabbitmq.status === "ok", "rabbitmq is not ok");
-  });
-
-  await step("system status answers through the web proxy", async () => {
-    const body = await getJson("/api/system/status", 200);
-    expect(body.service === "api", "unexpected service name");
-    expect(body.dependencies.database === "ok", "database is not ok");
-    expect(body.dependencies.rabbitmq === "ok", "rabbitmq is not ok");
   });
 
   try {
