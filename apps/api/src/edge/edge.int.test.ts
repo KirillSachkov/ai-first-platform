@@ -2,6 +2,7 @@ import { Controller, Get, Module } from "@nestjs/common";
 import { describe, expect, it } from "vitest";
 
 import { useTestApp } from "../../test/test-app.js";
+import { livenessResponseSchema } from "../system/health/health.schemas.js";
 
 // An endpoint that declares no access, registered only for this test (ADR-0004).
 @Controller("edge-test")
@@ -28,6 +29,6 @@ describe("edge access check", () => {
     const response = await api.inject({ method: "GET", url: "/health/live" });
 
     expect(response.statusCode).toBe(200);
-    expect(response.json()).toStrictEqual({ status: "ok" });
+    expect(livenessResponseSchema.parse(response.json())).toStrictEqual({ status: "ok" });
   });
 });

@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import type { DynamicModule, Type } from "@nestjs/common";
+import type { DynamicModule } from "@nestjs/common";
 import { LoggerModule } from "nestjs-pino";
 
 import { EdgeModule } from "./edge/edge.module.js";
@@ -12,16 +12,20 @@ import type { Config } from "./shared/config/config.js";
 import { ConfigModule } from "./shared/config/config.module.js";
 import { DatabaseModule } from "./shared/database/database.module.js";
 import { MessagingModule } from "./shared/messaging/messaging.module.js";
+import { systemClock } from "./shared/time/clock.js";
+import type { Clock } from "./shared/time/clock.js";
+import { ClockModule } from "./shared/time/clock.module.js";
 import { SystemModule } from "./system/system.module.js";
 
 @Module({})
 export class AppModule {
-  /** `extraModules` lets a test register a module the application does not have. */
-  static forRoot(config: Config, extraModules: readonly Type[] = []): DynamicModule {
+  /** `clock` is the system clock; an integration test passes a fixed one (test/start-app.ts). */
+  static forRoot(config: Config, clock: Clock = systemClock): DynamicModule {
     return {
       module: AppModule,
       imports: [
         ConfigModule.forRoot(config),
+        ClockModule.forRoot(clock),
         LoggerModule.forRootAsync({
           inject: [CONFIG],
           useFactory: (appConfig: Config) => ({
@@ -40,7 +44,6 @@ export class AppModule {
         ProjectsModule,
         AgentConnectionsModule,
         AccessModule,
-        ...extraModules,
       ],
     };
   }

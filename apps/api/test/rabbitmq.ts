@@ -1,7 +1,7 @@
 // Test vhosts on the shared RabbitMQ container, managed through its HTTP management API.
 import { z } from "zod";
 
-import { namePrefix } from "./infra.js";
+import { connectionUrl, namePrefix } from "./infra.js";
 import type { RabbitMqServer } from "./infra.js";
 
 type ManagementRequest = Readonly<{
@@ -55,7 +55,12 @@ export async function deleteVhosts(
 }
 
 export function amqpUrl(server: RabbitMqServer, vhost: string): string {
-  const { name, password } = server.user;
-  const credentials = `${encodeURIComponent(name)}:${encodeURIComponent(password)}`;
-  return `amqp://${credentials}@${server.host}:${server.amqpPort}/${encodeURIComponent(vhost)}`;
+  const { user, host, amqpPort } = server;
+  return connectionUrl({
+    scheme: "amqp",
+    user,
+    host,
+    port: amqpPort,
+    path: encodeURIComponent(vhost),
+  });
 }

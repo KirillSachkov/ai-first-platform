@@ -1,6 +1,7 @@
 # One workflow, two levels (issue #19, section "CI").
 # Pull request: static checks and gitleaks on the diff always; the tests of the changed parts only
-# (scripts/changed-parts.mjs decides); E2E only the @smoke set.
+# (scripts/changed-parts.mjs decides); E2E only the @smoke set, and `pnpm smoke` only when the smoke
+# script changes.
 # Push to main and manual runs: everything, gitleaks over the whole history; a failure on main opens
 # or comments a `bug` issue. Branch protection requires one check, `ci-ok`.
 name: CI
@@ -37,6 +38,7 @@ jobs:
       api: ${{ steps.parts.outputs.api }}
       web: ${{ steps.parts.outputs.web }}
       e2e: ${{ steps.parts.outputs.e2e }}
+      smoke: ${{ steps.parts.outputs.smoke }}
       lockfile: ${{ steps.parts.outputs.lockfile }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -51,7 +53,7 @@ jobs:
           HEAD: ${{ github.event.pull_request.head.sha }}
         run: |
           if [ "$FULL" = true ]; then
-            printf 'api=true\nweb=true\ne2e=true\nlockfile=true\n' | tee -a "$GITHUB_OUTPUT"
+            printf 'api=true\nweb=true\ne2e=true\nsmoke=true\nlockfile=true\n' | tee -a "$GITHUB_OUTPUT"
           else
             git diff --name-only "$BASE...$HEAD" | node scripts/changed-parts.mjs | tee -a "$GITHUB_OUTPUT"
           fi
@@ -109,7 +111,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      # The workflow starts the stack itself; the Playwright global setup does nothing.
+      # The workflow builds and starts the stack itself: the Playwright global setup does nothing,
+      # and `pnpm smoke` reuses the built images instead of building again without the cache.
       E2E_STACK: external
     steps:
       - name: Pull infrastructure images in the background
@@ -143,7 +146,8 @@ jobs:
         run: pnpm test:e2e --grep @smoke
       - if: env.FULL == 'true'
         run: pnpm test:e2e
-      - if: env.FULL == 'true'
+      # On a pull request smoke runs only when the smoke script or its lock changes.
+      - if: needs.changes.outputs.smoke == 'true'
         run: pnpm smoke
       - if: failure()
         run: docker compose logs --no-color > compose.log

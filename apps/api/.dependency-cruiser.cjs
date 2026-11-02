@@ -134,11 +134,29 @@ module.exports = {
       severity: "error",
       comment:
         "src/shared/ holds technical code only (async, database, messaging, config, http, health, " +
-        "request context) " +
+        "time, request context) " +
         "and must not depend on modules, the edge layer or system endpoints. Domain code belongs " +
         "in its module.",
       from: { path: "^src/shared/" },
       to: { path: "^src/(modules|edge|system)/" },
+    },
+    {
+      name: "app-built-only-in-app-ts",
+      severity: "error",
+      comment:
+        "Only src/app.ts builds the application from AppModule with createNestApp; call createApp " +
+        "from src/app.ts. Only tests register additional modules, in test/start-app.ts.",
+      from: { path: "^src/", pathNot: String.raw`^src/app\.ts$` },
+      to: { path: String.raw`^src/(app\.module|nest-app)\.ts$` },
+    },
+    {
+      name: "production-code-does-not-import-tests",
+      severity: "error",
+      comment:
+        "test/ holds test infrastructure. Production code must not import it; move what " +
+        "production needs into src/.",
+      from: { path: "^src/", pathNot: String.raw`\.test\.ts$` },
+      to: { path: "^test/" },
     },
     {
       name: "no-circular",

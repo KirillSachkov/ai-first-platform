@@ -3,7 +3,12 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 
-const lockPath = path.join(tmpdir(), "ai-first-platform-testcontainers.lock");
+// A fixed /tmp path, not os.tmpdir(): sandboxed agent sessions may get their own TMPDIR. The same
+// location as the Compose stack lock in scripts/with-stack-lock.mjs.
+const lockPath = path.join(
+  process.platform === "win32" ? tmpdir() : "/tmp",
+  "ai-first-platform-testcontainers.lock",
+);
 // A process that died while holding the lock leaves it behind; nobody holds it this long.
 const STALE_AFTER_MS = 5 * 60 * 1000;
 

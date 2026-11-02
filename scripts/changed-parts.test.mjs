@@ -3,7 +3,7 @@ import { describe, it } from "node:test";
 
 import { changedParts } from "./changed-parts.mjs";
 
-const nothing = { api: false, web: false, e2e: false, lockfile: false };
+const nothing = { api: false, web: false, e2e: false, smoke: false, lockfile: false };
 
 describe("changedParts", () => {
   it("runs no tests when only documentation changes", () => {
@@ -27,6 +27,7 @@ describe("changedParts", () => {
 
   it("runs everything and the audit when the lockfile changes", () => {
     assert.deepEqual(changedParts(["pnpm-lock.yaml"]), {
+      ...nothing,
       api: true,
       web: true,
       e2e: true,
@@ -55,11 +56,16 @@ describe("changedParts", () => {
     ".env.example",
     "e2e/tests/system-status.test.ts",
     "infra/postgres/create-app-role.sh",
-    "scripts/smoke.mjs",
-    "scripts/with-stack-lock.mjs",
   ]) {
     it(`runs only E2E when stack file ${file} changes`, () => {
       assert.deepEqual(changedParts([file]), { ...nothing, e2e: true });
+    });
+  }
+
+  // On a pull request the smoke script runs only when it changes; otherwise it waits for main.
+  for (const file of ["scripts/smoke.mjs", "scripts/with-stack-lock.mjs"]) {
+    it(`runs E2E and the smoke script when ${file} changes`, () => {
+      assert.deepEqual(changedParts([file]), { ...nothing, e2e: true, smoke: true });
     });
   }
 });
