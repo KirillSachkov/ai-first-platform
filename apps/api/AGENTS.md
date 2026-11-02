@@ -9,6 +9,14 @@ Modular monolith: `src/modules/<module>/` per domain module, `src/edge/` for req
 - A change that another module must react to is an integration event published by the owning module (outbox → RabbitMQ → inbox), never a synchronous write into another module or a shared transaction. Synchronous calls are for reads and checks along the graph in `.dependency-cruiser.cjs`.
 - Sign-in, account activity and access are checked synchronously in `src/edge/` before the feature runs. An endpoint declares its access with a decorator from `src/shared/http/`; until a sign-in method exists, only `@PublicEndpoint()` is defined and the edge rejects every other endpoint. Features will take `RequestContext` (`src/shared/request-context.ts`) as input.
 
+## Tests
+
+Rules and test kinds: `docs/agents/testing.md`.
+
+- Unit tests are `*.test.ts` next to the code and need no Docker. Sample: `src/shared/async/with-timeout.test.ts`.
+- Integration tests are `*.int.test.ts` next to the endpoint. Call `useTestApp()` from `test/test-app.ts`, send requests with `api.inject(...)`, and parse the body with the slice's response schema. Sample: `src/system/get-system-status/get-system-status.int.test.ts`; test-only modules: `src/edge/edge.int.test.ts`.
+- Shared test infrastructure (containers, database copies, vhosts) lives in `test/`.
+
 ## Gotchas
 
 - Inject every dependency with `@Inject(TOKEN_OR_CLASS)`. `tsx` runs the dev server without decorator metadata, so a constructor parameter without `@Inject` silently receives no value.
