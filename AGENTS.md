@@ -6,6 +6,10 @@ Before planning or implementing project work, read [customer-requirements.md](cu
 
 Before domain design, code exploration, implementation, or review, read [docs/agents/domain.md](docs/agents/domain.md) for the glossary, domain model, and relevant architectural decisions.
 
+## Testing
+
+Before writing or changing tests, writing a spec's Testing Decisions, or reviewing changes, read [docs/agents/testing.md](docs/agents/testing.md) for test kinds and seams, substitutes, when a test is required, commands, and samples.
+
 ## Contribution workflow
 
 Before making changes, read [README.md](README.md) for the repository's branch and pull request workflow and available development checks.
