@@ -141,6 +141,24 @@ module.exports = {
       to: { path: "^src/(modules|edge|system)/" },
     },
     {
+      name: "app-built-only-in-app-ts",
+      severity: "error",
+      comment:
+        "Only src/app.ts builds the application from AppModule with createNestApp; call createApp " +
+        "from src/app.ts. Only tests register additional modules, in test/start-app.ts.",
+      from: { path: "^src/", pathNot: String.raw`^src/app\.ts$` },
+      to: { path: String.raw`^src/(app\.module|nest-app)\.ts$` },
+    },
+    {
+      name: "production-code-does-not-import-tests",
+      severity: "error",
+      comment:
+        "test/ holds test infrastructure. Production code must not import it; move what " +
+        "production needs into src/.",
+      from: { path: "^src/", pathNot: String.raw`\.test\.ts$` },
+      to: { path: "^test/" },
+    },
+    {
       name: "no-circular",
       severity: "error",
       comment: "Circular imports break initialization order. Extract the shared part or invert it.",

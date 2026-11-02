@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import type { DynamicModule, Type } from "@nestjs/common";
+import type { DynamicModule } from "@nestjs/common";
 import { LoggerModule } from "nestjs-pino";
 
 import { EdgeModule } from "./edge/edge.module.js";
@@ -16,8 +16,7 @@ import { SystemModule } from "./system/system.module.js";
 
 @Module({})
 export class AppModule {
-  /** `extraModules` lets a test register a module the application does not have. */
-  static forRoot(config: Config, extraModules: readonly Type[] = []): DynamicModule {
+  static forRoot(config: Config): DynamicModule {
     return {
       module: AppModule,
       imports: [
@@ -40,7 +39,6 @@ export class AppModule {
         ProjectsModule,
         AgentConnectionsModule,
         AccessModule,
-        ...extraModules,
       ],
     };
   }
