@@ -23,7 +23,10 @@
     "test:unit": "pnpm --recursive --if-present run test:unit",
     "test": "pnpm --recursive --if-present run test",
     "test:e2e": "node scripts/with-stack-lock.mjs pnpm --filter @platform/e2e exec playwright test",
-    "smoke": "node scripts/with-stack-lock.mjs node scripts/smoke.mjs"
+    "smoke": "node scripts/with-stack-lock.mjs node scripts/smoke.mjs",
+    "test:scripts": "node --test \"scripts/**/*.test.mjs\"",
+    "verify": "node scripts/verify.mjs",
+    "verify:full": "node scripts/verify.mjs --full"
   },
   "prettier": "@platform/prettier-config",
   "devDependencies": {
