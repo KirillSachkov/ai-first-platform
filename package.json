@@ -13,19 +13,28 @@
     "db:generate": "pnpm --filter @platform/api db:generate",
     "db:migrate": "pnpm --filter @platform/api db:migrate",
     "api:generate": "pnpm --filter @platform/api openapi:generate && pnpm --filter @platform/web api:generate",
-    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm boundaries && pnpm api:check",
+    "check": "pnpm format:check && pnpm lint && pnpm boundaries && pnpm api:check && pnpm knip",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "pnpm --recursive --if-present lint",
-    "typecheck": "pnpm --recursive --if-present typecheck",
     "boundaries": "pnpm --recursive --if-present boundaries",
+    "knip": "knip",
     "api:check": "pnpm --filter @platform/api openapi:check && pnpm --filter @platform/web api:check",
-    "smoke": "node scripts/smoke.mjs"
+    "test:unit": "pnpm --recursive --if-present run test:unit",
+    "test": "pnpm --recursive --if-present run test",
+    "test:e2e": "node scripts/with-stack-lock.mjs pnpm --filter @platform/e2e exec playwright test",
+    "smoke": "node scripts/with-stack-lock.mjs node scripts/smoke.mjs",
+    "test:scripts": "node --test \"scripts/**/*.test.mjs\"",
+    "verify": "node scripts/verify.mjs",
+    "verify:full": "node scripts/verify.mjs --full",
+    "github:protect-main": "node scripts/github/protect-main.mjs"
   },
   "prettier": "@platform/prettier-config",
   "devDependencies": {
     "@platform/prettier-config": "workspace:*",
+    "knip": "6.44.1",
     "oxlint": "1.90.0",
+    "oxlint-tsgolint": "7.0.2005",
     "prettier": "3.9.10"
   }
 }

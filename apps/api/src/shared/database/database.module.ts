@@ -1,19 +1,19 @@
-import {
-  Global,
-  Inject,
-  Injectable,
-  Logger,
-  Module,
-  type OnApplicationShutdown,
-} from "@nestjs/common";
-import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
+import { Global, Inject, Injectable, Logger, Module } from "@nestjs/common";
+import type { OnApplicationShutdown } from "@nestjs/common";
+import { drizzle } from "drizzle-orm/node-postgres";
+import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 
 import { withTimeout } from "../async/with-timeout.js";
-import { CONFIG, type Config } from "../config/config.js";
+import { CONFIG } from "../config/config.js";
+import type { Config } from "../config/config.js";
 
 /** Drizzle instance for the application role. Each module queries only its own Postgres schema. */
 export type Database = NodePgDatabase;
+/**
+ * Nest token for {@link Database}.
+ * @public Features and repositories will inject it; none exists yet, so knip sees no importer.
+ */
 export const DATABASE = Symbol("Database");
 const POOL = Symbol("PgPool");
 const HEALTH_POOL = Symbol("PgHealthPool");
@@ -37,7 +37,7 @@ function createPool(
   const logger = new Logger(name);
   const pool = new Pool({
     connectionString: config.databaseUrl,
-    connectionTimeoutMillis: 2_000,
+    connectionTimeoutMillis: 2000,
     keepAlive: true,
     ...(options.max === undefined ? {} : { max: options.max }),
     ...(options.queryTimeoutMs === undefined ? {} : { query_timeout: options.queryTimeoutMs }),
@@ -62,7 +62,7 @@ function createPool(
       provide: HEALTH_POOL,
       inject: [CONFIG],
       useFactory: (config: Config) =>
-        createPool(config, "DatabaseHealth", { max: 1, queryTimeoutMs: 5_000 }),
+        createPool(config, "DatabaseHealth", { max: 1, queryTimeoutMs: 5000 }),
     },
     {
       provide: DATABASE,

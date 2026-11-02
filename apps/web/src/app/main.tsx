@@ -1,23 +1,19 @@
 import "./styles/index.css";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { createBrowserHistory, RouterProvider } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-import { routeTree } from "./route-tree.gen";
+import { createAppRouter } from "./router";
 
 const queryClient = new QueryClient();
-const router = createRouter({ routeTree, context: { queryClient }, defaultPreload: "intent" });
+const router = createAppRouter({ queryClient, history: createBrowserHistory() });
 
-declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router;
-  }
+const root = document.querySelector("#root");
+if (root === null) {
+  throw new Error("index.html has no #root element");
 }
-
-const root = document.getElementById("root");
-if (root === null) throw new Error("index.html has no #root element");
 
 createRoot(root).render(
   <StrictMode>

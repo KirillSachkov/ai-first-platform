@@ -1,5 +1,29 @@
 {
   "$schema": "../../node_modules/oxlint/configuration_schema.json",
-  "extends": ["../../packages/oxlint-config/react.json"],
-  "ignorePatterns": ["src/app/route-tree.gen.ts", "src/shared/api/schema.gen.ts"]
+  "extends": ["./node_modules/@platform/oxlint-config/react.json"],
+  // Options apply only in the root config of a run, so each app sets them.
+  "options": {
+    "typeAware": true,
+    "typeCheck": true,
+    "denyWarnings": true,
+    "reportUnusedDisableDirectives": "error"
+  },
+  "overrides": [
+    {
+      // Generated files stay in the run so that the compiler checks them; their style is the generator's.
+      // Regenerate them instead of editing: `pnpm api:generate`, or start Vite for the route tree.
+      "files": ["src/app/route-tree.gen.ts", "src/shared/api/schema.gen.ts"],
+      "rules": {
+        "typescript/consistent-indexed-object-style": "off",
+        "unicorn/no-abusive-eslint-disable": "off"
+      }
+    },
+    {
+      // Vitest setup files register hooks for every test file, outside any describe block.
+      "files": ["test/*-setup.ts"],
+      "rules": {
+        "vitest/require-top-level-describe": "off"
+      }
+    }
+  ]
 }

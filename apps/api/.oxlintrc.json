@@ -1,4 +1,18 @@
 {
   "$schema": "../../node_modules/oxlint/configuration_schema.json",
-  "extends": ["../../packages/oxlint-config/base.json"]
+  "extends": ["./node_modules/@platform/oxlint-config/node.json"],
+  // Options apply only in the root config of a run, so each app sets them.
+  "options": {
+    "typeAware": true,
+    "typeCheck": true,
+    "denyWarnings": true,
+    "reportUnusedDisableDirectives": "error"
+  },
+  "overrides": [
+    {
+      // The root module imports every domain and technical module by design.
+      "files": ["src/app.module.ts"],
+      "rules": { "import/max-dependencies": "off" }
+    }
+  ]
 }

@@ -1,6 +1,8 @@
-import { type DynamicModule, Global, Module } from "@nestjs/common";
+import { Global, Module } from "@nestjs/common";
+import type { DynamicModule } from "@nestjs/common";
 
-import { CONFIG, type Config } from "./config.js";
+import { CONFIG } from "./config.js";
+import type { Config } from "./config.js";
 
 @Global()
 @Module({})

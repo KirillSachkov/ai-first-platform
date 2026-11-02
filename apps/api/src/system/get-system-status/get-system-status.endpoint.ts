@@ -3,10 +3,8 @@ import { ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { PublicEndpoint } from "../../shared/http/endpoint-access.js";
 import { GetSystemStatusHandler } from "./get-system-status.handler.js";
-import {
-  systemStatusResponseSchema,
-  type SystemStatusResponse,
-} from "./get-system-status.schemas.js";
+import { systemStatusResponseSchema } from "./get-system-status.schemas.js";
+import type { SystemStatusResponse } from "./get-system-status.schemas.js";
 
 /**
  * Exemplar slice: the endpoint declares its access and HTTP contract (zod schemas, exported to

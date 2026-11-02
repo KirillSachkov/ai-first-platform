@@ -1,0 +1,80 @@
+// Project rules that oxlint has no built-in equivalent for. Oxlint loads this file as an ESLint-compatible JS plugin.
+
+const DISABLE_DIRECTIVE = /^\s*(?:eslint|oxlint)-disable(?:-next-line|-line)?(?<rest>\s[\s\S]*)?$/u;
+
+/** A rule may be disabled in code only with a reason: `// oxlint-disable-next-line rule -- why`. */
+const requireDisableReason = {
+  meta: {
+    type: "suggestion",
+    docs: { description: "Require a reason after `--` in every disable directive." },
+    messages: {
+      missingReason:
+        "Explain why the rule does not apply here: add ` -- <reason>` after the rule names, " +
+        "for example `// oxlint-disable-next-line eslint/no-await-in-loop -- steps must run in order`. " +
+        "If the rule should not apply anywhere, change the shared config in packages/oxlint-config instead.",
+    },
+    schema: [],
+  },
+  create(context) {
+    return {
+      Program() {
+        for (const comment of context.sourceCode.getAllComments()) {
+          const match = DISABLE_DIRECTIVE.exec(comment.value);
+          if (match === null) {
+            continue;
+          }
+          const reason = match.groups?.rest?.split(" -- ")[1]?.trim() ?? "";
+          if (reason === "") {
+            context.report({ loc: comment.loc, messageId: "missingReason" });
+          }
+        }
+      },
+    };
+  },
+};
+
+const PLAYWRIGHT_MODIFIERS = new Set(["only", "skip", "fixme"]);
+
+/**
+ * Playwright tests must not be focused or switched off. The vitest rules miss these calls
+ * because `test` comes from @playwright/test.
+ */
+const noPlaywrightTestModifiers = {
+  meta: {
+    type: "problem",
+    docs: { description: "Ban `test.only`, `test.skip`, `test.fixme` and their `describe` forms." },
+    messages: {
+      modifier:
+        "Remove `.{{name}}`: focused or switched-off tests are not allowed. Fix a failing test instead.",
+    },
+    schema: [],
+  },
+  create(context) {
+    return {
+      MemberExpression(node) {
+        if (node.property.type !== "Identifier" || !PLAYWRIGHT_MODIFIERS.has(node.property.name)) {
+          return;
+        }
+        let root = node.object;
+        while (root.type === "MemberExpression") {
+          root = root.object;
+        }
+        if (root.type === "Identifier" && root.name === "test") {
+          context.report({
+            node: node.property,
+            messageId: "modifier",
+            data: { name: node.property.name },
+          });
+        }
+      },
+    };
+  },
+};
+
+export default {
+  meta: { name: "platform" },
+  rules: {
+    "require-disable-reason": requireDisableReason,
+    "no-playwright-test-modifiers": noPlaywrightTestModifiers,
+  },
+};

@@ -8,9 +8,10 @@
     "build": "vite build",
     "api:generate": "openapi-typescript ../api/openapi/openapi.json --output src/shared/api/schema.gen.ts",
     "api:check": "openapi-typescript ../api/openapi/openapi.json --output src/shared/api/schema.gen.ts --check",
-    "lint": "oxlint --deny-warnings --report-unused-disable-directives",
-    "typecheck": "tsc --noEmit",
-    "boundaries": "steiger ./src"
+    "lint": "oxlint",
+    "boundaries": "steiger ./src",
+    "test": "vitest run",
+    "test:unit": "vitest run --project unit --passWithNoTests"
   },
   "dependencies": {
     "@tanstack/react-query": "5.105.0",
@@ -32,10 +33,17 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.1.2",
+    "@vitest/browser-playwright": "5.0.5",
+    "axe-core": "4.14.0",
+    "msw": "3.0.3",
+    "openapi-msw": "2.1.1",
     "openapi-typescript": "7.13.0",
+    "playwright": "1.64.1",
     "steiger": "0.8.1",
     "tailwindcss": "4.3.3",
-    "typescript": "6.0.3",
-    "vite": "8.3.5"
+    "typescript": "7.0.2",
+    "vite": "8.3.5",
+    "vitest": "5.0.5",
+    "vitest-browser-react": "2.3.0"
   }
 }

@@ -1,15 +1,10 @@
-import {
-  Global,
-  Inject,
-  Injectable,
-  Logger,
-  Module,
-  type OnApplicationShutdown,
-  type OnModuleInit,
-} from "@nestjs/common";
-import { type Channel, type ChannelModel, connect, type RecoveringChannelModel } from "amqplib";
+import { Global, Inject, Injectable, Logger, Module } from "@nestjs/common";
+import type { OnApplicationShutdown, OnModuleInit } from "@nestjs/common";
+import { connect } from "amqplib";
+import type { Channel, ChannelModel, RecoveringChannelModel } from "amqplib";
 
-import { CONFIG, type Config } from "../config/config.js";
+import { CONFIG } from "../config/config.js";
+import type { Config } from "../config/config.js";
 import { withTimeout } from "../async/with-timeout.js";
 
 /**
@@ -29,7 +24,7 @@ export class RabbitMqConnection implements OnModuleInit, OnApplicationShutdown {
     const connection = await connect(this.config.rabbitmqUrl, {
       recovery: {
         waitForConnect: false,
-        maxDelay: 5_000,
+        maxDelay: 5000,
         setup: (model: ChannelModel) => this.openHealthCheckChannel(model),
       },
     });
@@ -40,6 +35,11 @@ export class RabbitMqConnection implements OnModuleInit, OnApplicationShutdown {
     );
     connection.on("error", (error) => this.logger.warn(`Connection error: ${error.message}`));
     this.connection = connection;
+  }
+
+  /** Resolves once the first connection and its setup are done. Startup does not wait for it. */
+  async connected(): Promise<void> {
+    await this.connection?.waitForConnect();
   }
 
   /** The open channel that health checks use, or undefined while disconnected. */
@@ -58,17 +58,28 @@ export class RabbitMqConnection implements OnModuleInit, OnApplicationShutdown {
     const channel = await model.createChannel();
     channel.on("error", (error: Error) => this.logger.warn(`Channel error: ${error.message}`));
     channel.on("close", () => {
-      if (this.healthCheckChannel === channel) this.healthCheckChannel = undefined;
-      if (this.shuttingDown) return;
+      if (this.healthCheckChannel === channel) {
+        this.healthCheckChannel = undefined;
+      }
+      if (this.shuttingDown) {
+        return;
+      }
       // The pause keeps a broker that keeps closing channels from causing a tight loop. Reopening
       // fails when the whole connection dropped; recovery then reopens the channel in setup.
       setTimeout(() => {
-        this.openHealthCheckChannel(model).catch((error: Error) =>
-          this.logger.debug(`Channel not reopened: ${error.message}`),
-        );
-      }, 1_000).unref();
+        void this.reopenHealthCheckChannel(model);
+      }, 1000).unref();
     });
     this.healthCheckChannel = channel;
+  }
+
+  private async reopenHealthCheckChannel(model: ChannelModel): Promise<void> {
+    try {
+      await this.openHealthCheckChannel(model);
+    } catch (error) {
+      const reason = error instanceof Error ? error.message : String(error);
+      this.logger.debug(`Channel not reopened: ${reason}`);
+    }
   }
 }
 
@@ -78,7 +89,9 @@ export class RabbitMqHealth {
 
   async ping(timeoutMs: number): Promise<void> {
     const channel = this.connection.channelForHealthCheck;
-    if (channel === undefined) throw new Error("no open channel");
+    if (channel === undefined) {
+      throw new Error("no open channel");
+    }
     // A round trip on the open channel; the built-in exchange always exists.
     await withTimeout(channel.checkExchange("amq.topic"), timeoutMs);
   }
