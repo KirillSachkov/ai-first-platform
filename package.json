@@ -26,7 +26,8 @@
     "smoke": "node scripts/with-stack-lock.mjs node scripts/smoke.mjs",
     "test:scripts": "node --test \"scripts/**/*.test.mjs\"",
     "verify": "node scripts/verify.mjs",
-    "verify:full": "node scripts/verify.mjs --full"
+    "verify:full": "node scripts/verify.mjs --full",
+    "github:protect-main": "node scripts/github/protect-main.mjs"
   },
   "prettier": "@platform/prettier-config",
   "devDependencies": {
