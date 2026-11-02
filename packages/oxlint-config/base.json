@@ -134,6 +134,13 @@
         "import/no-commonjs": "off",
         "unicorn/prefer-module": "off"
       }
+    },
+    {
+      // A describe callback holds all cases of one behaviour; its length follows the number of cases.
+      "files": ["**/*.test.ts", "**/*.test.tsx"],
+      "rules": {
+        "eslint/max-lines-per-function": "off"
+      }
     }
   ]
 }

@@ -25,6 +25,8 @@ peerDependencyRules:
     "tsconfck>typescript": "7"
     # Optional peer used only by the Swagger CLI plugin, which the project does not use.
     "@nestjs/swagger>typescript": "7"
+    # @steiger/toolkit uses vitest only in its rule-testing helpers, which the project does not use.
+    "@steiger/toolkit>vitest": "5"
 packageExtensions:
   # The published types import @steiger/toolkit, which the package lists only as a devDependency;
   # without it steiger.config.ts sees the recommended config as an error type.

@@ -20,6 +20,8 @@
     "boundaries": "pnpm --recursive --if-present boundaries",
     "knip": "knip",
     "api:check": "pnpm --filter @platform/api openapi:check && pnpm --filter @platform/web api:check",
+    "test:unit": "pnpm --recursive --if-present run test:unit",
+    "test": "pnpm --recursive --if-present run test",
     "smoke": "node scripts/smoke.mjs"
   },
   "prettier": "@platform/prettier-config",

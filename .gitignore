@@ -54,6 +54,8 @@ coverage/
 htmlcov/
 playwright-report/
 test-results/
+# Vitest browser mode failure screenshots and attachments
+.vitest/
 *.log
 
 # Temporary files
