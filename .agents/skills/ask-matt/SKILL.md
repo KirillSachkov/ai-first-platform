@@ -6,6 +6,8 @@ disable-model-invocation: true
 
 # Ask Matt
 
+Read root `AGENTS.md` for the project's explicit start, language, authority, and context pointers. Advise which user-only entrypoint to select; do not start one implicitly. Here every implementation needs an issue, full specs remain conditional, and both implementation routes finish through `ship` as a verified PR for owner acceptance.
+
 You don't remember every skill, so ask.
 
 Before stating what a skill does or recommending a step be skipped, read that skill's SKILL.md: the summaries here are for orientation only.
