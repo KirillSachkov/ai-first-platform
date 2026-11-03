@@ -9,7 +9,7 @@ metadata:
     url: "https://github.com/humanlayer/skills/blob/main/plugins/show-me/skills/show-me/SKILL.md"
 ---
 
-Use this template for writing the PR body:
+Use this template for writing the PR body. Root `AGENTS.md` owns the audience language, including headings. Keep technical syntax and identifiers intact. Include the project's owner-acceptance actions and evidence limits. `ship` creates or updates the PR and waits for CI; this skill defines its description.
 
 ```markdown
 ## Summary

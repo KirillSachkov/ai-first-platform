@@ -4,6 +4,8 @@ description: "Turn the current conversation into a spec and publish it to the pr
 disable-model-invocation: true
 ---
 
+Read the requirements and human-participation pointers in root `AGENTS.md`. Apply its language rule to the published artifact and headings. Include preserved behavior and agreed human checkpoints. A change spec is not a current capability document, and publication does not start implementation.
+
 This skill takes the current conversation context and codebase understanding and produces a spec. Do NOT interview the user; just synthesize what you already know.
 
 The issue tracker and triage label vocabulary should have been provided to you. If not, tell the user to run `/setup-matt-pocock-skills`.
@@ -16,7 +18,7 @@ The issue tracker and triage label vocabulary should have been provided to you. 
 
 Check with the user that these seams match their expectations.
 
-3. Write the spec using the template below, then publish it to the project issue tracker. Apply the `ready-for-agent` triage label - no need for additional triage.
+3. Draft from the agreed decisions using the template. Confirm behavior, scope, criteria, and human checkpoints with the owner before publishing as ready. Apply the configured readiness label; it does not authorize execution.
 
 <spec-template>
 
@@ -30,7 +32,7 @@ The solution to the problem, from the user's perspective.
 
 ## User Stories
 
-A LONG, numbered list of user stories. Each user story should be in the format of:
+A sufficient, numbered set of user stories and observable scenarios. Use this format where useful:
 
 1. As an <actor>, I want a <feature>, so that <benefit>
 
@@ -38,7 +40,7 @@ A LONG, numbered list of user stories. Each user story should be in the format o
 1. As a mobile bank customer, I want to see balance on my accounts, so that I can make better informed decisions about my spending
 </user-story-example>
 
-This list of user stories should be extremely extensive and cover all aspects of the feature.
+Cover relevant success, failure, access, and boundary scenarios without adding unrelated scope. Keep unresolved decisions explicit.
 
 ## Implementation Decisions
 

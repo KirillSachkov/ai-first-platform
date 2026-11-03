@@ -1,21 +1,24 @@
 ## Project context
 
-Before planning or implementing project work, read [customer-requirements.md](customer-requirements.md) for the original brief and [docs/first-version.md](docs/first-version.md) for the agreed delivery scope. Explicit changes in the agreed scope take precedence over the original brief.
+Before planning or implementing project work, read [customer-requirements.md](customer-requirements.md) and [delivery scope](docs/first-version.md). Agreed scope changes take precedence over the brief.
 
-## Domain and architecture
+## Language
 
-Before domain design, code exploration, implementation, or review, read [docs/agents/domain.md](docs/agents/domain.md) for the glossary, domain model, and relevant architectural decisions.
+Team language: Russian (`ru`). Write human-facing titles, headings, issues, specs, product requirements, PRs, and reports in this language. Write agent instructions, skills, and tool descriptions in English. Preserve executable syntax, identifiers, and established technical terms. Shared requirements prefer the human reader. This section owns the language setting.
 
-## Testing
+## Start and authority
 
-Before writing or changing tests, writing a spec's Testing Decisions, or reviewing changes, read [docs/agents/testing.md](docs/agents/testing.md) for test kinds and seams, substitutes, when a test is required, commands, and samples.
+Implementation starts when the owner explicitly selects `implement` or `implement-spec`, including ordinary language that names the skill. If an implementation request names neither, propose the entrypoint and wait for selection. Issues, readiness labels, preparation, and review comments do not start implementation. An authorized spec run may delegate its agreed tickets without separate manual starts.
 
-## Contribution workflow
+Apply the assignment boundary to every skill: diagnosis alone does not authorize a fix; research and prototypes authorize only their agreed scope. Within a started implementation, routine commits, push, PR updates, and confirmed review/CI fixes may proceed. Requirements changes need the owner's decision. Merge permission is defined in [delivery](docs/agents/delivery.md).
 
-Before making changes, read [README.md](README.md) for the repository's branch and pull request workflow and available development checks.
+## Context pointers
 
-## Issue tracker
-
-Track work in GitHub Issues. Before reading or updating issues, pull requests, or a Wayfinder map, read [docs/agents/issue-tracker.md](docs/agents/issue-tracker.md) for tracker operations.
-
-When triaging issues or changing triage labels, use the mappings in [docs/agents/triage-labels.md](docs/agents/triage-labels.md).
+- Before preparing or implementing an issue/spec, read [requirements](docs/agents/requirements.md) and [human participation](docs/agents/human-review.md).
+- Before writing in a worktree or using shared services, read [worktree ownership](docs/agents/worktrees.md).
+- Before domain design, exploration, implementation, or review, read [domain guidance](docs/agents/domain.md).
+- Before tests, Testing Decisions, or review, read [testing](docs/agents/testing.md).
+- Before Standards review, read [CODING_STANDARDS.md](CODING_STANDARDS.md) and the instructions for changed applications.
+- Before delivery, read [delivery](docs/agents/delivery.md). Procedures live in skills; README is public information, not the agent's process contract.
+- Before issue/PR operations, read [tracker](docs/agents/issue-tracker.md). Before triage, read [label mappings](docs/agents/triage-labels.md).
+- Before applying a local skill, read [runtime and adaptations](.agents/skills/README.md#runtime).

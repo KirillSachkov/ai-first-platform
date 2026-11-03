@@ -119,7 +119,7 @@ The `main` branch is protected by a ruleset (#24): changes reach it only through
 1. Run `pnpm verify` and make it green.
 2. If the change touches the UI, open the page in a browser on the running stack, walk the scenario, and take a screenshot.
 3. In the PR description, list the commands you ran with their results, attach the screenshot, and explain every changed assertion.
-4. Leave the merge to the owner: the owner judges the interface and approves the merge.
+4. Hand the result to the owner under [human participation](human-review.md) and [merge authority](delivery.md#main-and-owner-acceptance).
 
 ## Red `main`
 
