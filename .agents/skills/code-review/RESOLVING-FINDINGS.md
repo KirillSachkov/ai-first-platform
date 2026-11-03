@@ -1,6 +1,6 @@
 # Resolve review findings
 
-The implementation author owns corrections; the independent reviewer remains read-only. Record checked base/head and requirement sources with each review. Keep the initial full-diff review when later passes cover only changes.
+Apply this procedure to agent or human review findings within the active assignment. The implementation author owns corrections; the independent reviewer remains read-only. Record checked base/head and requirement sources with each review. Keep the initial full-diff review when later passes cover only changes.
 
 Validate each finding against code and accepted requirements. Fix confirmed defects within scope. Give rejected findings a reason. Separate optional suggestions from blocking defects; an optional redesign is not an instruction to expand the task.
 

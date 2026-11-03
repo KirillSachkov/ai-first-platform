@@ -14,8 +14,8 @@ Apply the assignment boundary to every skill: diagnosis alone does not authorize
 
 ## Context pointers
 
-- Before preparing or implementing an issue/spec, read [requirements](docs/agents/requirements.md) and [human participation](docs/agents/human-review.md).
-- Before writing in a worktree or using shared services, read [worktree ownership](docs/agents/worktrees.md).
+- Before preparing a task/spec or starting implementation, read [requirements](docs/agents/requirements.md) and [human participation](docs/agents/human-review.md).
+- Before writing repository files or using shared services, read [worktree ownership](docs/agents/worktrees.md).
 - Before domain design, exploration, implementation, or review, read [domain guidance](docs/agents/domain.md).
 - Before tests, Testing Decisions, or review, read [testing](docs/agents/testing.md).
 - Before Standards review, read [CODING_STANDARDS.md](CODING_STANDARDS.md) and the instructions for changed applications.

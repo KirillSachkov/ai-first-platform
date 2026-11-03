@@ -10,7 +10,7 @@ The issue tracker should have been provided to you. If not, tell the user to run
 
 Read root `AGENTS.md` and its requirements, worktree, human-participation, and delivery pointers. Confirm the approved spec, tickets, criteria, blockers, and human checkpoints. The owner's start authorizes the agreed child tasks, not new requirements.
 
-The goal is the entire spec on a dedicated **integration branch/worktree** and one verified PR. Record an immutable review base against the intended PR target. Distinguish integrated tickets from merged delivery; follow the project's issue lifecycle.
+The goal is the entire spec on one **integration branch/worktree**, delivered under project rules. Record an immutable review base against the intended target. Follow the project's ticket lifecycle.
 
 The tickets are not a list of steps. They are a **task graph** with blocking relationships between them. This means there is always a **frontier** of tickets which are ready to be grabbed.
 
@@ -39,6 +39,6 @@ Communication to and from subagents should be sparse. Communicate primarily thro
 
 7. Once tickets are integrated and project checks pass, commit the result and call `code-review` with the recorded base, reviewed head, and spec for the complete integration diff. Fix confirmed issues through a fresh implementer and follow [finding resolution](../code-review/RESOLVING-FINDINGS.md). Individual ticket workers still use `tdd`, not the user-only `implement` entrypoint.
 
-8. Call `ship` to update the draft, complete required CI, and hand the verified result to the owner.
+8. Follow root `AGENTS.md` delivery pointers for the verified integration result, reusing any draft PR.
 
-9. Clean up only owned, integrated child worktrees with no active writer or unsaved work. Retain the integration worktree for acceptance.
+9. Clean up only owned, integrated child worktrees with no active writer or unsaved work. Follow project rules for retaining the integration worktree.

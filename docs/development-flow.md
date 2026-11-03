@@ -77,15 +77,20 @@ Worktree разделяет файлы. Compose остаётся общим; [п
 ## Когда применяется RESOLVING-FINDINGS.md
 
 `code-review` выдаёт два независимых отчёта. Standards проверяет стандарты; Spec проверяет требования и полноту человеческих проверок.
+Standards использует [CODING_STANDARDS.md](../CODING_STANDARDS.md) как критерии контекстной проверки. Этот файл определяет, что оценивать в изменении.
 Если есть замечания, исполнитель использует [RESOLVING-FINDINGS.md](../.agents/skills/code-review/RESOLVING-FINDINGS.md) для их обработки.
 Это общий reference, то есть Markdown-инструкция по ссылке из `implement`, `implement-spec` и `ship`.
 Владелец не запускает его отдельной командой.
+
+Замечания человека проходят тот же порядок в рамках уже начатой задачи.
+Предложение новой работы сначала проходит согласование; комментарий ревью сам по себе не запускает новую реализацию.
 
 ```mermaid
 flowchart TD
     R["code-review<br/>Standards и Spec"] --> Q{"Есть замечания?"}
     Q -->|Нет| S["ship"]
     Q -->|Да| F["RESOLVING-FINDINGS.md<br/>исполнитель проверяет каждую находку"]
+    HR["Замечания человека<br/>по текущей задаче"] --> F
     F --> C{"Нужны изменения?"}
     C -->|Да| V["Исправление<br/>применимые проверки и commit"]
     V --> R
@@ -152,7 +157,7 @@ Spec использует уже созданный draft PR.
 
 | Вопрос | Закреплённая версия Matt | Наш текущий проект |
 | --- | --- | --- |
-| Вход `implement` | Работа из spec или tickets; переданная ссылка на ticket загружается условно | Каждая реализация требует issue |
+| Вход `implement` | Работа из spec или tickets; переданная ссылка на ticket загружается условно | Issue обязательна по правилам проекта, которые skill читает через AGENTS |
 | Worktree | У `implement-spec` исполнители получают отдельные worktree | Отдельная копия нужна каждой самостоятельной реализации |
 | Проверки | Общие указания TDD, typechecking и test suite | Применимые уровни из testing.md |
 | Порядок малого `implement` | Вызов review перед финальным commit | Commit перед review закреплённого результата |
@@ -162,4 +167,5 @@ Spec использует уже созданный draft PR.
 Основания: закреплённые [implement](https://github.com/mattpocock/skills/blob/a496f5513d4a4cf889bc48e189e579f4b0bdf6aa/skills/engineering/implement/SKILL.md) и [implement-spec](https://github.com/mattpocock/skills/blob/a496f5513d4a4cf889bc48e189e579f4b0bdf6aa/skills/engineering/implement-spec/SKILL.md),
 наши [implement](../.agents/skills/implement/SKILL.md) и [implement-spec](../.agents/skills/implement-spec/SKILL.md).
 Выбор обязательной issue и особой доставки принадлежит этому проекту.
-Перенос этих условий из тела skills в проектные pointers остаётся отдельным обсуждаемым изменением.
+`implement` читает условия подготовки и доставки через проектные pointers в AGENTS.
+В этом проекте они требуют issue, выделенный worktree и `ship`; другой проект может определить свои условия.
