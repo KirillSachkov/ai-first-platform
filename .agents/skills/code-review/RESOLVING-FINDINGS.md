@@ -6,6 +6,6 @@ Validate each finding against code and accepted requirements. Fix confirmed defe
 
 After corrections, rerun affected checks, commit, and call `code-review` for the changed parts and closure of earlier findings. Supply the earlier report and immutable endpoints. When requirements or wider interactions change, broaden the review. For target-branch updates, use the project's [base renewal rule](../../../docs/agents/delivery.md#verification-evidence). Final coverage must account for all delivered changes, not just the last patch.
 
-Save findings, dispositions, and checked revisions in the issue or PR. Do not claim independent review from self-review or an unavailable reviewer. If decisions are disputed, scope must change, or repeated rounds make no progress, follow the project's human-participation procedure. Pause affected work and retain the useful result rather than retrying indefinitely.
+Save findings, dispositions, and checked revisions in the issue or PR. Do not claim independent review from self-review or an unavailable reviewer. If decisions are disputed, scope must change, or repeated rounds make no progress, follow [Ask the owner](../../../docs/agents/human-review.md#ask-the-owner). Pause affected work and retain the useful result rather than retrying indefinitely.
 
 Proceed to delivery only when no blocking findings remain unresolved and the required checks cover the result. CI fixes that change code use this same procedure before the result is called ready again.

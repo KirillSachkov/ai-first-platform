@@ -28,6 +28,7 @@ Every upstream-derived file is unchanged except the adaptations below. Retain pr
 
 - **Minimal project harness (#33).** Small pointers/boundaries in `ask-matt`, `to-spec`, `to-tickets`, and `diagnosing-bugs`; audience language in `pr`; committed review and delivery transitions in `implement`/`implement-spec`; immutable endpoints, bounded-issue criteria, and finding evidence in `code-review`. `code-review/RESOLVING-FINDINGS.md` shares correction steps. `ship` and its native metadata are project-owned delivery, without deployment or automatic merge.
 - **Acceptance and presentation follow-up (#33).** Spec review checks human-check coverage against the delivered diff and evidence. Runtime supports explicitly named user-only skills when native invocation is unavailable. `ship` creates drafts; `implement` metadata matches its assignment. Diagnosis-only exits preserve evidence and clean owned probes before handoff. `pr/PRESENTATION.md` holds the Markdown toolbox; the short PR body leads with behavior, evidence limits, and the owner's action. Existing credits and diagram guidance remain.
+- **Writing-for-agents audit (#33).** Requirements propose user-only preparation skills for owner selection. Human-check fields have one definition. Presentation reads are conditional on needs beyond the basic PR template. Finding resolution links directly to owner escalation.
 - Project facts live in root `AGENTS.md`, `CODING_STANDARDS.md`, and thematic `docs/agents/`. The public README is not the agent's process authority. The upstream license and original references remain intact.
 
 ## Installed content identity
@@ -38,7 +39,7 @@ then file bytes followed by NUL; concatenate and hash. Includes native metadata 
 | Skill | SHA-256 |
 | --- | --- |
 | `ask-matt` | `7c59fa688e458cc161526ac70abfade102471a50424b8c04ae93a92570b91144` |
-| `code-review` | `8d089c05873aa503dd5363a480a933bb50fefc25a89b186bbbca86531ab0a68a` |
+| `code-review` | `abede8ef7ace7de3c359bd21991c07a3a831327420904c1599f8c13f20b4703f` |
 | `codebase-design` | `5e680d83ed795dfdce570831c31c7e95927c3a3403a2f71006c8684f35472b84` |
 | `diagnosing-bugs` | `7f45fd315cf2ce923ff2208eb76d4ba3189f5e14b0b1ff33ff5256265ddd3bd9` |
 | `domain-modeling` | `f60496eae0534ad8602a8e2ff7ac4681445c37e44281811369ad2dfda08a82fe` |
@@ -49,7 +50,7 @@ then file bytes followed by NUL; concatenate and hash. Includes native metadata 
 | `implement` | `b7a35b2e7877a5be3616f7b1d729bedc668163e8b69c3bdd464e082ff52f288f` |
 | `implement-spec` | `3a1ec1bbcf5536a94e3e9e5fe79c8eefd5a215436bc9fec25e660e427e1a957c` |
 | `improve-codebase-architecture` | `d02da163afa2ba2422433ba35ecae21659bef7d8bba5d2341ca1fa55573f7b3f` |
-| `pr` | `50ec47aed20ff8b39e0de4066525c7add0476aad42234520763349536853fb36` |
+| `pr` | `d19b624a600e4700d6e6117247ebf348068e3e520b3ea8187b176a72025937d4` |
 | `prototype` | `c4efd5e0f1c302b6225be83e8e42abdb05e13fde900484e4e2240e90b4e83eb6` |
 | `research` | `f2d6425b15cf3100d5c3eb4305a8e817174b8e5fa1fde6e06ad4b61321c32a60` |
 | `retro` | `09c4f9fe72fc5bc8e486a2bbb32dd785ca6264c56a53dd1bf9a334af72586efd` |

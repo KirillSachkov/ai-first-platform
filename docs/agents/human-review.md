@@ -1,10 +1,20 @@
 # Human participation
 
-The owner chooses desired behavior, scope, acceptance criteria, and implementation entrypoint. Routine implementation, commits, push, PR creation/update, and fixes to confirmed review/CI findings proceed within that assignment. Requirements changes follow [requirements.md](requirements.md#when-requirements-change). [delivery.md](delivery.md) owns merge authority; a green check or agent review does not grant it.
+Use root `AGENTS.md` for assignment and start authority. Follow [requirements.md](requirements.md#when-requirements-change) for behavior changes and [delivery.md](delivery.md) for merge authority.
+
+## Human check
+
+Record each additional check with these fields:
+
+- Person or role.
+- Affected behavior, plausible failure, and its consequence.
+- Concrete action or question and expected result. Missing expectations remain explicit decisions for the owner.
+- Evidence and its limits.
+- When the check is needed and what permits work to continue.
 
 ## Plan additional acceptance
 
-When preparing an issue or spec, agree any additional human checks. For each, name the person or role, the behavior or decision to inspect, the evidence to provide, the point at which it is needed, and the condition for continuing. A small issue may explicitly need no checks beyond the normal final PR acceptance. Tickets inherit relevant parent checks and identify any additional ones.
+When preparing an issue or spec, agree additional checks using the [human-check fields](#human-check). A small issue may explicitly need no checks beyond normal final PR acceptance. Tickets inherit relevant parent checks and identify additional ones. Surface newly discovered checks when their decision is needed. Keep agreed checks until the owner resolves them; an agent cannot waive them.
 
 ## Choose additional human checks
 
@@ -17,15 +27,15 @@ Use the change's consequences, not its size or file extension. Require a focused
 - Changes to CI, release controls, or agent authority, including instructions that change these controls.
 - Missing or conflicting expectations, insufficient evidence, or a scenario requiring human-only access.
 
-Name the affected behavior, a plausible failure and its consequence, and the remaining human question. The owner or designated specialist inspects that question; this need not mean reading the entire diff or repeating passing automated tests. Link existing evidence where it answers the question. A sensitive path is a search aid; changes elsewhere can trigger the same rule.
+The owner or designated specialist inspects the remaining question. This need not mean reading the entire diff or repeating passing automated tests. Link existing evidence where it answers the question. A sensitive path is a search aid; changes elsewhere can trigger the same rule.
 
-Agree known checks during issue/spec preparation. Surface newly discovered checks when their decision is needed. Before handoff, the independent Spec reviewer compares requirements, agreed checkpoints, the complete delivered diff, and current evidence. Report omitted triggers, stale evidence, and unsupported claims. Keep agreed checks until the owner resolves them; an agent cannot waive them.
+Before handoff, the independent Spec reviewer compares requirements, agreed checkpoints, the complete delivered diff, and current evidence. Report omitted triggers, stale evidence, and unsupported claims.
 
 If no additional check is needed, give a short reason in the PR. Every final PR still goes to the owner for acceptance. Automated checks and independent review remain applicable. Automatic risk classifiers and exceptions to owner acceptance are future policy work.
 
 ## Present the result
 
-Lead with changed behavior and the owner's next action. For each additional check, state who acts, what to inspect or decide, why it matters, the expected result, and evidence with its limits. Say when the check is due and what must happen to continue. For an unresolved expectation, ask for the decision rather than inventing an expected result.
+Lead with changed behavior and the owner's next action. Present each additional check using the [human-check fields](#human-check).
 
 Keep required human actions, unresolved questions, and material limitations visible. Put detailed commands, logs, and revision records behind a disclosure. Use `pr` for presentation. A screenshot demonstrates visible state; permissions and side effects need evidence at the relevant boundary. Mark planned or unavailable checks as such.
 

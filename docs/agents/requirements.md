@@ -5,8 +5,8 @@ Every implementation needs a GitHub issue before repository changes begin. A sma
 ## Choose the artifact
 
 - Use a short issue for a clear bug, bounded documentation/configuration change, or refactoring with known invariants.
-- Use a full change spec for behavior with unresolved choices, several scenarios or contributors, contract changes, or costly failure. Use `to-spec` after discussing the decisions.
-- Use `to-tickets` when independent, verifiable slices or multiple sessions need explicit dependencies. Tickets refer to the parent requirements instead of copying them.
+- Use a full change spec for behavior with unresolved choices, several scenarios or contributors, contract changes, or costly failure. After discussing the decisions, propose `to-spec` for the owner to select.
+- When independent, verifiable slices or multiple sessions need explicit dependencies, propose `to-tickets` for the owner to select. Tickets refer to the parent requirements instead of copying them.
 - Keep a large idea or release in scope documents until concrete behavior is ready to specify. A full application spec is not a prerequisite for every task.
 
 ## Keep current requirements distinct from history

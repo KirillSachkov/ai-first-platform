@@ -15,7 +15,7 @@ Write a report the owner can understand without reading the conversation or ever
 
 1. Read the issue/spec, actual diff, verification results, and independent findings. Follow `docs/agents/human-review.md` for human checks.
 2. Lead with the problem and resulting behavior. Use a concrete before/after example where it helps. Show the affected scope.
-3. Choose the smallest useful structure. For diagrams, comparisons, screenshots, disclosures, or alerts, read [presentation](PRESENTATION.md). Use GitHub-supported Markdown to make the result clear and easy to scan.
+3. Choose the smallest useful structure. For diagrams, visual evidence, or formatting beyond the template, read the relevant [presentation](PRESENTATION.md) section. Use GitHub-supported Markdown to make the result clear and easy to scan.
 4. Show the evidence conclusion and material limits first. Put commands, logs, revision records, and the complete check table in a disclosure.
 5. State the owner's next action and additional human checks, or briefly explain why none are needed. Keep unresolved questions visible.
 6. Describe consequences, reversibility, and rollback. Include deviations only when they exist. Read the rendered result before handoff.
