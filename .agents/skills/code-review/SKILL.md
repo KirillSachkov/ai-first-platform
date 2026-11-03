@@ -76,7 +76,7 @@ If the spec is missing, skip the Spec sub-agent and note this in the final repor
 
 ### 5. Aggregate
 
-Name checked base/head and requirement sources. For each finding, give a stable reference, triggering condition, source rule, location, and consequence. Distinguish blocking defects from optional suggestions. On re-review, read the earlier report and verify affected changes and closure without losing the initial full-diff coverage. The caller owns [finding resolution](RESOLVING-FINDINGS.md).
+Name checked base/head and requirement sources. For each finding, give a stable reference, triggering condition, source rule, location, and consequence. Distinguish blocking defects from optional suggestions. On re-review, read the earlier report and check corrections, affected interactions, and closure of earlier findings. Broaden the review when requirements or wider interactions change. Return the reports to the caller; reviewers remain read-only.
 
 Present the two reports under `## Standards` and `## Spec` headings, verbatim or lightly cleaned. Do **not** merge or rerank findings, because the two axes are deliberately separate (see _Why two axes_).
 

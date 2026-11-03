@@ -12,6 +12,8 @@ Prepare or reuse the execution context under project instructions. Record starti
 
 Call the client's skill mechanism with `tdd` where project testing rules require it, at pre-agreed seams. Run targeted checks during the loop and the project's applicable verification level at the end.
 
-Commit assigned changes before calling `code-review` with the recorded base, reviewed head, and requirement source. Follow [finding resolution](../code-review/RESOLVING-FINDINGS.md) for corrections and independent re-review.
+Commit assigned changes before calling `code-review` with the recorded base, reviewed head, and requirement source.
+
+Fix review issues within the assignment. Rerun affected checks, commit corrections, and call `code-review` with the earlier report to check the fixes.
 
 Follow root `AGENTS.md` delivery pointers for the verified result.

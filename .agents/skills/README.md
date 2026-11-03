@@ -26,10 +26,11 @@ Every upstream-derived file is unchanged except the adaptations below. Retain pr
 - **Report style in `pr/SKILL.md`** (owner request, 2026-10-30): the Language section,
   self-explanatory diagram rules, and the check and deviation tables.
 
-- **Minimal project harness (#33).** Small pointers/boundaries in `ask-matt`, `to-spec`, `to-tickets`, and `diagnosing-bugs`; audience language in `pr`; committed review and delivery transitions in `implement`/`implement-spec`; immutable endpoints, bounded-issue criteria, and finding evidence in `code-review`. `code-review/RESOLVING-FINDINGS.md` shares correction steps. `ship` and its native metadata are project-owned delivery, without deployment or automatic merge.
+- **Minimal project harness (#33).** Small pointers/boundaries in `ask-matt`, `to-spec`, `to-tickets`, and `diagnosing-bugs`; audience language in `pr`; committed review and delivery transitions in `implement`/`implement-spec`; immutable endpoints, bounded-issue criteria, and finding evidence in `code-review`. `ship` and its native metadata are project-owned delivery, without deployment or automatic merge.
 - **Acceptance and presentation follow-up (#33).** Spec review checks human-check coverage against the delivered diff and evidence. Runtime supports explicitly named user-only skills when native invocation is unavailable. `ship` creates drafts; `implement` metadata matches its assignment. Diagnosis-only exits preserve evidence and clean owned probes before handoff. `pr/PRESENTATION.md` holds the Markdown toolbox; the short PR body leads with behavior, evidence limits, and the owner's action. Existing credits and diagram guidance remain.
 - **Writing-for-agents audit (#33).** Requirements propose user-only preparation skills for owner selection. Human-check fields have one definition. Presentation reads are conditional on needs beyond the basic PR template. Finding resolution links directly to owner escalation.
-- **Portable implementation core (#33).** `implement` restores the upstream description and conditional ticket lookup. Preparation and delivery follow project pointers instead of requiring an issue or calling `ship` in the skill itself. `implement-spec` retains its graph and delegates delivery/retention to project rules. Committed review, coverage and safe ownership remain explicit. Finding resolution covers agent and human findings within the active assignment.
+- **Portable implementation core (#33).** `implement` restores the upstream description and conditional ticket lookup. Preparation and delivery follow project pointers instead of requiring an issue or calling `ship` in the skill itself. `implement-spec` retains its graph and delegates delivery/retention to project rules. Committed review, coverage and safe ownership remain explicit.
+- **Correction simplification (#33).** Correction steps stay in `implement` and `implement-spec`: the main agent owns small-task fixes, and one fresh implementer owns aggregate-spec fixes. Independent re-review checks corrections and affected interactions. Project delivery owns coverage, visible disputes and stopping conditions for agent or human findings. No separate author-approval stage is required for each finding.
 - Project facts live in root `AGENTS.md`, `CODING_STANDARDS.md`, and thematic `docs/agents/`. The public README is not the agent's process authority. The upstream license and original references remain intact.
 
 ## Installed content identity
@@ -40,7 +41,7 @@ then file bytes followed by NUL; concatenate and hash. Includes native metadata 
 | Skill | SHA-256 |
 | --- | --- |
 | `ask-matt` | `7c59fa688e458cc161526ac70abfade102471a50424b8c04ae93a92570b91144` |
-| `code-review` | `aa181acc0dd0a5c269f57e2cb67ab95a06eba162e358a8d7c5e3d641081b501f` |
+| `code-review` | `651145cbbce0a813dce3071e720b54009af4e54fdfe6ae06a79b48ac10281007` |
 | `codebase-design` | `5e680d83ed795dfdce570831c31c7e95927c3a3403a2f71006c8684f35472b84` |
 | `diagnosing-bugs` | `7f45fd315cf2ce923ff2208eb76d4ba3189f5e14b0b1ff33ff5256265ddd3bd9` |
 | `domain-modeling` | `f60496eae0534ad8602a8e2ff7ac4681445c37e44281811369ad2dfda08a82fe` |
@@ -48,8 +49,8 @@ then file bytes followed by NUL; concatenate and hash. Includes native metadata 
 | `grill-with-docs` | `2dff19547f0f72000f8b88868e21b7d76c27cf5c7ececc6edf4042bbe06157ac` |
 | `grilling` | `27f71f106a7062691b2982d4f847304a62930ebed8b50734f4d4fd498d60afa8` |
 | `handoff` | `77c2607c751b7c522e0208ab113ba4949f8267610d6061323c7ccd3ace21d7da` |
-| `implement` | `f09a4362f48f80269b8a3774a0640b466e303327da5436fc6a8ba44c631c2b1d` |
-| `implement-spec` | `13b279ffc31046031c011db818c314caeafba619abeae94d1ed9cc2373acbf77` |
+| `implement` | `95af274086aef8db8a8c51b078d9d2f0d108a28796d1e84e373536f88f3664fe` |
+| `implement-spec` | `8cfbe422e17966c2dd77c8dee31855c94068e785b791175680ac7dbff3630bab` |
 | `improve-codebase-architecture` | `d02da163afa2ba2422433ba35ecae21659bef7d8bba5d2341ca1fa55573f7b3f` |
 | `pr` | `d19b624a600e4700d6e6117247ebf348068e3e520b3ea8187b176a72025937d4` |
 | `prototype` | `c4efd5e0f1c302b6225be83e8e42abdb05e13fde900484e4e2240e90b4e83eb6` |
@@ -66,4 +67,4 @@ then file bytes followed by NUL; concatenate and hash. Includes native metadata 
 | `wayfinder` | `62a0ab7262d40119da048328a71aeadaeaa21a4049ee9268d14500921bb6e257` |
 | `wizard` | `8fd93e38124bf81ad439231ba8af833b462ca9719c62373c87f25b06f6be776e` |
 | `writing-for-agents` | `dc53f07d1f662137317789b9b5d74cfcc26dbcfc15038a7faf676c844d8638e8` |
-| `ship` | `3e60fe8963850ce66f490075391c6517d939e1d202e699a7d3ce8efccef8e78c` |
+| `ship` | `08e8761ba341013c6fd1c6ae87e9d9cd7f407fd40c64e3088fa62f3f2cef55da` |

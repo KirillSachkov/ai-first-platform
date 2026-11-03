@@ -37,7 +37,7 @@ Communication to and from subagents should be sparse. Communicate primarily thro
 
 6. If this changes the **frontier** of available tickets, kick off more **implementer subagents** to work on the new tickets. This allows for maximum concurrency.
 
-7. Once tickets are integrated and project checks pass, commit the result and call `code-review` with the recorded base, reviewed head, and spec for the complete integration diff. Fix confirmed issues through a fresh implementer and follow [finding resolution](../code-review/RESOLVING-FINDINGS.md). Individual ticket workers still use `tdd`, not the user-only `implement` entrypoint.
+7. Once tickets are integrated and project checks pass, commit the result and call `code-review` with the recorded base, reviewed head, and spec for the complete integration diff. Fix review issues in a single fresh **implementer subagent**. Rerun affected checks, commit corrections, and call `code-review` with the earlier report to check the fixes. Individual ticket workers still use `tdd`, not the user-only `implement` entrypoint.
 
 8. Follow root `AGENTS.md` delivery pointers for the verified integration result, reusing any draft PR.
 

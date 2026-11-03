@@ -22,6 +22,6 @@ Report the source rule, the changed location, the triggering condition, and the 
 
 ## Maintenance
 
-Use concrete missed defects or recurring review friction to propose additions, clarification, or removal. State the observed case and why existing rules/checks missed it. Confirm new policy with the owner before treating it as a requirement.
+Use concrete missed defects or recurring review friction to propose additions, clarification, or removal. State the observed case and why existing rules/checks missed it. For a new contextual rule, give its trigger, what to inspect, the consequence, and the source. Confirm new policy with the owner before treating it as a requirement.
 
 If a rule can be checked mechanically, propose an applicable lint, architecture, or CI check instead. Once tooling enforces it, remove duplicate reviewer work. Preserve one authoritative source for each rule.

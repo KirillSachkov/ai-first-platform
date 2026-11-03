@@ -3,7 +3,7 @@ name: ship
 description: "Deliver reviewed work as a verified PR for owner acceptance. Use after implement or implement-spec, or when asked to deliver a reviewed branch."
 ---
 
-Deliver the assigned, committed, independently reviewed branch. Read root `AGENTS.md`, `docs/agents/delivery.md`, the testing guide, and the issue/spec. Check that the current tree, requirements, review outcomes, and agreed human checkpoints still match the evidence. If they do not, complete the affected checks and [finding resolution](../code-review/RESOLVING-FINDINGS.md) first.
+Deliver the assigned, committed, independently reviewed branch. Read root `AGENTS.md`, `docs/agents/delivery.md`, the testing guide, and the issue/spec. Check that the current tree, requirements, review outcomes, and agreed human checkpoints still match the evidence. Complete missing checks and independent review before delivery.
 
 1. Push the owned branch. Call `pr` to write the body in the team language, then create a draft or update the existing PR through the configured tracker. Reuse a spec's draft and link its implementation issues. Return a ready PR to draft while material revisions need verification.
 2. Wait for required CI on the current PR result. Fix failures within scope, commit, and repeat affected checks and independent review before relying on the new CI. Missing, pending, cancelled, or earlier green checks are not success. Report blockers or decisions instead of waiving failures.
