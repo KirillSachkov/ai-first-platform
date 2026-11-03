@@ -61,8 +61,9 @@ Take expected values from the first source that defines them:
 
 1. The spec issue.
 2. The acceptance criteria of the implementation issue.
-3. The reproduction steps of the bug.
-4. The pull request description.
+3. The current capability contract under `docs/requirements/`, where the agreed change preserves that behavior.
+4. The reproduction steps of the bug.
+5. The pull request description.
 
 Write expected values as literals. Never copy them from the code under test or recompute them the way the code does. When no source defines a value, ask the owner.
 
@@ -70,7 +71,7 @@ When you change an assertion in an existing test, explain each changed assertion
 
 ## Flaky tests and coverage
 
-- A flaky test is a failing check. Fix it before other work. No level retries tests: Vitest has no retries, Playwright runs with `retries: 0` and `failOnFlakyTests: true`.
+- A flaky test is a failing check. Fix it before delivering affected work; unrelated repairs follow the assignment rules in root `AGENTS.md`. No level retries tests: Vitest has no retries, Playwright runs with `retries: 0` and `failOnFlakyTests: true`.
 - There is no coverage threshold. Add a test because a behaviour needs it, never to raise a percentage.
 - oxlint rejects focused (`only`) and disabled (`skip`) tests and tests without assertions.
 
@@ -123,7 +124,7 @@ The `main` branch is protected by a ruleset (#24): changes reach it only through
 
 ## Red `main`
 
-A failure on `main` opens an issue labelled `bug` with a link to the run; a repeat failure comments on it. A red `main` is fixed first, before any other work.
+A failure on `main` opens an issue labelled `bug` with a link to the run; a repeat failure comments on it. Prioritize its repair under [delivery scope rules](delivery.md#verification-evidence). Resume dependent work after the failure is resolved; the priority does not start an unrelated implementation.
 
 ## Coming later
 

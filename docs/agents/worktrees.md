@@ -1,10 +1,10 @@
 # Worktree ownership and shared services
 
-Each independent implementation uses its own worktree and branch. Reuse the assigned worktree when resuming the same issue. One writer owns a worktree at a time. Read-only reviewers may share a committed snapshot; reviewers that modify files or generate artifacts need their own copy.
+Each independent implementation uses its own worktree and branch. Diagnosis that writes reproductions or instrumentation uses a dedicated diagnosis worktree under the same ownership rules. Reuse the assigned worktree when resuming the same issue. One writer owns a worktree at a time. Read-only reviewers may share a committed snapshot; reviewers that modify files or generate artifacts need their own copy.
 
 ## Start or resume
 
-1. Inspect the current path, branch, HEAD, status, and assigned issue. Preserve existing changes and live work.
+1. Inspect the current path, branch, HEAD, status, and assigned issue or diagnosis target. Preserve existing changes and live work.
 2. For independent work, base a new branch/worktree on fetched `origin/main`. Confirm its actual base before editing.
 3. If the current copy is already dedicated to the issue, reuse it. Establish ownership before writing. An integration ticket bases its worktree on the integration branch instead of main.
 4. Use the host's worktree manager when available. In Orca, use the version-matched `orca-cli` skill. Parent/child UI metadata does not prove the Git base. Never reset a foreign checkout to obtain the desired base.

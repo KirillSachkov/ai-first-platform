@@ -7,7 +7,7 @@ description: Diagnosis loop for hard bugs and performance regressions. Use when 
 
 A discipline for hard bugs. Skip phases only when explicitly justified.
 
-Root `AGENTS.md` owns assignment and start boundaries. Diagnosis alone stops before a production fix and reports evidence and the proposed next step. Use an assigned worktree for reproductions. An explicitly started implementation may use this diagnostic discipline inside its agreed issue.
+Root `AGENTS.md` owns assignment and start boundaries. Use a dedicated diagnosis worktree under `docs/agents/worktrees.md` for reproductions and instrumentation. Diagnosis alone ends after Phase 4: preserve evidence, remove only your temporary probes and throwaway artifacts, and report the cause or remaining uncertainty plus the proposed next step. Phase 5 requires explicitly started implementation. An authorized implementation may use this diagnostic discipline inside its agreed issue.
 
 When exploring the codebase, read `DOMAIN.md` (if it exists) to get a clear mental model of the relevant modules, and check ADRs in the area you're touching.
 
