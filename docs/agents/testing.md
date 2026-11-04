@@ -61,7 +61,7 @@ Take expected values from the first source that defines them:
 
 1. The spec issue.
 2. The acceptance criteria of the implementation issue.
-3. The current capability contract under `docs/requirements/`, where the agreed change preserves that behavior.
+3. The existing test of a behavior that the agreed change preserves.
 4. The reproduction steps of the bug.
 5. The pull request description.
 

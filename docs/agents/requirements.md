@@ -9,13 +9,19 @@ Every implementation needs a GitHub issue before repository changes begin. A sma
 - When independent, verifiable slices or multiple sessions need explicit dependencies, propose `to-tickets` for the owner to select. Tickets refer to the parent requirements instead of copying them.
 - Keep a large idea or release in scope documents until concrete behavior is ready to specify. A full application spec is not a prerequisite for every task.
 
-## Keep current requirements distinct from history
+## Current behavior and history
 
-`customer-requirements.md` holds the brief; `docs/first-version.md` holds delivery scope. `DOMAIN.md`, `docs/domain-model.md`, and ADRs retain their existing purposes. A proposed domain model does not prove implemented behavior.
+`customer-requirements.md` holds the brief; `docs/first-version.md` holds delivery scope. A proposed domain model in `docs/domain-model.md` does not prove implemented behavior.
 
-A change spec lives in its GitHub issue. Maintain current capability behavior under `docs/requirements/<capability>.md` when that capability is implemented. Create these files as work arrives, rather than generating speculative product documentation during harness setup. Name capabilities by stable behavior, not source-file layout.
+A change spec lives in its GitHub issue. It records what was requested and why at that time. After merge, preserve it unchanged as history; never edit it to describe later behavior.
 
-A capability document owns the current contract. Link to existing glossary/ADRs and to the issue/PR that changes it. A ticket owns its bounded acceptance criteria. Keep proposed and implemented behavior explicit. Historical change issues remain the record of what was requested at that time.
+Each question about current behavior has one owner:
+
+- Behavior: tests at the seams in [testing.md](testing.md). Name each test by the behavior it checks.
+- Terms: `DOMAIN.md`.
+- Lasting decisions, constraints, and deliberate non-goals: ADRs.
+
+Do not keep a separate prose document of current behavior. Record a lasting requirement that a test cannot check in an ADR. To learn the current behavior of a capability, read its tests, `DOMAIN.md`, the related ADRs, and the issues linked from them.
 
 ## Content and human decisions
 
@@ -27,6 +33,6 @@ For human acceptance, follow [human-review.md](human-review.md). Full specs and 
 
 Before changing agreed behavior, show the semantic difference and obtain the owner's decision. Record that decision in the issue. Update affected criteria, tickets, dependencies, tests, and implementation. Pause dependent work while the decision is missing; independent authorized work may continue.
 
-After merge, a new desired behavior gets a new change issue. A violation of the current contract gets a bug issue. Preserve the previous issue as history. Update current capability requirements with code and tests in the same PR. If requirements are merged ahead of implementation, mark them as proposed rather than current behavior.
+After merge, a new desired behavior gets a new change issue. The new issue links the earlier issue and names each criterion it replaces. A violation of current tested behavior gets a bug issue. Change tests before code as [testing.md](testing.md#when-a-test-is-required) requires.
 
-When code, tests, and requirements disagree, identify the accepted decision. Code shows actual behavior; it does not establish desired behavior. A passing test does not justify rewriting the requirement to match it. Conflicting accepted decisions return to the owner.
+When code, tests, and issues disagree, identify the accepted decision: the latest owner-approved criterion. Code shows actual behavior; it does not establish desired behavior. A passing test does not justify rewriting the requirement to match it. Conflicting accepted decisions return to the owner.
