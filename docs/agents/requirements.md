@@ -18,10 +18,10 @@ A change spec lives in its GitHub issue. It records what was requested and why a
 Each question about current behavior has one owner:
 
 - Behavior: tests at the seams in [testing.md](testing.md), named as [testing.md](testing.md#placement-and-naming) requires.
-- Terms and the rules inside their definitions: `DOMAIN.md`.
+- Terms: `DOMAIN.md`.
 - Decisions that meet the ADR criteria in `domain-modeling`, including deliberate non-goals: ADRs.
 
-Keep current behavior in these sources only, without a separate prose document. A lasting requirement that a test cannot check goes into the `DOMAIN.md` definition it constrains or into a qualifying ADR; otherwise its issue remains its record. To learn the current behavior of a capability, read its tests, `DOMAIN.md`, the related ADRs, and the issues linked from them.
+Keep current behavior in these sources only, without a separate prose document. A lasting requirement that a test cannot check goes into an ADR when it meets those criteria; otherwise its issue remains its record. To learn the current behavior of a capability, read its tests, `DOMAIN.md`, the related ADRs, and the issues linked from them.
 
 ## Content and human decisions
 
