@@ -17,7 +17,7 @@ A change spec lives in its GitHub issue. It records what was requested and why a
 
 Each question about current behavior has one owner:
 
-- Behavior: tests at the seams in [testing.md](testing.md). Name each test by the behavior it checks.
+- Behavior: tests at the seams in [testing.md](testing.md), named as [testing.md](testing.md#placement-and-naming) requires.
 - Terms: `DOMAIN.md`.
 - Lasting decisions, constraints, and deliberate non-goals: ADRs.
 
@@ -33,6 +33,6 @@ For human acceptance, follow [human-review.md](human-review.md). Full specs and 
 
 Before changing agreed behavior, show the semantic difference and obtain the owner's decision. Record that decision in the issue. Update affected criteria, tickets, dependencies, tests, and implementation. Pause dependent work while the decision is missing; independent authorized work may continue.
 
-After merge, a new desired behavior gets a new change issue. The new issue links the earlier issue and names each criterion it replaces. A violation of current tested behavior gets a bug issue. Change tests before code as [testing.md](testing.md#when-a-test-is-required) requires.
+After merge, a new desired behavior gets a new change issue. The new issue links the earlier issue and names each criterion it replaces. A violation of tested behavior or of an accepted criterion gets a bug issue. Change tests before code as [testing.md](testing.md#when-a-test-is-required) requires.
 
 When code, tests, and issues disagree, identify the accepted decision: the latest owner-approved criterion. Code shows actual behavior; it does not establish desired behavior. A passing test does not justify rewriting the requirement to match it. Conflicting accepted decisions return to the owner.
