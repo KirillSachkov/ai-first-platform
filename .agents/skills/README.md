@@ -31,6 +31,7 @@ Every upstream-derived file is unchanged except the adaptations below. Retain pr
 - **Writing-for-agents audit (#33).** Requirements propose user-only preparation skills for owner selection. Human-check fields have one definition. Presentation reads are conditional on needs beyond the basic PR template. Finding resolution links directly to owner escalation.
 - **Portable implementation core (#33).** `implement` restores the upstream description and conditional ticket lookup. Preparation and delivery follow project pointers instead of requiring an issue or calling `ship` in the skill itself. `implement-spec` retains its graph and delegates delivery/retention to project rules. Committed review, coverage and safe ownership remain explicit.
 - **Correction simplification (#33).** Correction steps stay in `implement` and `implement-spec`: the main agent owns small-task fixes, and one fresh implementer owns aggregate-spec fixes. Independent re-review checks corrections and affected interactions. Project delivery owns coverage, visible disputes and stopping conditions for agent or human findings. No separate author-approval stage is required for each finding.
+- **Instruction ownership (#35).** Project requirements, domain paths, and delivery criteria have one policy source. Router/preparation skills read those sources; `ship` owns delivery actions. Testing Decisions describe the assigned change rather than restating testing principles.
 - Project facts live in root `AGENTS.md`, `CODING_STANDARDS.md`, and thematic `docs/agents/`. The public README is not the agent's process authority. The upstream license and original references remain intact.
 
 ## Installed content identity
@@ -40,7 +41,7 @@ then file bytes followed by NUL; concatenate and hash. Includes native metadata 
 
 | Skill | SHA-256 |
 | --- | --- |
-| `ask-matt` | `7c59fa688e458cc161526ac70abfade102471a50424b8c04ae93a92570b91144` |
+| `ask-matt` | `cfacd9f7b9f5410442579d46c2a46660f5916b40e0daaaeca10f786be0ce6e62` |
 | `code-review` | `651145cbbce0a813dce3071e720b54009af4e54fdfe6ae06a79b48ac10281007` |
 | `codebase-design` | `5e680d83ed795dfdce570831c31c7e95927c3a3403a2f71006c8684f35472b84` |
 | `diagnosing-bugs` | `7f45fd315cf2ce923ff2208eb76d4ba3189f5e14b0b1ff33ff5256265ddd3bd9` |
@@ -50,7 +51,7 @@ then file bytes followed by NUL; concatenate and hash. Includes native metadata 
 | `grilling` | `27f71f106a7062691b2982d4f847304a62930ebed8b50734f4d4fd498d60afa8` |
 | `handoff` | `77c2607c751b7c522e0208ab113ba4949f8267610d6061323c7ccd3ace21d7da` |
 | `implement` | `95af274086aef8db8a8c51b078d9d2f0d108a28796d1e84e373536f88f3664fe` |
-| `implement-spec` | `8cfbe422e17966c2dd77c8dee31855c94068e785b791175680ac7dbff3630bab` |
+| `implement-spec` | `7875096d8a2c7ec734cbaa7cf0d75ae33806124b252cb4dd26d16142096205a7` |
 | `improve-codebase-architecture` | `d02da163afa2ba2422433ba35ecae21659bef7d8bba5d2341ca1fa55573f7b3f` |
 | `pr` | `d19b624a600e4700d6e6117247ebf348068e3e520b3ea8187b176a72025937d4` |
 | `prototype` | `c4efd5e0f1c302b6225be83e8e42abdb05e13fde900484e4e2240e90b4e83eb6` |
@@ -60,11 +61,11 @@ then file bytes followed by NUL; concatenate and hash. Includes native metadata 
 | `tdd` | `e262a6d42d7588c95df99c989c18151c0cab96a8d11a8a7cebf93bf43b2c280b` |
 | `teach` | `9aaf696786348313963552e446415c67fdd8129276b61f02be6dcedb208cd381` |
 | `to-questionnaire` | `560491db9f48174ca9f7b5dd1444bc9c3cb7ac2d9e3e673e48289ef3221f164e` |
-| `to-spec` | `8064291406797497f30fc7e95bf08c60dda5754c680101fa6be0df34874ef9bd` |
-| `to-tickets` | `40d2d1c178ebd6585bb40268f9ab3be7859643f53db869643a68e210397078f9` |
+| `to-spec` | `20ad3963bdf14e96788ded6ad2f46933eb47071a7229b47282232fd4e1d125fd` |
+| `to-tickets` | `dc168c2ba857a8494423bbb88b39c48c0d325b8bb0e30021643731adf4c1b6b1` |
 | `triage` | `40d36a83b7d09c053a12cc647fba2b1dd2af09f5f71551525eed907d90027147` |
 | `wait-what` | `d89d9b5abee5ecf9179e331b329382314312c4cbc7f0ab17571d7e69377e0146` |
 | `wayfinder` | `62a0ab7262d40119da048328a71aeadaeaa21a4049ee9268d14500921bb6e257` |
 | `wizard` | `8fd93e38124bf81ad439231ba8af833b462ca9719c62373c87f25b06f6be776e` |
 | `writing-for-agents` | `dc53f07d1f662137317789b9b5d74cfcc26dbcfc15038a7faf676c844d8638e8` |
-| `ship` | `08e8761ba341013c6fd1c6ae87e9d9cd7f407fd40c64e3088fa62f3f2cef55da` |
+| `ship` | `f8682ccbbc07ade3c6794e47cb5f94fd9bc691031b76b56a3928553461f69635` |
