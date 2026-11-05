@@ -63,7 +63,7 @@ then file bytes followed by NUL; concatenate and hash. Includes native metadata 
 | `tdd` | `e262a6d42d7588c95df99c989c18151c0cab96a8d11a8a7cebf93bf43b2c280b` |
 | `teach` | `9aaf696786348313963552e446415c67fdd8129276b61f02be6dcedb208cd381` |
 | `to-questionnaire` | `560491db9f48174ca9f7b5dd1444bc9c3cb7ac2d9e3e673e48289ef3221f164e` |
-| `to-spec` | `337089538ec849ad0e88e321a7bb675a4c8a22dc66ffd89e3b51dc190e4dbe1f` |
+| `to-spec` | `d87f3308bdbe6da158db9d986323e3d6217601a56577ffafc18fe75e8cdb669e` |
 | `to-tickets` | `dc168c2ba857a8494423bbb88b39c48c0d325b8bb0e30021643731adf4c1b6b1` |
 | `triage` | `40d36a83b7d09c053a12cc647fba2b1dd2af09f5f71551525eed907d90027147` |
 | `wait-what` | `d89d9b5abee5ecf9179e331b329382314312c4cbc7f0ab17571d7e69377e0146` |
