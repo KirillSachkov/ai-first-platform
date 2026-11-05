@@ -1,6 +1,6 @@
 # Requirements and change specifications
 
-Every implementation needs a GitHub issue before repository changes begin. A small issue states the problem, desired and preserved behavior, scope, acceptance criteria, and verification. Read its comments and linked decisions before treating it as ready. Missing expected behavior returns to the owner; a label alone is insufficient.
+Every implementation needs a GitHub issue before repository changes begin. Read its comments and linked decisions when preparing the assignment. A readiness label alone does not make an issue ready.
 
 ## Choose the artifact
 
@@ -25,13 +25,11 @@ Keep current behavior in these sources only, without a separate prose document. 
 
 ## Content and human decisions
 
-Describe actors and permissions where relevant; success, failure, and boundary scenarios; preserved invariants; observable acceptance criteria; scope and dependencies. Separate required behavior from technical decisions. Reference the existing testing guide for seams, substitutes, commands, and prior art.
-
-For human acceptance, follow [human-review.md](human-review.md). Full specs and small issues need the same clear desired result, at different levels of detail. Apply the language rule in root `AGENTS.md`, including translated template headings.
+A short issue records the problem, desired and preserved behavior, scope, acceptance criteria, and verification. Use the `to-spec` template for full specs and [human participation](human-review.md) for acceptance planning.
 
 ## When requirements change
 
-Before changing agreed behavior, show the semantic difference and obtain the owner's decision. Record that decision in the issue. Update affected criteria, tickets, dependencies, tests, and implementation. Pause dependent work while the decision is missing; independent authorized work may continue.
+Before changing agreed behavior, show the semantic difference and follow [Ask the owner](human-review.md#ask-the-owner). Record the decision in the issue. Update affected criteria, tickets, dependencies, tests, and implementation.
 
 After merge, a new desired behavior gets a new change issue. The new issue links the earlier issue and names each criterion it replaces. A violation of tested behavior or of an accepted criterion gets a bug issue. Change tests before code as [testing.md](testing.md#when-a-test-is-required) requires.
 

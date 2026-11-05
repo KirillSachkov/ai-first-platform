@@ -6,7 +6,7 @@ Use `ship` to deliver a reviewed branch as a verified PR. Use `pr` to write its 
 
 The target branch for independent work is `main`; a spec uses an integration branch for its tickets. Follow [worktrees.md](worktrees.md) for bases and ownership. Each implementation issue links to a PR. A single integration PR may close the spec and several tickets. Discussion/research issues without repository changes may resolve with an answer rather than a PR.
 
-For a small implementation, open a draft PR after local verification and committed independent review. A spec opens a draft after its first integrated result. `ship` reuses an existing PR instead of creating duplicates. Return a ready PR to draft when material revisions need verification. Mark it ready only after required checks and review cover the current change.
+For a small implementation, the draft PR follows local verification and committed independent review. A spec's draft follows its first integrated result. A ready PR requires checks and review covering the current change.
 
 Keep issue delivery state explicit. Link the final PR with closing keywords and retain issues until delivery criteria are met, normally by merge. An integrated child commit may unblock dependent work inside the authorized spec run without pretending that its issue has shipped. Record integration progress in the parent issue or draft PR.
 
@@ -26,7 +26,7 @@ Delivery requires resolved blocking findings and independent review covering all
 
 After updating from the fetched intended PR target, record a new immutable merge-base with that target. Review the complete resulting PR diff against the new base, including effects of the update and conflict resolutions. Retain earlier reports and record old/new endpoints; do not treat incoming target commits as assigned work. Recheck affected behavior and human checkpoints. Renew merge approval for the new head.
 
-Wait for successful `ci-ok` for the current PR result. Pending, missing, cancelled, or older successful checks do not count. Do not waive a failure or call a rerun proof of correctness. Fix within scope or report the blocker and next step. For red `main`, report its bug issue and propose `implement`; the priority rule does not authorize starting an unrelated fix. Pause dependent work and continue only independent authorized work.
+Delivery requires successful `ci-ok` for the current PR result. Failures remain blockers until resolved. Do not waive a failure or call a rerun proof of correctness. For red `main`, report its bug issue and propose `implement`; the priority rule does not authorize starting an unrelated fix. Pause dependent work and continue only independent authorized work.
 
 ## Human handoff
 

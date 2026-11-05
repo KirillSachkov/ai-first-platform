@@ -67,8 +67,6 @@ Take expected values from the first source that defines them:
 
 Write expected values as literals. Never copy them from the code under test or recompute them the way the code does. When no source defines a value, ask the owner.
 
-When you change an assertion in an existing test, explain each changed assertion in the PR description: what it checked, what it checks now, and which source requires the change.
-
 ## Flaky tests and coverage
 
 - A flaky test is a failing check. Fix it before delivering affected work; unrelated repairs follow the assignment rules in root `AGENTS.md`. No level retries tests: Vitest has no retries, Playwright runs with `retries: 0` and `failOnFlakyTests: true`.
@@ -119,14 +117,11 @@ The `main` branch is protected by a ruleset (#24): changes reach it only through
 
 ## Self-check before a PR
 
-1. Run `pnpm verify` and make it green.
-2. If the change touches the UI, open the page in a browser on the running stack, walk the scenario, and take a screenshot.
-3. In the PR description, list the commands you ran with their results, attach the screenshot, and explain every changed assertion.
-4. Hand the result to the owner under [human participation](human-review.md) and [merge authority](delivery.md#main-and-owner-acceptance).
+Use the pre-PR level above. If the change touches the UI, open the page on the running stack, walk the scenario, and take a screenshot. Include it in the PR evidence using `pr`.
 
 ## Red `main`
 
-A failure on `main` opens an issue labelled `bug` with a link to the run; a repeat failure comments on it. Prioritize its repair under [delivery scope rules](delivery.md#verification-evidence). Resume dependent work after the failure is resolved; the priority does not start an unrelated implementation.
+A failure on `main` opens an issue labelled `bug` with a link to the run; a repeat failure comments on it. Follow [delivery scope rules](delivery.md#verification-evidence) for repair and dependent work.
 
 ## Coming later
 
