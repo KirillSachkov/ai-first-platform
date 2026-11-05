@@ -8,5 +8,8 @@
 
 Use [docs/first-version.md](../first-version.md) to determine delivery scope. A domain concept or future integration described in the model does not by itself place a capability in the main delivery.
 
-For glossary and ADR work, use `domain-modeling`. Record relationships, lifecycle rules, module responsibilities, and unresolved questions in `docs/domain-model.md`.
+Use the glossary's canonical terms in discussions, code, issues, and reviews. For glossary and ADR work, use `domain-modeling`.
+
+Record relationships, lifecycle rules, module responsibilities, and unresolved questions in `docs/domain-model.md`.
+
 Before accepting a proposal that conflicts with an ADR, resolve the decision with the owner.

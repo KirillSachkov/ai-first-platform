@@ -26,7 +26,7 @@ Delivery requires resolved blocking findings and independent review covering all
 
 After updating from the fetched intended PR target, record a new immutable merge-base with that target. Review the complete resulting PR diff against the new base, including effects of the update and conflict resolutions. Retain earlier reports and record old/new endpoints; do not treat incoming target commits as assigned work. Recheck affected behavior and human checkpoints. Renew merge approval for the new head.
 
-Delivery requires successful `ci-ok` for the current PR result. Failures remain blockers until resolved. For red `main`, report its bug issue and propose `implement`; the priority rule does not authorize starting an unrelated fix. Pause dependent work and continue only independent authorized work.
+Delivery requires successful `ci-ok` for the current PR result. Failures remain blockers until resolved. Do not waive a failure or call a rerun proof of correctness. For red `main`, report its bug issue and propose `implement`; the priority rule does not authorize starting an unrelated fix. Pause dependent work and continue only independent authorized work.
 
 ## Human handoff
 

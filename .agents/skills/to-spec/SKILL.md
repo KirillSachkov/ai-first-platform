@@ -4,7 +4,7 @@ description: "Turn the current conversation into a spec and publish it to the pr
 disable-model-invocation: true
 ---
 
-Before drafting, read the requirements, testing, and human-participation pointers in root `AGENTS.md`. Apply its language rule to the published artifact. The spec is a snapshot of the decision, not a description of current behavior.
+Before drafting, read the requirements, testing, and human-participation pointers in root `AGENTS.md`. Apply its language rule to the published artifact. Include preserved behavior and agreed human checkpoints. The spec is a snapshot of the decision, not a description of current behavior.
 
 This skill takes the current conversation context and codebase understanding and produces a spec. Do NOT interview the user; just synthesize what you already know.
 
@@ -18,7 +18,7 @@ The issue tracker and triage label vocabulary should have been provided to you. 
 
 Check with the user that these seams match their expectations.
 
-3. Draft from the agreed decisions using the template. Confirm the draft with the owner before publishing as ready. Apply the configured readiness label.
+3. Draft from the agreed decisions using the template. Confirm behavior, scope, criteria, and human checkpoints with the owner before publishing as ready. Apply the configured readiness label; it does not authorize execution.
 
 <spec-template>
 
@@ -28,7 +28,7 @@ The problem that the user is facing, from the user's perspective.
 
 ## Solution
 
-The solution to the problem, from the user's perspective. Include the behavior this change must preserve.
+The solution to the problem, from the user's perspective.
 
 ## User Stories
 

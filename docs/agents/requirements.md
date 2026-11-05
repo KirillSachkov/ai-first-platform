@@ -1,6 +1,6 @@
 # Requirements and change specifications
 
-Every implementation needs a GitHub issue before repository changes begin. Read its comments and linked decisions when preparing the assignment.
+Every implementation needs a GitHub issue before repository changes begin. Read its comments and linked decisions when preparing the assignment. A readiness label alone does not make an issue ready.
 
 ## Choose the artifact
 
