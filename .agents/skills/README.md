@@ -68,4 +68,4 @@ then file bytes followed by NUL; concatenate and hash. Includes native metadata 
 | `wayfinder` | `62a0ab7262d40119da048328a71aeadaeaa21a4049ee9268d14500921bb6e257` |
 | `wizard` | `8fd93e38124bf81ad439231ba8af833b462ca9719c62373c87f25b06f6be776e` |
 | `writing-for-agents` | `dc53f07d1f662137317789b9b5d74cfcc26dbcfc15038a7faf676c844d8638e8` |
-| `ship` | `08e8761ba341013c6fd1c6ae87e9d9cd7f407fd40c64e3088fa62f3f2cef55da` |
+| `ship` | `cdfb7a4990c33ac55b339d18b6b8ea9c7d9428527d4d3b875642ca1f8a40f304` |
