@@ -61,7 +61,7 @@ Take expected values from the first source that defines them:
 
 1. The spec issue.
 2. The acceptance criteria of the implementation issue.
-3. The current capability contract under `docs/requirements/`, where the agreed change preserves that behavior.
+3. The existing test of a behaviour that the agreed change preserves.
 4. The reproduction steps of the bug.
 5. The pull request description.
 
@@ -82,6 +82,8 @@ When you change an assertion in an existing test, explain each changed assertion
 | `api` | `src/**/*.test.ts` next to the code     | `src/**/*.int.test.ts` next to the endpoint             | `apps/api/test/` | `apps/api/vitest.config.ts` |
 | `web` | `src/**/*.unit.test.ts` next to the code | `src/**/*.component.test.tsx` next to the page or feature | `apps/web/test/` | `apps/web/vitest.config.ts` |
 | `e2e` | —                                       | `e2e/tests/*.test.ts`                                  | `e2e/support/` | `e2e/playwright.config.ts` |
+
+Name each test by the behaviour it checks. Tests are the record of current behaviour ([requirements.md](requirements.md#current-behavior-and-history)).
 
 Root scripts use `node:test`: `scripts/*.test.mjs`, sample [`changed-parts.test.mjs`](../../scripts/changed-parts.test.mjs).
 
