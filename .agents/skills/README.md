@@ -33,6 +33,7 @@ Every upstream-derived file is unchanged except the adaptations below. Retain pr
 - **Correction simplification (#33).** Correction steps stay in `implement` and `implement-spec`: the main agent owns small-task fixes, and one fresh implementer owns aggregate-spec fixes. Independent re-review checks corrections and affected interactions. Project delivery owns coverage, visible disputes and stopping conditions for agent or human findings. No separate author-approval stage is required for each finding.
 - **Tests own current behavior (#37).** `to-spec` calls the spec a snapshot of the decision, not a description of current behavior.
 - **Instruction ownership (#35).** Project requirements, domain paths, and delivery criteria have one policy source. Router/preparation skills read those sources; `ship` owns delivery actions. This change removes no upstream Matt text; `to-spec` Testing Decisions and the `implement-spec` draft-PR step keep their upstream wording.
+- **Upstream wording first (#43).** `to-spec` keeps every upstream line; project rules sit in separate added lines.
 - Project facts live in root `AGENTS.md`, `CODING_STANDARDS.md`, and thematic `docs/agents/`. The public README is not the agent's process authority. The upstream license and original references remain intact.
 
 ## Installed content identity
@@ -62,7 +63,7 @@ then file bytes followed by NUL; concatenate and hash. Includes native metadata 
 | `tdd` | `e262a6d42d7588c95df99c989c18151c0cab96a8d11a8a7cebf93bf43b2c280b` |
 | `teach` | `9aaf696786348313963552e446415c67fdd8129276b61f02be6dcedb208cd381` |
 | `to-questionnaire` | `560491db9f48174ca9f7b5dd1444bc9c3cb7ac2d9e3e673e48289ef3221f164e` |
-| `to-spec` | `5ac906f65f8009a4ddb0b1851d7eb169b190b608f58aa7e8b40353c58b8b4196` |
+| `to-spec` | `337089538ec849ad0e88e321a7bb675a4c8a22dc66ffd89e3b51dc190e4dbe1f` |
 | `to-tickets` | `dc168c2ba857a8494423bbb88b39c48c0d325b8bb0e30021643731adf4c1b6b1` |
 | `triage` | `40d36a83b7d09c053a12cc647fba2b1dd2af09f5f71551525eed907d90027147` |
 | `wait-what` | `d89d9b5abee5ecf9179e331b329382314312c4cbc7f0ab17571d7e69377e0146` |
