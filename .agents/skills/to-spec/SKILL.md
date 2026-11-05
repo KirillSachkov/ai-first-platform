@@ -4,7 +4,7 @@ description: "Turn the current conversation into a spec and publish it to the pr
 disable-model-invocation: true
 ---
 
-Before drafting, read the requirements, testing, and human-participation pointers in root `AGENTS.md`. Apply its language rule to the published artifact.
+Before drafting, read the requirements, testing, and human-participation pointers in root `AGENTS.md`. Apply its language rule to the published artifact. The spec is a snapshot of the decision, not a description of current behavior.
 
 This skill takes the current conversation context and codebase understanding and produces a spec. Do NOT interview the user; just synthesize what you already know.
 
@@ -62,8 +62,8 @@ Exception: if a prototype produced a snippet that encodes a decision more precis
 
 A list of testing decisions that were made. Include:
 
-- The chosen seams, observable behaviors, and expected results for this change
-- Task-specific infrastructure or substitute decisions under the project's testing rules
+- A description of what makes a good test (only test external behavior, not implementation details)
+- Which modules will be tested
 - Prior art for the tests (i.e. similar types of tests in the codebase)
 
 ## Out of Scope
