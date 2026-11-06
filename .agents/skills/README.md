@@ -7,7 +7,7 @@ The upstream MIT license is in `LICENSE.mattpocock`. Each project owns its harne
 ## Runtime
 
 Codex and OpenCode discover project skills in `.agents/skills`; `.claude/skills` points here for Claude Code.
-Root `AGENTS.md` and `docs/agents/` own project rules; a skill reaches them through a pointer line.
+Root `AGENTS.md` and `docs/agents/` own project rules; a skill reaches them through a pointer line. Reading a `SKILL.md` file is not proof of automatic discovery.
 
 ## Project adaptations
 
