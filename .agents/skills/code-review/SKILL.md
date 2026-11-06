@@ -69,7 +69,7 @@ Issue both sub-agent calls together, in the foreground, and aggregate the report
 
 - The diff command and commit list.
 - The path or fetched contents of the spec.
-- The agreed human checkpoints and available verification evidence. Independently compare requirements, the complete diff, and evidence using `docs/agents/human-review.md`. Report missed human-check triggers, unsupported exemptions, and stale or insufficient evidence inside the Spec report. State any remaining human question and affected behavior; an agent's review does not complete the human check.
+- The agreed human checkpoints and available verification evidence, checked as `docs/agents/human-review.md#choose-additional-human-checks` requires. Report gaps and any remaining human question with its affected behavior inside the Spec report; an agent's review does not complete a human check.
 - The brief: "Report: (a) requirements the spec asked for that are missing or partial; (b) behaviour in the diff that wasn't asked for (scope creep); (c) requirements that look implemented but where the implementation looks wrong. Quote the spec line for each finding. Under 400 words."
 
 If the spec is missing, skip the Spec sub-agent and note this in the final report.

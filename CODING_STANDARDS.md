@@ -1,6 +1,6 @@
 # Coding standards
 
-This document guides the Standards reviewer. Apply contextual rules here and the relevant sources below. Root `AGENTS.md` owns authority; this document does not expand the assignment.
+This document guides the Standards reviewer. Apply contextual rules here and the relevant sources below.
 
 ## Review sources
 
@@ -8,7 +8,7 @@ This document guides the Standards reviewer. Apply contextual rules here and the
 - For backend changes, read `apps/api/AGENTS.md`. For frontend changes, read `apps/web/AGENTS.md`.
 - For test judgement, read `docs/agents/testing.md`. Keep its rules there rather than copying them here.
 - For instructions, skills, and context pointers, read `.agents/skills/writing-for-agents/SKILL.md` and its skill-mechanics reference when applicable.
-- Formatting, compiler diagnostics, import restrictions, generated API drift, and mechanically enforced layout belong to their configured checks. Do not repeat their diagnostics as manual review findings.
+- `pnpm check` already enforces formatting, compiler diagnostics, lint rules, module and layer boundaries, and generated API drift. Leave its diagnostics out of manual findings.
 
 ## Contextual checks
 

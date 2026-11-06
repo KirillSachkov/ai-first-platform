@@ -13,6 +13,16 @@
       // The root module imports every domain and technical module by design.
       "files": ["src/app.module.ts"],
       "rules": { "import/max-dependencies": "off" }
+    },
+    {
+      // Application code reads the current time from the injectable clock (apps/api/AGENTS.md).
+      "files": ["src/**"],
+      "rules": { "platform/no-current-time": "error" }
+    },
+    {
+      // The system clock reads the real time; tests control time through the clock or fake timers.
+      "files": ["src/shared/time/clock.ts", "src/**/*.test.ts"],
+      "rules": { "platform/no-current-time": "off" }
     }
   ]
 }

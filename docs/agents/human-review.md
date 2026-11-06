@@ -1,7 +1,5 @@
 # Human participation
 
-Use root `AGENTS.md` for assignment and start authority. Follow [requirements.md](requirements.md#when-requirements-change) for behavior changes and [delivery.md](delivery.md) for merge authority.
-
 ## Human check
 
 Record each additional check with these fields:
@@ -35,9 +33,7 @@ If no additional check is needed, give a short reason in the PR. Every final PR 
 
 ## Present the result
 
-Lead with changed behavior and the owner's next action. Present each additional check using the [human-check fields](#human-check).
-
-Keep required human actions, unresolved questions, and material limitations visible. Put detailed commands, logs, and revision records behind a disclosure. Use `pr` for presentation. A screenshot demonstrates visible state; permissions and side effects need evidence at the relevant boundary. Mark planned or unavailable checks as such.
+Present each additional check in the PR using the [human-check fields](#human-check). Mark planned or unavailable checks as such. The [PR report rules](pr.md) own the rest of the presentation.
 
 ## Ask the owner
 
@@ -47,6 +43,4 @@ Record the question and next step in the existing issue or PR, and notify the ow
 
 ## Keep results inspectable
 
-Record agent verification and progress in comments or the PR. Preserve the issue's agreed criteria and their acceptance checkboxes; the owner controls acceptance marks. Earlier agent marks are not evidence of owner acceptance. Keep the issue open until its delivery criteria are met, normally by its linked PR merging.
-
-Readiness, human acceptance, and merge are separate states. Reviews name commits and requirement inputs; [delivery.md](delivery.md#verification-evidence) owns revision changes and renewed merge approval.
+Record agent verification and progress in comments or the PR. Preserve the issue's agreed criteria and their acceptance checkboxes; the owner controls acceptance marks. Earlier agent marks are not evidence of owner acceptance. Readiness, human acceptance, and merge are separate states.

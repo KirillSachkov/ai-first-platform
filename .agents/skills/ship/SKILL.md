@@ -3,11 +3,11 @@ name: ship
 description: "Deliver reviewed work as a verified PR for owner acceptance. Use after implement or implement-spec, or when asked to deliver a reviewed branch."
 ---
 
-Deliver the assigned, committed, independently reviewed branch. Before delivery, read root `AGENTS.md`, its delivery, testing, tracker, and human-participation pointers, and the issue/spec. Complete missing evidence under those project rules.
+Deliver the assigned, committed, independently reviewed branch under [delivery](../../../docs/agents/delivery.md). Read the issue or spec, and complete missing evidence under the delivery rules.
 
-1. Push the owned branch. Call `pr` for the body. Create or update its PR through the configured tracker, following project draft timing and issue linkage. Return a ready PR to draft while material revisions need verification.
-2. Wait for CI on the current PR result. Missing, pending, cancelled, or earlier green checks are not success. For in-scope failures, fix, commit, and repeat affected checks and independent review. Report blockers under [Ask the owner](../../../docs/agents/human-review.md#ask-the-owner).
+1. Push the owned branch. Call `pr` for the body. Create or update the PR through the [tracker](../../../docs/agents/issue-tracker.md), following draft timing and issue linkage. Return a ready PR to draft while material revisions need verification.
+2. Wait for `ci-ok` on the current PR head. For in-scope failures, fix, commit, and repeat affected checks and independent review. Report blockers under [Ask the owner](../../../docs/agents/human-review.md#ask-the-owner).
 3. Record checked revisions, finding dispositions, evidence and its limits, and agreed human checks in the PR. Resolve any human decision due before handoff.
-4. When project readiness criteria hold, mark the draft ready. Give the owner the PR, the full SHA of the PR head, and the concrete next action. Keep acceptance and merge distinct. Follow project merge authority; a green run grants no merge permission. Retain or clean owned resources under project worktree rules.
+4. When readiness criteria hold, mark the draft ready. Hand off under [Main and owner acceptance](../../../docs/agents/delivery.md#main-and-owner-acceptance): the PR, the handed-off head, and the owner's concrete next action. Retain or clean owned resources under [worktree rules](../../../docs/agents/worktrees.md#finish).
 
-Delivery ends at owner handoff. Merge follows project merge authority. Deployment and automatic merge are outside this procedure.
+Delivery ends at owner handoff. Deployment and automatic merge are outside this procedure.

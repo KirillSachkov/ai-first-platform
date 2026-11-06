@@ -7,7 +7,7 @@ Each independent implementation uses its own worktree and branch. Diagnosis that
 1. Inspect the current path, branch, HEAD, status, and assigned issue or diagnosis target. Preserve existing changes and live work.
 2. For independent work, base a new branch/worktree on fetched `origin/main`. Confirm its actual base before editing.
 3. If the current copy is already dedicated to the issue, reuse it. Establish ownership before writing. An integration ticket bases its worktree on the integration branch instead of main.
-4. Use the host's worktree manager when available. In Orca, use the version-matched `orca-cli` skill. Parent/child UI metadata does not prove the Git base. Never reset a foreign checkout to obtain the desired base.
+4. Use the host's worktree manager and its version-matched skill when available. Parent/child UI metadata does not prove the Git base. Never reset a foreign checkout to obtain the desired base.
 5. Prepare dependencies and local configuration for this copy using the pinned Node/pnpm versions, package scripts, Compose configuration, and `.env.example`. Do not share writable `node_modules` between branches. A worktree does not automatically prepare services or credentials.
 
 Use the root checkout for orientation rather than implementation. Use bounded issue-related names for branches and worktrees. Parallel implementation workers each get a separate writable copy; merge into the integration branch serially.

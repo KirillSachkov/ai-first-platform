@@ -11,15 +11,11 @@ Modular monolith: `src/modules/<module>/` per domain module, `src/edge/` for req
 
 ## Tests
 
-Rules and test kinds: `docs/agents/testing.md`.
-
-- Unit tests are `*.test.ts` next to the code and need no Docker. Sample: `src/shared/async/with-timeout.test.ts`.
-- Integration tests are `*.int.test.ts` next to the endpoint. Call `useTestApp()` from `test/test-app.ts`, send requests with `api.inject(...)`, and parse the body with the slice's response schema. Sample: `src/system/get-system-status/get-system-status.int.test.ts`; test-only modules: `src/edge/edge.int.test.ts`.
-- Shared test infrastructure (containers, database copies, vhosts) lives in `test/`.
+Rules, kinds, file names and samples: `docs/agents/testing.md`. Integration tests start the app with `useTestApp()` from `test/test-app.ts` and send requests with `api.inject(...)`. Shared test infrastructure (containers, database copies, vhosts) lives in `test/`.
 
 ## Gotchas
 
-- Read the current time from `@Inject(CLOCK)` (`src/shared/time/clock.ts`), not `new Date()`, so integration tests can fix it.
+- Read the current time from `@Inject(CLOCK)` (`src/shared/time/clock.ts`) so integration tests can fix it. `platform/no-current-time` rejects `new Date()` and `Date.now()` in other `src/` code outside tests.
 - Inject every dependency with `@Inject(TOKEN_OR_CLASS)`. `tsx` runs the dev server without decorator metadata, so a constructor parameter without `@Inject` silently receives no value.
 - After changing a module's Drizzle schema, run `pnpm db:generate`. Each module has its own migrations folder and history table in its own Postgres schema.
 - After changing endpoint zod schemas, run `pnpm api:generate` from the repository root and commit `openapi/openapi.json` with the regenerated web client.

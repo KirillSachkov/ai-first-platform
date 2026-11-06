@@ -71,10 +71,53 @@ const noPlaywrightTestModifiers = {
   },
 };
 
+/**
+ * Application code reads the current time from an injected clock, so tests can fix it.
+ * `new Date(value)` with an argument stays allowed: it parses a value, not the current time.
+ */
+const noCurrentTime = {
+  meta: {
+    type: "problem",
+    docs: { description: "Ban `new Date()` without arguments and `Date.now()`." },
+    messages: {
+      currentTime:
+        "Read the current time from the injected clock, so tests can fix it. " +
+        "The app's AGENTS.md names the clock.",
+    },
+    schema: [],
+  },
+  create(context) {
+    return {
+      NewExpression(node) {
+        if (
+          node.callee.type === "Identifier" &&
+          node.callee.name === "Date" &&
+          node.arguments.length === 0
+        ) {
+          context.report({ node, messageId: "currentTime" });
+        }
+      },
+      CallExpression(node) {
+        const { callee } = node;
+        if (
+          callee.type === "MemberExpression" &&
+          callee.object.type === "Identifier" &&
+          callee.object.name === "Date" &&
+          callee.property.type === "Identifier" &&
+          callee.property.name === "now"
+        ) {
+          context.report({ node, messageId: "currentTime" });
+        }
+      },
+    };
+  },
+};
+
 export default {
   meta: { name: "platform" },
   rules: {
     "require-disable-reason": requireDisableReason,
     "no-playwright-test-modifiers": noPlaywrightTestModifiers,
+    "no-current-time": noCurrentTime,
   },
 };

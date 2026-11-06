@@ -11,7 +11,7 @@
 - Прекращение доступа сотрудника и его агента к сведениям платформы при увольнении.
 - Дополнительный этап: модуль интеграций с GitHub для выдачи и отзыва доступа к репозиториям. Основная поставка использует заранее доступные репозитории.
 
-Согласованные границы: [docs/first-version.md](docs/first-version.md). Предметная модель и приблизительные модули: [docs/domain-model.md](docs/domain-model.md). Термины: [DOMAIN.md](DOMAIN.md). Архитектурные решения: [docs/adr/](docs/adr/). Исходные требования: [customer-requirements.md](customer-requirements.md).
+Согласованные границы: [docs/first-version.md](docs/first-version.md). Предметная модель и приблизительные модули: [docs/domain-model.md](docs/domain-model.md). Термины: [GLOSSARY.md](GLOSSARY.md). Архитектурные решения: [docs/adr/](docs/adr/). Исходные требования: [customer-requirements.md](customer-requirements.md).
 
 ## Состояние проекта
 

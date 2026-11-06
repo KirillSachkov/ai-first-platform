@@ -34,7 +34,7 @@ Start a new test from the sample of its kind. Specs cite these samples as prior 
 
 Substitute only time, randomness, and external services. Use real PostgreSQL, RabbitMQ, migrations, Drizzle, repositories, and our own modules.
 
-- Time comes through the injectable clock: code reads it with `@Inject(CLOCK)` from `src/shared/time/clock.ts`, never with `new Date()`. An integration test fixes it with `useTestApp({ clock })`; sample: [`get-system-status.int.test.ts`](../../apps/api/src/system/get-system-status/get-system-status.int.test.ts). Unit tests use `vi.useFakeTimers()`.
+- Time: backend code reads the injectable clock (`apps/api/AGENTS.md`, enforced by `platform/no-current-time`). An integration test fixes it with `useTestApp({ clock })`; sample: [`get-system-status.int.test.ts`](../../apps/api/src/system/get-system-status/get-system-status.int.test.ts). Unit tests use `vi.useFakeTimers()`.
 - External services sit behind module ports; the test supplies the port implementation.
 - Frontend component tests answer HTTP with MSW handlers from `apps/web/test/msw.ts`. `http` is typed by the OpenAPI schema, so a response that breaks the schema does not compile. Use `response.untyped(...)` only for statuses the schema does not declare, with a comment.
 - E2E tests substitute nothing. They create their own data through the public API with values from `uniqueValue()` ([`e2e/support/unique-value.ts`](../../e2e/support/unique-value.ts)) and never reset the database.
@@ -87,24 +87,12 @@ Root scripts use `node:test`: `scripts/*.test.mjs`, sample [`changed-parts.test.
 
 ## Commands and levels
 
-| Command            | What it runs                                                                                     | Docker |
-| ------------------ | ------------------------------------------------------------------------------------------------ | ------ |
-| `pnpm check`       | All static checks except gitleaks                                                                | no     |
-| `pnpm test:unit`   | Unit tests of `api` and `web`                                                                    | no     |
-| `pnpm test`        | All Vitest tests                                                                                 | yes    |
-| `pnpm test:e2e`    | Playwright on Compose; `--grep @smoke` runs the PR set                                           | yes    |
-| `pnpm smoke`       | Stack outage and recovery                                                                        | yes    |
-| `pnpm verify`      | `check`, `test:scripts`, and Vitest tests of the apps changed since `main`. No E2E, no smoke     | yes    |
-| `pnpm verify:full` | The `main` level: everything above, `pnpm audit`, gitleaks over history. Run only when asked     | yes    |
+`package.json` lists the commands; `scripts/verify.mjs` defines `verify`. Levels:
 
-In the TDD loop, run one file from the app directory: `pnpm exec vitest run <path-to-test-file>` in `apps/api` or `apps/web`.
-
-Levels:
-
-- **Local loop**: one test file.
-- **Before a PR**: `pnpm verify`.
-- **PR in CI**: static checks and gitleaks on the diff always. `api` and `web` tests, `@smoke` E2E, `pnpm smoke` (when the smoke script or its lock changes), and audit run only for changed parts (`scripts/changed-parts.mjs`). One required check: `ci-ok`.
-- **`main` in CI**: everything, all E2E, smoke, audit, gitleaks over the whole history.
+- **Local loop**: one test file, `pnpm exec vitest run <path-to-test-file>` in `apps/api` or `apps/web`.
+- **Before a PR**: `pnpm verify`. It runs `check`, `test:scripts`, and the Vitest tests of the apps changed since `main`, without E2E or smoke. It needs Docker for integration and component tests.
+- **PR in CI**: static checks and gitleaks on the diff always. `api` and `web` tests, `@smoke` E2E (`pnpm test:e2e --grep @smoke`), `pnpm smoke` (when the smoke script or its lock changes), and audit run only for changed parts (`scripts/changed-parts.mjs`). One required check: `ci-ok`.
+- **`main` in CI**: everything, all E2E, smoke, audit, gitleaks over the whole history. `pnpm verify:full` repeats this level locally; run it only when asked.
 
 The `main` branch is protected by a ruleset (#24): changes reach it only through a PR with a green `ci-ok`. No pre-commit hooks exist; commit as often as the loop needs.
 
@@ -114,14 +102,11 @@ The `main` branch is protected by a ruleset (#24): changes reach it only through
 - Integration tests reuse shared PostgreSQL and RabbitMQ containers across runs and worktrees. Each test file gets its own database copy and vhost, so parallel agents do not collide. Remove stale containers with `docker ps --filter label=org.testcontainers=true`.
 - `pnpm test:e2e` and `pnpm smoke` share one Compose stack and wait for each other on a machine-wide lock.
 - Run `pnpm format` from the repository root only; from an app directory Prettier misses the root `.prettierignore`.
+- Component and E2E tests share one Playwright version and one Chromium. Install it once: `pnpm --filter @platform/e2e exec playwright install chromium`.
 
 ## Self-check before a PR
 
 Use the pre-PR level above. If the change touches the UI, open the page on the running stack, walk the scenario, and take a screenshot. Include it in the PR evidence using `pr`.
-
-## Red `main`
-
-A failure on `main` opens an issue labelled `bug` with a link to the run; a repeat failure comments on it. Follow [delivery scope rules](delivery.md#verification-evidence) for repair and dependent work.
 
 ## Coming later
 
