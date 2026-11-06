@@ -9,9 +9,9 @@ metadata:
     url: "https://github.com/humanlayer/skills/blob/main/plugins/show-me/skills/show-me/SKILL.md"
 ---
 
-Use this template for writing the PR body:
-
 Project [PR report rules](../../../docs/agents/pr.md) extend this template and win where they differ.
+
+Use this template for writing the PR body:
 
 ```markdown
 ## Summary

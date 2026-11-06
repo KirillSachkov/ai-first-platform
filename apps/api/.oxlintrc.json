@@ -20,8 +20,8 @@
       "rules": { "platform/no-current-time": "error" }
     },
     {
-      // The system clock is the one place that reads the real time.
-      "files": ["src/shared/time/clock.ts"],
+      // The system clock reads the real time; tests control time through the clock or fake timers.
+      "files": ["src/shared/time/clock.ts", "src/**/*.test.ts"],
       "rules": { "platform/no-current-time": "off" }
     }
   ]

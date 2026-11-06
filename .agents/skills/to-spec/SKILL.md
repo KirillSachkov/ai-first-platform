@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 This skill takes the current conversation context and codebase understanding and produces a spec. Do NOT interview the user; just synthesize what you already know.
 
-Project content and publishing rules: [requirements](../../../docs/agents/requirements.md#content-and-human-decisions). Publish only after the owner confirms behavior, scope, criteria, and human checkpoints.
+Before publishing, apply the project [content and confirmation rules](../../../docs/agents/requirements.md#content-and-human-decisions).
 
 The issue tracker and triage label vocabulary should have been provided to you. If not, tell the user to run `/setup-matt-pocock-skills`.
 

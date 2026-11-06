@@ -33,7 +33,7 @@ If no additional check is needed, give a short reason in the PR. Every final PR 
 
 ## Present the result
 
-Present each additional check in the PR using the [human-check fields](#human-check) and the [PR report rules](pr.md). Mark planned or unavailable checks as such.
+Present each additional check in the PR using the [human-check fields](#human-check). Mark planned or unavailable checks as such. The [PR report rules](pr.md) own the rest of the presentation.
 
 ## Ask the owner
 

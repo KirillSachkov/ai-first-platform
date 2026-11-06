@@ -72,7 +72,7 @@ const noPlaywrightTestModifiers = {
 };
 
 /**
- * Backend code reads the current time from the injectable clock, so integration tests can fix it.
+ * Application code reads the current time from an injected clock, so tests can fix it.
  * `new Date(value)` with an argument stays allowed: it parses a value, not the current time.
  */
 const noCurrentTime = {
@@ -81,8 +81,8 @@ const noCurrentTime = {
     docs: { description: "Ban `new Date()` without arguments and `Date.now()`." },
     messages: {
       currentTime:
-        "Read the current time from the clock: inject it with `@Inject(CLOCK)` from src/shared/time/clock.ts " +
-        "and call `clock.now()`, so integration tests can fix the time.",
+        "Read the current time from the injected clock, so tests can fix it. " +
+        "The app's AGENTS.md names the clock.",
     },
     schema: [],
   },

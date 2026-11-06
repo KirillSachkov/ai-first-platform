@@ -16,9 +16,10 @@ a skill adds at most a pointer line to them. Keep these lines when syncing.
 
 | Skill | Adaptation |
 | --- | --- |
-| `implement`, `implement-spec` | One added line: project [review and delivery rules](../../docs/agents/delivery.md#review-and-corrections) win where they differ |
+| `implement` | One added line: project rules win; commit before review, testing levels, [review and delivery rules](../../docs/agents/delivery.md#review-and-corrections) |
+| `implement-spec` | One added line: project rules win; no reset of foreign work, delivery through `ship`, safe cleanup |
 | `pr` | One added line: project [PR report rules](../../docs/agents/pr.md) extend the template |
-| `to-spec` | One added line: content rules and owner confirmation before publishing |
+| `to-spec` | One added line: content and owner-confirmation rules before publishing |
 | `diagnosing-bugs` | One added paragraph: diagnosis alone ends after Phase 4 |
 | `code-review` | Immutable base and head SHAs, a bounded issue as a spec source, human checkpoints in the Spec prompt, and the finding format with re-review |
 

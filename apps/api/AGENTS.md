@@ -15,7 +15,7 @@ Rules, kinds, file names and samples: `docs/agents/testing.md`. Integration test
 
 ## Gotchas
 
-- Read the current time from `@Inject(CLOCK)` (`src/shared/time/clock.ts`) so integration tests can fix it. `platform/no-current-time` rejects `new Date()` and `Date.now()` elsewhere in `src/`.
+- Read the current time from `@Inject(CLOCK)` (`src/shared/time/clock.ts`) so integration tests can fix it. `platform/no-current-time` rejects `new Date()` and `Date.now()` in other `src/` code outside tests.
 - Inject every dependency with `@Inject(TOKEN_OR_CLASS)`. `tsx` runs the dev server without decorator metadata, so a constructor parameter without `@Inject` silently receives no value.
 - After changing a module's Drizzle schema, run `pnpm db:generate`. Each module has its own migrations folder and history table in its own Postgres schema.
 - After changing endpoint zod schemas, run `pnpm api:generate` from the repository root and commit `openapi/openapi.json` with the regenerated web client.

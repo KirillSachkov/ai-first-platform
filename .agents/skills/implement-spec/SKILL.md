@@ -10,7 +10,7 @@ The issue tracker should have been provided to you. If not, tell the user to run
 
 The goal is the entire spec implemented on a single **integration branch**, with every ticket resolved the way the issue tracker closes work.
 
-Project rules for [worktrees](../../../docs/agents/worktrees.md) and for the review base, ticket workers, review rounds and delivery ([Review and corrections](../../../docs/agents/delivery.md#review-and-corrections)) win where they differ from the steps below.
+Project rules win where they differ from the steps below: a worker reports a base mismatch instead of resetting foreign work, delivery goes through `ship`, and cleanup keeps unintegrated work ([worktrees](../../../docs/agents/worktrees.md), [Review and corrections](../../../docs/agents/delivery.md#review-and-corrections)).
 
 The tickets are not a list of steps. They are a **task graph** with blocking relationships between them. This means there is always a **frontier** of tickets which are ready to be grabbed.
 

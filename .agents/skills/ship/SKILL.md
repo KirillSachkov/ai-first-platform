@@ -3,7 +3,7 @@ name: ship
 description: "Deliver reviewed work as a verified PR for owner acceptance. Use after implement or implement-spec, or when asked to deliver a reviewed branch."
 ---
 
-Deliver the assigned, committed, independently reviewed branch under [delivery](../../../docs/agents/delivery.md). Complete missing evidence under its rules.
+Deliver the assigned, committed, independently reviewed branch under [delivery](../../../docs/agents/delivery.md). Read the issue or spec, and complete missing evidence under the delivery rules.
 
 1. Push the owned branch. Call `pr` for the body. Create or update the PR through the [tracker](../../../docs/agents/issue-tracker.md), following draft timing and issue linkage. Return a ready PR to draft while material revisions need verification.
 2. Wait for `ci-ok` on the current PR head. For in-scope failures, fix, commit, and repeat affected checks and independent review. Report blockers under [Ask the owner](../../../docs/agents/human-review.md#ask-the-owner).

@@ -22,7 +22,8 @@ flowchart TD
 ```
 
 SHA — идентификатор конкретного commit. Приёмка результата и разрешение merge — отдельные решения.
-Условия merge описаны в [правилах доставки](agents/delivery.md#main-and-owner-acceptance).
+При передаче агент называет полный SHA последнего commit в PR. Агент выполняет merge только этого commit и только после явного разрешения владельца.
+Любой новый commit, включая обновление из main, требует нового разрешения. Подробности: [правила доставки](agents/delivery.md#main-and-owner-acceptance).
 
 ## С чего начать
 
@@ -100,5 +101,5 @@ Standards использует [CODING_STANDARDS.md](../CODING_STANDARDS.md). Ф
 Spec отвечает на вопрос «что тогда попросили и почему». После merge её не переписывают.
 Текущее поведение показывают тесты, термины хранит `GLOSSARY.md`, существенные решения хранят ADR.
 Источники для каждого вопроса: [requirements.md](agents/requirements.md#current-behavior-and-history).
-Отличия skills от версии Matt: [.agents/skills/README.md](../.agents/skills/README.md).
+Skills Matt совпадают с закреплённой версией, кроме строк, которые отсылают к правилам проекта. Список отличий: [.agents/skills/README.md](../.agents/skills/README.md).
 План оценки процесса после первых задач: [#46](https://github.com/KirillSachkov/ai-first-platform/issues/46).
