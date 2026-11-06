@@ -101,5 +101,5 @@ Standards использует [CODING_STANDARDS.md](../CODING_STANDARDS.md). Ф
 Spec отвечает на вопрос «что тогда попросили и почему». После merge её не переписывают.
 Текущее поведение показывают тесты, термины хранит `GLOSSARY.md`, существенные решения хранят ADR.
 Источники для каждого вопроса: [requirements.md](agents/requirements.md#current-behavior-and-history).
-Skills Matt совпадают с закреплённой версией, кроме строк, которые отсылают к правилам проекта. Список отличий: [.agents/skills/README.md](../.agents/skills/README.md).
+Skills Matt совпадают с закреплённой версией, кроме строк из списка отличий. Список отличий: [.agents/skills/README.md](../.agents/skills/README.md).
 План оценки процесса после первых задач: [#46](https://github.com/KirillSachkov/ai-first-platform/issues/46).

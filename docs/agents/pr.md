@@ -4,11 +4,10 @@ These rules extend the `pr` template. Write a report the owner understands witho
 
 ## Shape
 
-The first line is the agent provenance line from [delivery](delivery.md#main-and-owner-acceptance); it is not a preamble. Lead with the changed behavior and the owner's next action. Use the template sections in the team language, scaled to the change:
+The first line is the agent provenance line from [delivery](delivery.md#main-and-owner-acceptance); it is not a preamble. Use the template sections in the team language, scaled to the change. Summary leads with the changed behavior. Then:
 
-- **Summary** as in the template.
+- **What the owner needs to do** follows Summary: the concrete action or question, expected result, reason, and evidence. Present additional checks as [human-review.md](human-review.md#present-the-result) requires, or give a short reason why none is needed.
 - **Evidence** keeps the short verification result and its important limit visible. A `<details>` block below it holds the checked head (commit permalink), the review base (full SHA), and a table of every check actually run on the delivered result: check, actual result, what it confirms.
-- **What the owner needs to do** is an added section: the concrete action or question, expected result, reason, and evidence. Present additional checks as [human-review.md](human-review.md#present-the-result) requires, or give a short reason why none is needed.
 - **Merge Danger** also states reversibility, rollback, and residual uncertainty.
 
 Omit empty sections and replace every placeholder.
