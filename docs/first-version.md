@@ -69,7 +69,7 @@ Production-среда сейчас не предполагается. Deploy, у
 
 ## Основания и открытые вопросы
 
-Исходный бриф: [customer-requirements.md](../customer-requirements.md). Термины: [DOMAIN.md](../DOMAIN.md).
+Исходный бриф: [customer-requirements.md](../customer-requirements.md). Термины: [GLOSSARY.md](../GLOSSARY.md).
 
 При сверке использованы материалы content-studio: согласованный состав «13. Первая версия платформы.md», раздел «Результат» в `02-mvp-platform-map.md` и исследования `2026-09-28-agent-first-platform-value.md` и `2026-09-28-agent-first-tracker-baseline.md`. Раздел «Результат» находится в исторической части карты и включает GitHub-доступы и MCP; согласованный материал выделяет GitHub-доступы в дополнительную практику. В интервью подтверждено разделение поставок. Упоминание MCP в карте не заменяет отдельный выбор способа подключения.
 

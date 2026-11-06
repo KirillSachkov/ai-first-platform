@@ -11,21 +11,23 @@ Every implementation needs a GitHub issue before repository changes begin. Read 
 
 ## Current behavior and history
 
-`customer-requirements.md` holds the brief; `docs/first-version.md` holds delivery scope. A proposed domain model in `docs/domain-model.md` does not prove implemented behavior.
+A proposed domain model in `docs/domain-model.md` does not prove implemented behavior.
 
 A change spec lives in its GitHub issue. It records what was requested and why at that time. After merge, preserve it unchanged as history; never edit it to describe later behavior.
 
 Each question about current behavior has one owner:
 
 - Behavior: tests at the seams in [testing.md](testing.md), named as [testing.md](testing.md#placement-and-naming) requires.
-- Terms: `DOMAIN.md`.
+- Terms: `GLOSSARY.md`.
 - Decisions that meet the [ADR criteria](../../.agents/skills/domain-modeling/ADR-FORMAT.md#when-to-offer-an-adr), including deliberate non-goals: ADRs.
 
-Keep current behavior in these sources only, without a separate prose document. A lasting requirement that a test cannot check goes into an ADR when it meets those criteria; otherwise its issue remains its record. To learn the current behavior of a capability, read its tests, `DOMAIN.md`, the related ADRs, and the issues linked from them.
+Keep current behavior in these sources only, without a separate prose document. A lasting requirement that a test cannot check goes into an ADR when it meets those criteria; otherwise its issue remains its record. To learn the current behavior of a capability, read its tests, `GLOSSARY.md`, the related ADRs, and the issues linked from them.
 
 ## Content and human decisions
 
-A short issue records the problem, desired and preserved behavior, scope, acceptance criteria, and verification. Use the `to-spec` template for full specs and [human participation](human-review.md) for acceptance planning.
+A short issue records the problem, desired and preserved behavior, scope, acceptance criteria, and verification. A full spec uses the `to-spec` template and also records preserved behavior and agreed human checkpoints. It covers success, failure, access, and boundary scenarios within the agreed scope and keeps unresolved decisions explicit. Plan acceptance with [human participation](human-review.md).
+
+Before a spec is published, the owner confirms behavior, scope, criteria, and human checkpoints.
 
 ## When requirements change
 

@@ -4,9 +4,9 @@ description: "Turn the current conversation into a spec and publish it to the pr
 disable-model-invocation: true
 ---
 
-Before drafting, read the requirements, testing, and human-participation pointers in root `AGENTS.md`. Apply its language rule to the published artifact. Include preserved behavior and agreed human checkpoints. The spec is a snapshot of the decision, not a description of current behavior.
-
 This skill takes the current conversation context and codebase understanding and produces a spec. Do NOT interview the user; just synthesize what you already know.
+
+Project content and publishing rules: [requirements](../../../docs/agents/requirements.md#content-and-human-decisions). Publish only after the owner confirms behavior, scope, criteria, and human checkpoints.
 
 The issue tracker and triage label vocabulary should have been provided to you. If not, tell the user to run `/setup-matt-pocock-skills`.
 
@@ -19,8 +19,6 @@ The issue tracker and triage label vocabulary should have been provided to you. 
 Check with the user that these seams match their expectations.
 
 3. Write the spec using the template below, then publish it to the project issue tracker. Apply the `ready-for-agent` triage label - no need for additional triage.
-
-Do not publish until the owner confirms behavior, scope, criteria, and human checkpoints. The readiness label does not authorize execution.
 
 <spec-template>
 
@@ -43,8 +41,6 @@ A LONG, numbered list of user stories. Each user story should be in the format o
 </user-story-example>
 
 This list of user stories should be extremely extensive and cover all aspects of the feature.
-
-Cover success, failure, access, and boundary scenarios within the agreed scope. Keep unresolved decisions explicit.
 
 ## Implementation Decisions
 

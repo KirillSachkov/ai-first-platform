@@ -11,14 +11,11 @@ React SPA organised by Feature-Sliced Design; `pnpm boundaries` (Steiger) checks
 
 ## Tests
 
-Rules and test kinds: `docs/agents/testing.md`.
+Rules, kinds, file names and samples: `docs/agents/testing.md`. Component tests render with `renderApp(url)` from `test/render-app.tsx`, answer HTTP with `worker.use(http.get(...))` from `test/msw.ts`, and check `expectNoAxeViolations` from `test/axe.ts`.
 
-- Component tests are `*.component.test.tsx` next to the page or feature and run in Chromium. Render with `renderApp(url)` from `test/render-app.tsx`, answer HTTP with `worker.use(http.get(...))` from `test/msw.ts`, and check `expectNoAxeViolations` from `test/axe.ts`. Sample: `src/pages/system/system-page.component.test.tsx`.
-- Unit tests are `*.unit.test.ts` next to the code.
-- Install Chromium once: `pnpm --filter @platform/web exec playwright install chromium`.
 - Add a new runtime dependency of tested code to `optimizeDeps.include` in `vitest.config.ts`; otherwise Vite reloads the test page mid-run.
 
 ## API client
 
 - The backend is reached through same-origin `/api` with `$api` from `@/shared/api`; the Vite dev server proxies it to the backend.
-- `src/shared/api/schema.gen.ts` is generated from `apps/api/openapi/openapi.json`. After any backend endpoint change, run `pnpm api:generate` from the repository root and commit both files; `pnpm check` fails while they drift.
+- `src/shared/api/schema.gen.ts` is generated from `apps/api/openapi/openapi.json`; regenerate it with `pnpm api:generate` (see `apps/api/AGENTS.md`).
