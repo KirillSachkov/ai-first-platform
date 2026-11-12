@@ -32,6 +32,13 @@ _Avoid_: Administrator for this role
 **Platform administrator** (администратор платформы):
 An employee authorized to manage invitations, platform access, projects, their repositories and instruction sources, and project membership. Administrators see project settings in management; reading a project's context requires project membership, as for any employee.
 
+**Platform access termination** (прекращение доступа к платформе):
+An administrator's action that makes an employee account inactive. From that moment the employee and their agent connections receive nothing from the platform, and the employee's project memberships, administrator rights, and agent connections end.
+_Avoid_: деактивация, деактивировать, увольнение
+
+**Platform access restoration** (восстановление доступа к платформе):
+An administrator's action that makes an inactive employee account active again. It returns none of the earlier project memberships, administrator rights, or agent connections.
+
 **Project** (проект):
 A company product or business objective that groups repositories, participating employees, access permissions, and instructions for work. A project may have no repositories yet.
 _Avoid_: Repository as a synonym for project.

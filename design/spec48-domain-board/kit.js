@@ -169,8 +169,10 @@ export function createKit() {
     const w = Math.ceil(widthOf(label, size)) + 20;
     const h = 28;
     const onTop = kind === "hotChip";
-    const x = onTop ? target.x + target.w - w + 10 : target.x + 10;
-    const y = onTop ? target.y - 14 : target.y + target.h - 8 + (o.index ?? 0) * 24;
+    const index = o.index ?? 0;
+    // Open-question chips line up leftwards along the top edge; actor chips stack downwards.
+    const x = onTop ? target.x + target.w - w + 10 - index * (w + 4) : target.x + 10;
+    const y = onTop ? target.y - 14 : target.y + target.h - 8 + index * 24;
     if (!target.el.groupIds.length) target.el.groupIds = [nextId("group")];
     return rect(kind, x, y, w, h, label, { fontSize: size, groupIds: [...target.el.groupIds] });
   }
