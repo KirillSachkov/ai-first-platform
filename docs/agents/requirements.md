@@ -11,9 +11,11 @@ Every implementation needs a GitHub issue before repository changes begin. Read 
 
 ## Current behavior and history
 
-A proposed domain model in `docs/domain-model.md` does not prove implemented behavior.
+An issue, an ADR, or a board snapshot does not prove implemented behavior.
 
 A change spec lives in its GitHub issue. It records what was requested and why at that time. After merge, preserve it unchanged as history; never edit it to describe later behavior.
+
+Requirements clarified before implementation, such as relationships, lifecycle rules, invariants, and open questions, live in the issue: in the spec, or in the final comment of the decision task that settled them. That comment is history as of the decision, like the spec.
 
 Each question about current behavior has one owner:
 

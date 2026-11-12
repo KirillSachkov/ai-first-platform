@@ -11,11 +11,11 @@
 - Прекращение доступа сотрудника и его агента к сведениям платформы при увольнении.
 - Дополнительный этап: модуль интеграций с GitHub для выдачи и отзыва доступа к репозиториям. Основная поставка использует заранее доступные репозитории.
 
-Согласованные границы: [docs/first-version.md](docs/first-version.md). Предметная модель и приблизительные модули: [docs/domain-model.md](docs/domain-model.md). Термины: [GLOSSARY.md](GLOSSARY.md). Архитектурные решения: [docs/adr/](docs/adr/). Исходные требования: [customer-requirements.md](customer-requirements.md).
+Согласованные границы: [docs/first-version.md](docs/first-version.md). Термины: [GLOSSARY.md](GLOSSARY.md). Архитектурные решения, включая ответственность модулей: [docs/adr/](docs/adr/). Где хранится каждое знание о предметной области: [docs/agents/domain.md](docs/agents/domain.md). Исходные требования: [customer-requirements.md](customer-requirements.md).
 
 ## Состояние проекта
 
-Согласованы границы первой версии, предметная модель и модули. Готов каркас без бизнес-функций: монорепозиторий с backend (`apps/api`, TypeScript, NestJS, PostgreSQL, RabbitMQ) и frontend (`apps/web`, React SPA), запуск через Docker Compose, проверки готовности и проверки архитектурных границ. Решения о стеке и устройстве backend — в ADR 0002–0004. Способ входа сотрудника и подключения агента пока не выбран; открытые вопросы перечислены в документе модели.
+Согласованы границы первой версии и модули. Готов каркас без бизнес-функций: монорепозиторий с backend (`apps/api`, TypeScript, NestJS, PostgreSQL, RabbitMQ) и frontend (`apps/web`, React SPA), запуск через Docker Compose, проверки готовности и проверки архитектурных границ. Решения о стеке и устройстве backend — в ADR 0002–0004. Вход сотрудника и подключение агента описаны в [спецификации #48](https://github.com/KirillSachkov/ai-first-platform/issues/48) и ещё не реализованы; открытые вопросы перечислены там же.
 
 ## Начало работы
 
