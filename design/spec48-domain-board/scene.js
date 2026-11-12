@@ -72,7 +72,7 @@ function box(id, kind, x, y, label, opts = {}) {
       text: label,
       fontSize: opts.fontSize ?? 16,
       fontFamily: 2,
-      textAlign: kind === "rule" ? "left" : "center",
+      textAlign: opts.align ?? (kind === "rule" ? "left" : "center"),
       strokeColor: kind === "hot" ? "#7a1010" : "#212529",
     },
   });
@@ -167,19 +167,19 @@ frame("Легенда", () => {
 
 // ---------- Context: modules ----------
 frame("Контекст: модули и их данные", () => {
-  box("m-edge", "aggregate", 0, 150, "Edge\nвход · активность · разрешения", { bg: C.edge, size: [220, 90] });
-  box("m-emp", "aggregate", 340, 0, "«Сотрудники»\nучётная запись сотрудника, приглашение, корпоративная личность", { size: SIZE.module });
-  box("m-conn", "aggregate", 340, 290, "«Подключения агентов»\nподключение агента", { size: SIZE.module });
-  box("m-acc", "aggregate", 720, 140, "«Доступ»\nучастие в проекте, полномочия администратора", { size: SIZE.module });
-  box("m-proj", "aggregate", 1100, 140, "«Проекты»\nпроект, репозиторий, источник инструкций, версия harness", { size: SIZE.module });
+  box("m-edge", "aggregate", 0, 130, "Edge / Входной слой\nпроверяет по порядку:\n1. сессию или подключение\n2. активность учётной записи\n3. разрешения", { bg: C.edge, size: [240, 140], align: "left" });
+  box("m-emp", "aggregate", 340, 0, "Employees / Сотрудники\n• учётная запись сотрудника\n• приглашение\n• корпоративная личность", { size: [320, 125], align: "left" });
+  box("m-conn", "aggregate", 340, 290, "Agent connections / Подключения агентов\n• владелец подключения\n• действительность и отзыв", { size: [320, 110], align: "left" });
+  box("m-acc", "aggregate", 740, 135, "Access / Доступ\n• участие в проекте\n• полномочия администратора\n• решения о разрешениях", { size: [270, 125], align: "left" });
+  box("m-proj", "aggregate", 1130, 135, "Projects / Проекты\n• проект\n• репозиторий\n• источник инструкций\n• версия harness", { size: [250, 140], align: "left" });
   link("m-edge", "m-emp", "сессия", { mx: 270 });
   link("m-edge", "m-conn", "токен", { mx: 270 });
   link("m-edge", "m-acc", "разрешения", { sy: 0, ey: 0 });
   link("m-acc", "m-proj", "проекты");
-  link("m-emp", "m-acc", "события", { event: true, mx: 650, ey: -30 });
+  link("m-emp", "m-acc", "события", { event: true, mx: 700, ey: -35 });
   link("m-emp", "m-conn", null, { event: true, sx: -85, ex: -85 });
-  text(395, 240, "доступ прекращён", 15, "#e8590c");
-  text(720, 300, "«Доступ» не вызывает «Сотрудников»\nи «Подключения агентов» (ADR-0004).", 16);
+  text(395, 225, "доступ прекращён", 15, "#e8590c");
+  text(740, 310, "Access не вызывает Employees\nи Agent connections (ADR-0004).", 16);
 });
 
 // ---------- Open questions ----------
@@ -202,9 +202,9 @@ frame("Блок 1. Приглашение и присоединение сотр
   const L = lanes(-40, Y, 4180, [
     ["p", "Участники", 160],
     ["o", "OIDC-провайдер", 160],
-    ["e", "«Сотрудники»", 230],
-    ["a", "«Доступ»", 190],
-    ["r", "«Проекты»", 130],
+    ["e", "Employees / Сотрудники", 230],
+    ["a", "Access / Доступ", 190],
+    ["r", "Projects / Проекты", 130],
   ]);
   const at = (lane, dy = 40) => L[lane] + dy;
 
@@ -290,8 +290,8 @@ frame("Блок 2. Проекты и участие", () => {
   const Y = 2070;
   const L = lanes(-40, Y, 3000, [
     ["p", "Участники", 160],
-    ["r", "«Проекты»", 340],
-    ["a", "«Доступ»", 230],
+    ["r", "Projects / Проекты", 340],
+    ["a", "Access / Доступ", 230],
   ]);
   const at = (lane, dy) => L[lane] + dy;
 
@@ -344,9 +344,9 @@ frame("Блок 3. Персональное подключение агента"
   const L = lanes(-40, Y, 3400, [
     ["p", "Участники", 160],
     ["c", "Клиент агента", 140],
-    ["e", "«Сотрудники»", 140],
-    ["n", "«Подключения агентов»", 260],
-    ["a", "«Доступ» и «Проекты»", 140],
+    ["e", "Employees / Сотрудники", 140],
+    ["n", "Agent connections /\nПодключения агентов", 260],
+    ["a", "Access / Доступ\nProjects / Проекты", 140],
   ]);
   const at = (lane, dy) => L[lane] + dy;
   const P = { proposed: true };
