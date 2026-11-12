@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Спецификация 48: доменная модель</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react@19.0.0",
+          "react/jsx-runtime": "https://esm.sh/react@19.0.0/jsx-runtime",
+          "react-dom": "https://esm.sh/react-dom@19.0.0",
+          "react-dom/client": "https://esm.sh/react-dom@19.0.0/client"
+        }
+      }
+    </script>
+    <link rel="stylesheet" href="https://esm.sh/@excalidraw/excalidraw@0.18.1/dist/prod/index.css" />
+    <script>
+      window.EXCALIDRAW_ASSET_PATH = "https://esm.sh/@excalidraw/excalidraw@0.18.1/dist/prod/";
+    </script>
+    <style>
+      html, body, #app { margin: 0; height: 100%; }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import React from "react";
+      import { createRoot } from "react-dom/client";
+      import * as Ex from "https://esm.sh/@excalidraw/excalidraw@0.18.1/dist/prod/index.js?external=react,react-dom";
+      const { skeleton } = await import("./scene.js?v=" + Date.now());
+
+      const elements = Ex.convertToExcalidrawElements(skeleton, { regenerateIds: false });
+      // Bound labels belong to the same frame as their container.
+      const byId = new Map(elements.map((el) => [el.id, el]));
+      for (const el of elements) {
+        if (el.type === "text" && el.containerId && byId.has(el.containerId)) {
+          el.frameId = byId.get(el.containerId).frameId ?? null;
+        }
+      }
+      const App = () =>
+        React.createElement(Ex.Excalidraw, {
+          langCode: "ru-RU",
+          excalidrawAPI: (api) => { window.__api = api; setTimeout(() => api.scrollToContent(undefined, { fitToViewport: true, viewportZoomFactor: 0.95 }), 300); },
+          initialData: {
+            elements,
+            appState: { viewBackgroundColor: "#ffffff", currentItemFontFamily: 2, frameRendering: { enabled: true, name: true, outline: true, clip: false } },
+            scrollToContent: true,
+          },
+        });
+      createRoot(document.getElementById("app")).render(React.createElement(App));
+      window.__boardReady = true;
+    </script>
+  </body>
