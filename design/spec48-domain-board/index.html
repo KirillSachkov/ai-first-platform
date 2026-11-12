@@ -27,24 +27,33 @@
       import React from "react";
       import { createRoot } from "react-dom/client";
       import * as Ex from "https://esm.sh/@excalidraw/excalidraw@0.18.1/dist/prod/index.js?external=react,react-dom";
-      const { skeleton } = await import("./scene.js?v=" + Date.now());
+      const stamp = Date.now();
+      const { createKit } = await import("./kit.js?v=" + stamp);
+      const { build } = await import("./scene.js?v=" + stamp);
+      const skeleton = build(createKit());
 
       const elements = Ex.convertToExcalidrawElements(skeleton, { regenerateIds: false });
-      // Bound labels belong to the same frame as their container.
+      // Bound labels belong to the same frame and group as their container.
       const byId = new Map(elements.map((el) => [el.id, el]));
       for (const el of elements) {
         if (el.type === "text" && el.containerId && byId.has(el.containerId)) {
-          el.frameId = byId.get(el.containerId).frameId ?? null;
+          const container = byId.get(el.containerId);
+          el.frameId = container.frameId ?? null;
+          el.groupIds = [...container.groupIds];
         }
       }
       const App = () =>
         React.createElement(Ex.Excalidraw, {
           langCode: "ru-RU",
-          excalidrawAPI: (api) => { window.__api = api; setTimeout(() => api.scrollToContent(undefined, { fitToViewport: true, viewportZoomFactor: 0.95 }), 300); },
+          excalidrawAPI: (api) => {
+            window.__api = api;
+            // Open on the legend and the module map at a readable zoom; the whole board is too tall to fit.
+            const firstScreen = elements.filter((el) => el.y < 1300);
+            setTimeout(() => api.scrollToContent(firstScreen, { fitToViewport: true, viewportZoomFactor: 0.95 }), 300);
+          },
           initialData: {
             elements,
-            appState: { viewBackgroundColor: "#ffffff", currentItemFontFamily: 2, frameRendering: { enabled: true, name: true, outline: true, clip: false } },
-            scrollToContent: true,
+            appState: { viewBackgroundColor: "#ffffff", currentItemFontFamily: 2, frameRendering: { enabled: true, name: false, outline: true, clip: false } },
           },
         });
       createRoot(document.getElementById("app")).render(React.createElement(App));
