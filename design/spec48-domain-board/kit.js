@@ -22,6 +22,7 @@ const KINDS = {
   state: { bg: "#e7f5ff", round: true },
   rule: { bg: "#f3f0ff", stroke: "#9775fa", head: "#5f3dc4" },
   hot: { bg: "#ffe3e3", stroke: "#e03131", head: "#c92a2a", ink: "#7a1010" },
+  example: { bg: "#ebfbee", stroke: "#40c057", head: "#2b8a3e" },
   actor: { bg: "#ffd43b", stroke: "#f08c00" },
   hotChip: { bg: "#ff8787", stroke: "#c92a2a", ink: "#5c0b0b" },
 };
@@ -305,10 +306,10 @@ export function createKit() {
     return r;
   }
 
-  /** Column of cards of one width. Each item is [kind, head, body, options]. Returns the bottom y. */
+  /** Column of cards of one width (o.w fixes it). Each item is [kind, head, body, options]. Returns the bottom y. */
   function stack(x, y, items, o = {}) {
     const maxW = o.maxW ?? 470;
-    const w = Math.max(...items.map(([, head, body]) => cardSize(head, body, maxW).w));
+    const w = o.w ?? Math.max(...items.map(([, head, body]) => cardSize(head, body, maxW).w));
     let cy = y;
     for (const [kind, head, body, options] of items) {
       const r = card(kind, x, cy, head, body, { ...options, w, maxW });
