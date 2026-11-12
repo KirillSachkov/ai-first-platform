@@ -60,6 +60,27 @@
           },
         });
       createRoot(document.getElementById("app")).render(React.createElement(App));
+
+      // Exports one frame, or everything outside frames when no name is given, as a PNG with the scene inside.
+      // The file opens back in Excalidraw as an editable board. Returns the PNG as base64.
+      window.__exportFrame = async (frameName) => {
+        const all = window.__api.getSceneElements();
+        const frame = frameName ? all.find((el) => el.type === "frame" && el.name === frameName) : null;
+        if (frameName && !frame) throw new Error("No frame named " + frameName);
+        const picked = all.filter((el) => (frame ? el.frameId === frame.id : !el.frameId && el.type !== "frame"));
+        const blob = await Ex.exportToBlob({
+          elements: picked,
+          appState: { exportBackground: true, viewBackgroundColor: "#ffffff", exportEmbedScene: true },
+          files: window.__api.getFiles(),
+          exportPadding: 24,
+          mimeType: "image/png",
+          getDimensions: (width, height) => ({ width: width * 1.5, height: height * 1.5, scale: 1.5 }),
+        });
+        const bytes = new Uint8Array(await blob.arrayBuffer());
+        let binary = "";
+        for (let i = 0; i < bytes.length; i += 0x8000) binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+        return btoa(binary);
+      };
       window.__boardReady = true;
     </script>
   </body>
