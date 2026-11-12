@@ -8,7 +8,7 @@
 
 A domain concept or future integration described in the model does not by itself place a capability in the delivery scope of [docs/first-version.md](../first-version.md).
 
-Design boards on `design/*` branches and their gallery are working material for people; take requirements and current behavior from the spec and the outcomes linked to it, `GLOSSARY.md`, ADRs, and tests, never from a board.
+Design boards on `design/*` branches and their gallery are working material for people, never a source of requirements or current behavior: take requirements from the spec and the outcomes linked to it, and current behavior from tests, `GLOSSARY.md`, and ADRs, as [requirements.md](requirements.md#current-behavior-and-history) assigns.
 
 Use the glossary's canonical terms in discussions, code, issues, and reviews. For glossary and ADR work, use `domain-modeling`.
 
