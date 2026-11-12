@@ -8,6 +8,8 @@
 
 A domain concept or future integration described in the model does not by itself place a capability in the delivery scope of [docs/first-version.md](../first-version.md).
 
+Design boards on `design/*` branches and their gallery are working material for people; take requirements and current behavior from the spec and the outcomes linked to it, `GLOSSARY.md`, ADRs, and tests, never from a board.
+
 Use the glossary's canonical terms in discussions, code, issues, and reviews. For glossary and ADR work, use `domain-modeling`.
 
 Record relationships, lifecycle rules, module responsibilities, and unresolved questions in `docs/domain-model.md`.
