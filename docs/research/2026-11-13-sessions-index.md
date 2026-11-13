@@ -34,9 +34,9 @@ python3 -I tools/parse_sessions.py <файл.jsonl> claude 1000 > out.txt   # п
 | 5 нояб | Claude `50e2348d-eef4-481d-99aa-16e979053c8d` | Обсуждение требований к функциям | Отказ от документа текущих требований (PR #38) |
 
 Файлы:
-- `/Users/dev/.claude/projects/-Users-dev-Work-Personal-ai-first-platform/d0584903-8ab9-4ac9-8556-26fb9eea1ed0.jsonl`
-- `/Users/dev/.codex/sessions/2026/11/03/rollout-2026-11-03T14-36-31-01a1a132-4f99-73c0-906b-91a713d5e167.jsonl`
-- `/Users/dev/.claude/projects/-Users-dev-Work-Personal-ai-first-platform/50e2348d-eef4-481d-99aa-16e979053c8d.jsonl`
+- `~/.claude/projects/-Users-dev-Work-Personal-ai-first-platform/d0584903-8ab9-4ac9-8556-26fb9eea1ed0.jsonl`
+- `~/.codex/sessions/2026/11/03/rollout-2026-11-03T14-36-31-01a1a132-4f99-73c0-906b-91a713d5e167.jsonl`
+- `~/.claude/projects/-Users-dev-Work-Personal-ai-first-platform/50e2348d-eef4-481d-99aa-16e979053c8d.jsonl`
 
 ## Основная цепочка
 
@@ -55,17 +55,17 @@ python3 -I tools/parse_sessions.py <файл.jsonl> claude 1000 > out.txt   # п
 | 11 | 12 нояб с 21:17, идёт | Claude `2e999c27-0e67-4ca0-b673-cfe159b85949` | AGENTS.md: исследование практик и скилл | Практики AGENTS.md, копия скиллов Matt |
 
 Файлы:
-1. `/Users/dev/.codex/sessions/2026/11/05/rollout-2026-11-05T12-47-42-01a1ab1b-687b-73b2-acd0-8189feabd172.jsonl`
-2. `/Users/dev/.codex/sessions/2026/11/12/rollout-2026-11-12T11-22-49-01a1ceda-367c-7102-b6e0-247bac39bfb2.jsonl`
-3. `/Users/dev/.codex/sessions/2026/11/12/rollout-2026-11-12T13-02-11-01a1cf35-2dbb-7e62-ac33-c4db1e8254bc.jsonl`
-4. `/Users/dev/.claude/projects/-Users-dev-Work-Personal-ai-first-platform/8992470f-7cab-41d9-9e29-dc13acaa9238.jsonl`
-5. `/Users/dev/.claude/projects/-Users-dev-Work-Materials-content-studio/4a614b9a-d1e7-4f56-bcb6-77b01c4fad26.jsonl`
-6. `/Users/dev/.claude/projects/-Users-dev-orca-workspaces-ai-first-platform-issue-58-domain/f2380c42-43b2-4430-bc1b-3fcf5c01d566.jsonl`
-7. `/Users/dev/.claude/projects/-Users-dev-Work-Personal-ai-first-platform/003a3bf4-7856-4cd0-8c8e-7b6c99d2dc62.jsonl`
-8. `/Users/dev/.claude/projects/-Users-dev-Work-Personal-ai-first-platform/0675d074-e31b-4d8f-b47c-615656cd4adf.jsonl`
-9. `/Users/dev/.claude/projects/-Users-dev-orca-workspaces-ai-first-platform-audit-48-record-fixes/f0c27a70-92e5-4f51-a691-5e45a55adafd.jsonl`
-10. `/Users/dev/.claude/projects/-Users-dev-orca-workspaces-ai-first-platform-spec48-technical-solution-56/ad070512-1248-4d40-a950-d8badfae6988.jsonl`
-11. `/Users/dev/.claude/projects/-Users-dev-orca-workspaces-agent-harness-agents-md-practices/2e999c27-0e67-4ca0-b673-cfe159b85949.jsonl`
+1. `~/.codex/sessions/2026/11/05/rollout-2026-11-05T12-47-42-01a1ab1b-687b-73b2-acd0-8189feabd172.jsonl`
+2. `~/.codex/sessions/2026/11/12/rollout-2026-11-12T11-22-49-01a1ceda-367c-7102-b6e0-247bac39bfb2.jsonl`
+3. `~/.codex/sessions/2026/11/12/rollout-2026-11-12T13-02-11-01a1cf35-2dbb-7e62-ac33-c4db1e8254bc.jsonl`
+4. `~/.claude/projects/-Users-dev-Work-Personal-ai-first-platform/8992470f-7cab-41d9-9e29-dc13acaa9238.jsonl`
+5. `~/.claude/projects/-Users-dev-Work-Materials-content-studio/4a614b9a-d1e7-4f56-bcb6-77b01c4fad26.jsonl`
+6. `~/.claude/projects/-Users-dev-orca-workspaces-ai-first-platform-issue-58-domain/f2380c42-43b2-4430-bc1b-3fcf5c01d566.jsonl`
+7. `~/.claude/projects/-Users-dev-Work-Personal-ai-first-platform/003a3bf4-7856-4cd0-8c8e-7b6c99d2dc62.jsonl`
+8. `~/.claude/projects/-Users-dev-Work-Personal-ai-first-platform/0675d074-e31b-4d8f-b47c-615656cd4adf.jsonl`
+9. `~/.claude/projects/-Users-dev-orca-workspaces-ai-first-platform-audit-48-record-fixes/f0c27a70-92e5-4f51-a691-5e45a55adafd.jsonl`
+10. `~/.claude/projects/-Users-dev-orca-workspaces-ai-first-platform-spec48-technical-solution-56/ad070512-1248-4d40-a950-d8badfae6988.jsonl`
+11. `~/.claude/projects/-Users-dev-orca-workspaces-agent-harness-agents-md-practices/2e999c27-0e67-4ca0-b673-cfe159b85949.jsonl`
 
 Сессии 4, 10 и 11 ещё могли дополниться. Перед чтением сверь время последней записи.
 
@@ -80,11 +80,11 @@ python3 -I tools/parse_sessions.py <файл.jsonl> claude 1000 > out.txt   # п
 | Codex `01a1ab1b-cb2b-7e01-9b12-32c22ed15a42` | Повторный старт сессии 1, одно сообщение |
 | Claude `c7073a76`, `3efbb5be`, `63e4b940` | Генерация заголовков чатов |
 
-Файлы исследователей Codex лежат в `/Users/dev/.codex/sessions/2026/11/12/` с этими ID в имени.
+Файлы исследователей Codex лежат в `~/.codex/sessions/2026/11/12/` с этими ID в имени.
 
 ## Рядом по теме курса
 
-Claude `f80829ec-d9d4-440b-91a5-00ca6389e216` «Запись уроков про улучшение агента и Harness» (Content Studio, 12 нояб). Я её не читал. Файл: `/Users/dev/.claude/projects/-Users-dev-Work-Materials-content-studio/f80829ec-d9d4-440b-91a5-00ca6389e216.jsonl`.
+Claude `f80829ec-d9d4-440b-91a5-00ca6389e216` «Запись уроков про улучшение агента и Harness» (Content Studio, 12 нояб). Я её не читал. Файл: `~/.claude/projects/-Users-dev-Work-Materials-content-studio/f80829ec-d9d4-440b-91a5-00ca6389e216.jsonl`.
 
 ## Результаты в GitHub и файлах
 

@@ -76,7 +76,7 @@
 
 **О4. `docs/first-version.md` противоречит принятому уточнению.** Строка 17 говорит «один или несколько репозиториев», а владелец разрешил проект без репозиториев (13:23:19). Расхождение отмечено в итоге #52 и в отчёте исполнителя #58, но не исправлено и не вынесено в задачу.
 
-**О5. Три исследования Codex не сохранены.** Файлы `2026-11-12-spec48-design-process.md`, `2026-11-12-domain-design-artifacts.md` и `2026-11-12-eventstorming-agent-tools.md` лежат неотслеживаемыми в `/Users/dev/orca/workspaces/ai-first-platform/spec48-design-research/docs/research/`. На них опирается выбор варианта Б, Wayfinder и Excalidraw. Ветки на GitHub нет. Черновик профиля в `quality-profile-53` тоже не закоммичен, но его канонический результат уже в #53.
+**О5. Три исследования Codex не сохранены.** Файлы `2026-11-12-spec48-design-process.md`, `2026-11-12-domain-design-artifacts.md` и `2026-11-12-eventstorming-agent-tools.md` лежат неотслеживаемыми в `~/orca/workspaces/ai-first-platform/spec48-design-research/docs/research/`. На них опирается выбор варианта Б, Wayfinder и Excalidraw. Ветки на GitHub нет. Черновик профиля в `quality-profile-53` тоже не закоммичен, но его канонический результат уже в #53.
 
 **О6. Закрытие #59 и PR #61 приписано владельцу.** Комментарии [в #59](https://github.com/KirillSachkov/ai-first-platform/issues/59#issuecomment-6828066734) и в PR #61 говорят «по решению владельца». В сессии `003a3bf4` владелец написал только «мерж принимаю апрув» (18:33:43) и позже «делай» об удалении ветки (19:13:06). Решение закрыть принял агент (18:35:52). Правило [delivery.md](../agents/delivery.md#main-and-owner-acceptance) запрещает записывать одобрение владельца за него.
 

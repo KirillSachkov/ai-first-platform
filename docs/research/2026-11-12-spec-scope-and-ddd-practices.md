@@ -296,7 +296,7 @@
 
 ## 6. Проверка черновика `domain-design-kit`
 
-Черновик лежит в `/Users/dev/orca/workspaces/agent-harness/domain-design-kit-draft/domain-design-kit/docs/`. Я сверил его утверждения с источниками разделов 2 и 3.
+Черновик лежит в `~/orca/workspaces/agent-harness/domain-design-kit-draft/domain-design-kit/docs/`. Я сверил его утверждения с источниками разделов 2 и 3.
 
 **Где он прав.** **[вывод]**
 - «Тактический DDD только для сложных правил» (principles.md, п. 9) совпадает с Evans 2009, Khononov и Vernon.
