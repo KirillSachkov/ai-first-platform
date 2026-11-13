@@ -11,7 +11,7 @@
 - Прекращение доступа сотрудника и его агента к сведениям платформы при увольнении.
 - Дополнительный этап: модуль интеграций с GitHub для выдачи и отзыва доступа к репозиториям. Основная поставка использует заранее доступные репозитории.
 
-Согласованные границы: [docs/first-version.md](docs/first-version.md). Термины: [GLOSSARY.md](GLOSSARY.md). Архитектурные решения: [docs/adr/](docs/adr/), ответственность модулей: [ADR-0006](docs/adr/0006-first-version-modules.md). Исходные требования: [customer-requirements.md](customer-requirements.md).
+Согласованные границы: [карта #1](https://github.com/KirillSachkov/ai-first-platform/issues/1) и спецификации задач. Термины: [GLOSSARY.md](GLOSSARY.md). Архитектурные решения: [docs/adr/](docs/adr/), ответственность модулей: [ADR-0006](docs/adr/0006-first-version-modules.md). Исходные требования: [customer-requirements.md](customer-requirements.md).
 
 ## Состояние проекта
 

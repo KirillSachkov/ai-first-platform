@@ -16,7 +16,7 @@ Each piece of domain knowledge has one home:
 - Read the ADRs in `docs/adr/` that concern the area being designed, implemented, or reviewed.
 - Read the issue and the spec or decision comments it links. Distinguish accepted decisions from proposals and open questions; [requirements.md](requirements.md#when-requirements-change) decides between conflicting ones.
 
-A glossary term, an ADR, or a future integration does not by itself place a capability in the delivery scope of [docs/first-version.md](../first-version.md).
+A glossary term, an ADR, or a future integration does not by itself place a capability in the delivery scope.
 
 ## Record
 
