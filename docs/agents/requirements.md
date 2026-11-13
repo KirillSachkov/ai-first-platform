@@ -7,7 +7,10 @@ Every implementation needs a GitHub issue before repository changes begin. Read 
 - Use a short issue for a clear bug, bounded documentation/configuration change, or refactoring with known invariants.
 - Use a full change spec for behavior with unresolved choices, several scenarios or contributors, contract changes, or costly failure. After discussing the decisions, propose `to-spec` for the owner to select.
 - When independent, verifiable slices or multiple sessions need explicit dependencies, propose `to-tickets` for the owner to select. Tickets refer to the parent requirements instead of copying them.
+- When a Wayfinder map leads to implementation, it ends with one consolidated `to-spec` that gathers the decisions of its tickets. `to-tickets` works from that spec rather than from separate ticket comments.
 - Keep a large idea or release in scope documents until concrete behavior is ready to specify. A full application spec is not a prerequisite for every task.
+
+Before proposing that the owner start an issue, confirm it is still open.
 
 ## Current behavior and history
 
@@ -34,6 +37,8 @@ Before a spec is published, the owner confirms behavior, scope, criteria, and hu
 ## When requirements change
 
 Before changing agreed behavior, show the semantic difference and follow [Ask the owner](human-review.md#ask-the-owner). Record the decision in the issue. Update affected criteria, tickets, dependencies, tests, and implementation.
+
+For started work, a scope change takes effect once it is recorded in the issue and sent to the session doing the work. A reply inside a conversation leaves the scope unchanged until then.
 
 After merge, a new desired behavior gets a new change issue. The new issue links the earlier issue and names each criterion it replaces. A violation of tested behavior or of an accepted criterion gets a bug issue. Change tests before code as [testing.md](testing.md#when-a-test-is-required) requires.
 
