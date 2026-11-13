@@ -1,6 +1,6 @@
 ## Project context
 
-Before planning or implementing project work, read [customer-requirements.md](customer-requirements.md) and [delivery scope](docs/first-version.md). Agreed scope changes take precedence over the brief.
+Before planning or implementing project work, read the delivery scope in [map #1](https://github.com/KirillSachkov/ai-first-platform/issues/1) and the issue or spec of the task.
 
 ## Language
 
