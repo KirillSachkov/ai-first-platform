@@ -7,7 +7,7 @@ Every implementation needs a GitHub issue before repository changes begin. Read 
 - Use a short issue for a clear bug, bounded documentation/configuration change, or refactoring with known invariants.
 - Use a full change spec for behavior with unresolved choices, several scenarios or contributors, contract changes, or costly failure. After discussing the decisions, propose `to-spec` for the owner to select.
 - When independent, verifiable slices or multiple sessions need explicit dependencies, propose `to-tickets` for the owner to select. Tickets refer to the parent requirements instead of copying them.
-- When a Wayfinder map leads to implementation, it ends with one consolidated `to-spec` that gathers the decisions of its tickets. `to-tickets` works from that spec rather than from separate ticket comments.
+- When a Wayfinder map leads to implementation, it ends with a proposal of one consolidated `to-spec` for the owner to select. That spec gathers the decisions recorded in the map's Decisions so far. `to-tickets` works from that spec rather than from separate ticket comments.
 - Keep a large idea or release in scope documents until concrete behavior is ready to specify. A full application spec is not a prerequisite for every task.
 
 Before proposing that the owner start an issue, confirm it is still open.

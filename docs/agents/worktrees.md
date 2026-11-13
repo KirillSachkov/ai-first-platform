@@ -4,7 +4,7 @@ Each independent implementation uses its own worktree and branch. Diagnosis that
 
 ## Start or resume
 
-1. Find other work on the issue: open PRs, remote and local branches, and `git worktree list` entries that name it. In Orca, also run `orca reference find <issue URL>` and `orca worktree show --worktree issue:<number>`. When another session is active on the issue, follow [Ask the owner](human-review.md#ask-the-owner) before writing.
+1. Find other work on the issue: open PRs, remote and local branches, and `git worktree list` entries that name it. In Orca, also run `orca reference find <issue URL>` and `orca worktree show --worktree issue:<number>`. When another session is active on the issue, other than the copy this assignment resumes, follow [Ask the owner](human-review.md#ask-the-owner) before writing.
 2. Inspect the current path, branch, HEAD, status, and assigned issue or diagnosis target. Preserve existing changes and live work.
 3. For independent work, base a new branch/worktree on fetched `origin/main`. Confirm its actual base before editing.
 4. If the current copy is already dedicated to the issue, reuse it. Establish ownership before writing. An integration ticket bases its worktree on the integration branch instead of main.
@@ -12,7 +12,7 @@ Each independent implementation uses its own worktree and branch. Diagnosis that
 6. Before the first write, link the chosen worktree to the issue: a new branch carries the issue number in its name. In Orca, also run `orca worktree set --worktree current --issue <number>`.
 7. Prepare dependencies and local configuration for this copy using the pinned Node/pnpm versions, package scripts, Compose configuration, and `.env.example`. Do not share writable `node_modules` between branches. A worktree does not automatically prepare services or credentials.
 
-Use the root checkout for orientation rather than implementation. Use bounded issue-related names for branches and worktrees. Parallel implementation workers each get a separate writable copy; merge into the integration branch serially.
+Use the root checkout for orientation rather than implementation. Use bounded issue-related names for worktrees; step 6 sets the branch name. Parallel implementation workers each get a separate writable copy; merge into the integration branch serially.
 
 ## Shared resources
 
