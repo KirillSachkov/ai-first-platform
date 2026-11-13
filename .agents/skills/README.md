@@ -1,5 +1,10 @@
 # Project skills
 
+## Agent Kit selection
+
+The current managed subset, immutable source and update procedure are in [AGENT-KIT.md](AGENT-KIT.md). The manifest owns only those selected folders. The predecessor receipts and local adaptation notes below remain provenance for the other folders; an older whole-set sync recipe does not apply to the managed subset.
+
+
 The 27 upstream-derived skill directories are copies of [mattpocock/skills](https://github.com/mattpocock/skills)
 at commit `a496f5513d4a4cf889bc48e189e579f4b0bdf6aa` (upstream `main` on 2026-10-31). `ship` is project-authored.
 The upstream MIT license is in `LICENSE.mattpocock`. Each project owns its harness (owner decision, 2026-10-31).
