@@ -1,0 +1,56 @@
+{
+  "realm": "spec48",
+  "enabled": true,
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "revokeRefreshToken": false,
+  "clients": [
+    {
+      "clientId": "platform",
+      "name": "Платформа (прототип spec48)",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "proto-platform-secret",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "implicitFlowEnabled": false,
+      "serviceAccountsEnabled": false,
+      "redirectUris": [
+        "http://127.0.0.1:18481/login/callback",
+        "http://127.0.0.1:18482/login/callback"
+      ],
+      "webOrigins": ["+"],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "+"
+      },
+      "defaultClientScopes": ["web-origins", "acr", "profile", "roles", "email", "basic"],
+      "optionalClientScopes": ["offline_access"]
+    }
+  ],
+  "users": [
+    {
+      "username": "anna",
+      "email": "anna@example.test",
+      "emailVerified": true,
+      "firstName": "Анна",
+      "lastName": "Тестова",
+      "enabled": true,
+      "credentials": [{ "type": "password", "value": "anna-pass", "temporary": false }],
+      "realmRoles": ["default-roles-spec48"]
+    },
+    {
+      "username": "boris",
+      "email": "boris@example.test",
+      "emailVerified": true,
+      "firstName": "Борис",
+      "lastName": "Тестов",
+      "enabled": true,
+      "credentials": [{ "type": "password", "value": "boris-pass", "temporary": false }],
+      "realmRoles": ["default-roles-spec48"]
+    }
+  ]
+}
