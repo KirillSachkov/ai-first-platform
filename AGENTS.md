@@ -1,6 +1,6 @@
 ## Project context
 
-Before planning or implementing project work, read the delivery scope in [map #1](https://github.com/KirillSachkov/ai-first-platform/issues/1) and the issue or spec of the task.
+Before planning or implementing project work, read the agreed first-version scope linked from the notes of [map #1](https://github.com/KirillSachkov/ai-first-platform/issues/1) and the issue or spec of the task.
 
 ## Language
 
