@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>ПРОТОТИП: период доступа сотрудника (спека #48, вопрос H4)</title>
+<style>
+  :root { --accent: #2f5bd3; --bad: #c62828; --ok: #2e7d32; --muted: #666; --line: #e3e3e8; --bg: #fafafb; }
+  * { box-sizing: border-box; }
+  body { font: 15px/1.5 -apple-system, "Segoe UI", Roboto, sans-serif; margin: 0; color: #1d1d22; background: #fff; }
+  main { max-width: 1180px; margin: 0 auto; padding: 24px 28px 80px; }
+  h1 { font-size: 24px; margin: 0 0 4px; }
+  h2 { font-size: 18px; margin: 32px 0 10px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+  h3 { font-size: 15px; margin: 14px 0 6px; }
+  .banner { background: #fff4d6; border: 1px solid #f0d78a; padding: 8px 12px; border-radius: 6px; font-size: 13px; margin: 10px 0 14px; }
+  .muted { color: var(--muted); font-size: 13px; }
+  .question { background: var(--bg); border-left: 3px solid var(--accent); padding: 10px 14px; }
+  button { font: inherit; font-size: 13px; padding: 5px 10px; border: 1px solid #c9c9d3; background: #fff; border-radius: 5px; cursor: pointer; margin: 2px 4px 2px 0; }
+  button:hover { border-color: var(--accent); }
+  button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  button.next { background: var(--accent); color: #fff; border-color: var(--accent); }
+  button.done { background: #eef1f8; color: #777; }
+  button:disabled { opacity: .45; cursor: default; }
+  .rules label { display: block; padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; margin: 4px 0; cursor: pointer; }
+  .rules label.sel { border-color: var(--accent); background: #f2f5fd; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .card { border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; background: #fff; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-weight: 600; color: #444; }
+  .ok { color: var(--ok); font-weight: 600; }
+  .bad { color: var(--bad); font-weight: 600; }
+  tr.mismatch td { background: #fdecec; }
+  .note { background: #f2f5fd; border-radius: 6px; padding: 8px 12px; margin: 8px 0; }
+  .tabs button { border-radius: 5px 5px 0 0; margin: 0 2px 0 0; }
+  .tabs button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .tabpanel { border: 1px solid var(--line); padding: 10px 14px; border-radius: 0 6px 6px 6px; }
+  ol.log { font-size: 13px; padding-left: 22px; margin: 4px 0; }
+  .trace { font-size: 13px; background: var(--bg); padding: 6px 10px 6px 28px; border-radius: 6px; margin: 4px 0 10px; }
+  .kv span { display: inline-block; min-width: 190px; color: #555; }
+  .pill { display: inline-block; font-size: 12px; padding: 0 6px; border-radius: 10px; background: #eee; margin-left: 4px; }
+  .rescell { cursor: pointer; }
+</style>
+</head>
+<body>
+<main>
+<h1>Период доступа сотрудника: что делать с участием и подключениями после прекращения доступа</h1>
+<div class="banner">ПРОТОТИП, выбросить после решения. Ветка <code>prototype/spec48-access-period</code>, в <code>main</code> не попадает. Всё в памяти, ничего не сохраняется.</div>
+
+<div class="question">
+<b>Вопрос (спека #48, H4).</b> Администратор прекращает доступ Анны к платформе. Модуль Сотрудники делает это сразу и синхронно.
+Последствия (завершить участие Анны в проектах в модуле Доступ, отозвать её подключения агентов в модуле Подключения агентов)
+приходят событиями через outbox, RabbitMQ и inbox: с задержкой, повторно и не по порядку. Доступ не может синхронно спросить Сотрудников,
+Подключения агентов не вызывают никого. На каждый запрос входной слой спрашивает Сотрудников про учётную запись вызывающего,
+затем Подключения агентов (подключение действует?), затем Доступ (разрешения), и передаёт данные учётной записи в контексте запроса.
+Какое правило даёт пять принятых исходов при любом порядке доставки событий?
+</div>
+
+<h2>Правило</h2>
+<div class="muted">Переключение правила переигрывает те же действия заново, так что один и тот же сценарий можно сравнить между правилами.</div>
+<div id="rules" class="rules"></div>
+
+<h2>Текущее состояние</h2>
+<div id="last" class="note"></div>
+<div id="state"></div>
+
+<h2>Свободная игра</h2>
+<div class="card">
+  <div><label><input type="checkbox" id="sameTick"> следующее действие в тот же тик (совпадающие метки времени)</label></div>
+  <h3>Модуль Сотрудники (администратор)</h3>
+  <button data-act="terminate">Прекратить доступ Анны</button>
+  <button data-act="restore">Восстановить доступ Анны</button>
+  <h3>Модуль Доступ (администратор)</h3>
+  <button data-act="addMembership">Добавить Анну в новый проект</button>
+  <h3>Модуль Подключения агентов (Анна)</h3>
+  <button data-act="connect">Анна подключает агента (проверка и запись сразу)</button>
+  <button data-act="consent">Анна подтверждает подключение (только проверка входного слоя)</button>
+  <span id="consentButtons"></span>
+  <h3>Доставка событий</h3>
+  <div id="deliverButtons" class="muted"></div>
+  <h3>Журнал</h3>
+  <button id="undo">Отменить последнее действие</button>
+  <button id="reset">Начать заново</button>
+  <ol id="log" class="log"></ol>
+</div>
+
+<h2>Сценарии по шагам</h2>
+<div id="tabs" class="tabs"></div>
+<div id="tabpanel" class="tabpanel"></div>
+
+<h2>Проверка всех порядков</h2>
+<div class="muted">
+Перебираем все чередования небольших сценариев: действия администраторов по порядку, а доставку каждого события в модуль в любой момент после его появления,
+в любом порядке, с повторной доставкой. После каждого шага спрашиваем входной слой про каждую запись Анны (это и есть «запрос в каждой точке»)
+и сравниваем с тем, что требуют исходы 1–5. «Призрак»: после доставки всех событий запись хранится действующей, но входной слой её не пропускает.
+Нажмите на ✗, чтобы увидеть самый короткий найденный контрпример.
+</div>
+<p><button class="primary" id="runCheck">Запустить проверку</button> <span id="checkInfo" class="muted"></span></p>
+<div id="check"></div>
+<div id="counter"></div>
+
+<!-- ===================== Portable logic module: no DOM below this line ===================== -->
+<script id="model">
+const AccessPeriodModel = (() => {
+  const RULES = {
+    R1: {
+      name: 'R1. Поколение, проставленное модулем',
+      text: 'Сотрудники увеличивают номер поколения при каждом восстановлении, события несут этот номер. Доступ и Подключения агентов знают поколение только из событий (проекция) и ставят его на новые записи. Исключение: подключение создаёт сама Анна, поэтому номер берётся из контекста её запроса. Входной слой пропускает запись, только если её поколение равно поколению учётной записи. Событие о прекращении завершает записи с поколением не больше своего, событие о восстановлении завершает записи младших поколений.'
+    },
+    R2: {
+      name: 'R2. Начало периода проверяется при запросе (≥)',
+      text: 'Сотрудники хранят начало текущего периода доступа (создание учётной записи или последнее восстановление). Входной слой передаёт его в контексте. Запись действует, только если создана не раньше начала периода. События только убирают мусор: «прекращён в T» завершает записи, созданные не позже T; «восстановлен в R» завершает записи, созданные раньше R.'
+    },
+    R2b: {
+      name: 'R2b. Как R2, но прекращение завершает всё',
+      text: 'Проверка при запросе как в R2. Событие «прекращён в T» завершает все действующие записи, в том числе созданные после T. Так пытаемся убрать записи, добавленные в окне, без восстановления.'
+    },
+    R3: {
+      name: 'R3. Наивное правило',
+      text: 'Входной слой проверяет только, что учётная запись активна и запись действует. Событие о прекращении завершает все действующие записи. Событие о восстановлении ничего не делает.'
+    },
+    R4: {
+      name: 'R4. R2 со строгим сравнением (предложение прототипа)',
+      text: 'Как R2, но запись действует, только если создана строго позже начала периода, а «восстановлен в R» завершает записи, созданные не позже R. При совпадении меток времени проигрывает новая запись (её придётся добавить ещё раз), а не безопасность. Начальные записи создаются на тик позже учётной записи.'
+    }
+  };
+
+  const LETTERS = ['Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'];
+  const clone = (x) => JSON.parse(JSON.stringify(x));
+
+  function rec(id, kind, label, createdAt, gen, period) {
+    // period: oracle only (which access period the record belongs to; null = created while access was terminated).
+    // Rules never read it; the checker compares against it.
+    return { id, kind, label, createdAt, gen, period, endedAt: null, endedBy: null };
+  }
+
+  function initialState() {
+    return {
+      tick: 1,
+      emp: { active: true, gen: 1, activeSince: 0, terminatedAt: null, periodNo: 1 },
+      events: [],
+      consents: [],
+      access: { proj: 1, records: [rec('m-А', 'membership', 'Проект А', 1, 1, 1), rec('adm', 'admin', 'Права администратора', 1, 1, 1)] },
+      conns: { proj: 1, records: [rec('c-1', 'connection', 'Подключение 1', 1, 1, 1)] },
+      seq: { conn: 2, event: 1, consent: 1 },
+      requests: [],
+      last: { text: 'Начальное состояние: учётная запись Анны создана в т0, участие в «Проект А», права администратора и «Подключение 1» созданы в т1.', changed: false }
+    };
+  }
+
+  const ctxOf = (s) => ({ active: s.emp.active, gen: s.emp.gen, activeSince: s.emp.activeSince });
+  const evName = (ev) => (ev.type === 'terminated' ? 'Доступ прекращён' : 'Доступ восстановлен') + ' в т' + ev.at + ' (поколение ' + ev.gen + ')';
+
+  // What the edge would answer for this record given the caller's account context.
+  function decide(rule, r, ctx) {
+    if (!ctx.active) return { ok: false, why: 'учётная запись неактивна' };
+    if (r.endedAt !== null) return { ok: false, why: 'запись завершена' };
+    if (rule === 'R1') return r.gen === ctx.gen ? { ok: true, why: 'поколение совпадает' } : { ok: false, why: 'поколение записи ' + r.gen + ', учётной записи ' + ctx.gen };
+    if (rule === 'R2' || rule === 'R2b') return r.createdAt >= ctx.activeSince ? { ok: true, why: 'создана не раньше начала периода' } : { ok: false, why: 'создана в т' + r.createdAt + ', раньше начала периода т' + ctx.activeSince };
+    if (rule === 'R4') return r.createdAt > ctx.activeSince ? { ok: true, why: 'создана после начала периода' } : { ok: false, why: 'создана в т' + r.createdAt + ', не позже начала периода т' + ctx.activeSince };
+    return { ok: true, why: 'учётная запись активна, запись действует' };
+  }
+
+  // Oracle: what the accepted outcomes require.
+  const expected = (s, r) => s.emp.active && r.period !== null && r.period === s.emp.periodNo;
+
+  function handle(rule, m, ev, now) {
+    const ended = [];
+    const end = (r) => { if (r.endedAt === null) { r.endedAt = now; r.endedBy = evName(ev); ended.push(r.label); } };
+    const T = ev.type === 'terminated';
+    if (rule === 'R1') {
+      m.proj = Math.max(m.proj, ev.gen);
+      m.records.forEach((r) => { if (T ? r.gen <= ev.gen : r.gen < ev.gen) end(r); });
+    } else if (rule === 'R2') {
+      m.records.forEach((r) => { if (T ? r.createdAt <= ev.at : r.createdAt < ev.at) end(r); });
+    } else if (rule === 'R4') {
+      m.records.forEach((r) => { if (r.createdAt <= ev.at) end(r); });
+    } else if (rule === 'R2b') {
+      m.records.forEach((r) => { if (T || r.createdAt < ev.at) end(r); });
+    } else if (rule === 'R3') {
+      if (T) m.records.forEach(end);
+    }
+    return ended;
+  }
+
+  function nextLetter(s) {
+    const used = new Set(s.access.records.map((r) => r.label));
+    return LETTERS.find((l) => !used.has('Проект ' + l));
+  }
+
+  function addConnection(s, ctx, t, how) {
+    const id = 'c-' + s.seq.conn++;
+    const r = rec(id, 'connection', 'Подключение ' + id.slice(2), t, ctx.gen, s.emp.active ? s.emp.periodNo : null);
+    s.conns.records.push(r);
+    return r;
+  }
+
+  // Pure step: (rule, state, action) => new state. Every action advances the clock by one tick unless sameTick.
+  function step(rule, s0, a) {
+    const s = clone(s0);
+    if (!a.sameTick) s.tick += 1;
+    const t = s.tick;
+    let text = '', changed = true;
+    const R1note = (g) => (rule === 'R1' ? ', поколение ' + g : '');
+    switch (a.type) {
+      case 'terminate':
+        if (!s.emp.active) { text = 'Повторное прекращение: учётная запись уже неактивна, ничего не меняется, событие не публикуется.'; changed = false; break; }
+        s.emp.active = false; s.emp.terminatedAt = t;
+        s.events.push({ id: 'e' + s.seq.event++, type: 'terminated', at: t, gen: s.emp.gen, delivered: { access: 0, conns: 0 } });
+        text = 'Администратор прекратил доступ Анны в т' + t + '. Сотрудники опубликовали событие «Доступ прекращён».';
+        break;
+      case 'restore':
+        if (s.emp.active) { text = 'Повторное восстановление: учётная запись уже активна, ничего не меняется (начало периода и поколение прежние).'; changed = false; break; }
+        s.emp.active = true; s.emp.gen += 1; s.emp.activeSince = t; s.emp.periodNo += 1;
+        s.events.push({ id: 'e' + s.seq.event++, type: 'restored', at: t, gen: s.emp.gen, delivered: { access: 0, conns: 0 } });
+        text = 'Администратор восстановил доступ Анны в т' + t + ' (поколение ' + s.emp.gen + ', начало периода т' + t + '). Опубликовано событие «Доступ восстановлен».';
+        break;
+      case 'addMembership': {
+        const letter = a.letter || nextLetter(s);
+        const r = rec('m-' + letter, 'membership', 'Проект ' + letter, t, s.access.proj, s.emp.active ? s.emp.periodNo : null);
+        s.access.records.push(r);
+        text = 'Администратор добавил Анну в «' + r.label + '» в т' + t + R1note(r.gen) + (rule === 'R1' ? ' (из проекции модуля Доступ)' : '') + '. Доступ не может спросить Сотрудников, поэтому запись создана.';
+        break;
+      }
+      case 'consent': {
+        const ctx = ctxOf(s);
+        if (!ctx.active) { text = 'Входной слой отклонил подтверждение подключения: учётная запись неактивна.'; changed = false; break; }
+        const id = 'k-' + s.seq.consent++;
+        s.consents.push({ id, ctx, at: t, used: false });
+        text = 'Анна подтвердила подключение агента в т' + t + '. Входной слой проверил: учётная запись активна. Запись подключения ещё не сохранена.';
+        break;
+      }
+      case 'commitConnection': {
+        const k = s.consents.find((c) => c.id === a.consent && !c.used);
+        if (!k) { text = 'Нет такого подтверждения.'; changed = false; break; }
+        k.used = true;
+        const r = addConnection(s, k.ctx, t);
+        text = 'Подключения агентов сохранили «' + r.label + '» в т' + t + ' по подтверждению из т' + k.at + R1note(r.gen) + (rule === 'R1' ? ' (из контекста запроса Анны)' : '') + '.';
+        break;
+      }
+      case 'connect': {
+        const ctx = ctxOf(s);
+        if (!ctx.active) { text = 'Входной слой отклонил подключение агента: учётная запись неактивна.'; changed = false; break; }
+        const r = addConnection(s, ctx, t);
+        text = 'Анна подключила агента: «' + r.label + '» создано в т' + t + R1note(r.gen) + '.';
+        break;
+      }
+      case 'deliver': {
+        const ev = s.events.find((e) => e.id === a.eventId);
+        const m = s[a.module];
+        const before = JSON.stringify(m);
+        const again = ev.delivered[a.module] > 0;
+        const ended = handle(rule, m, ev, t);
+        ev.delivered[a.module] += 1;
+        changed = JSON.stringify(m) !== before;
+        text = 'Событие «' + evName(ev) + '» доставлено в модуль ' + (a.module === 'access' ? 'Доступ' : 'Подключения агентов') + (again ? ' повторно' : '') + '. ' +
+          (ended.length ? 'Завершено: ' + ended.join(', ') + '.' : 'Записи не изменились.');
+        break;
+      }
+      case 'request': {
+        const m = a.module === 'access' ? s.access : s.conns;
+        const r = m.records.find((x) => x.id === a.record);
+        const d = decide(rule, r, ctxOf(s));
+        const exp = expected(s, r);
+        const who = r.kind === 'connection' ? 'Агент Анны через «' + r.label + '»' : r.kind === 'admin' ? 'Анна открывает управление платформой' : 'Анна запрашивает контекст «' + r.label + '»';
+        text = who + ': входной слой ' + (d.ok ? 'пропускает' : 'отклоняет') + ' (' + d.why + '). По требованиям ' + (exp ? 'должен пропустить' : 'должен отклонить') + '.';
+        s.requests.push({ tick: t, text, ok: d.ok, expected: exp });
+        changed = false;
+        break;
+      }
+    }
+    s.last = { text, changed };
+    return s;
+  }
+
+  const replay = (rule, log) => log.reduce((s, a) => step(rule, s, a), initialState());
+
+  // ---------- Checker ----------
+  const OUTCOMES = {
+    O1: '1. Прекращение действует сразу',
+    O2: '2. Добавленное в окне не возвращается',
+    O3: '3. Восстановление без старого',
+    O4: '4. Новое после восстановления живёт',
+    O5: '5. Повторы ничего не меняют',
+    G: 'Нет призраков в итоге'
+  };
+
+  const SCENARIOS = [
+    { id: 'A', title: 'прекратить, добавить в окне, восстановить, добавить после', steps: ['TERM', 'ADD_W', 'RESTORE', 'ADD_C'], maxDeliv: 2, ties: false },
+    { id: 'B', title: 'прекратить, добавить в окне, не восстанавливать', steps: ['TERM', 'ADD_W'], maxDeliv: 2, ties: false },
+    { id: 'C', title: 'два цикла прекращения и восстановления', steps: ['TERM', 'ADD_W', 'RESTORE', 'ADD_C', 'TERM', 'RESTORE', 'ADD_C'], maxDeliv: 1, ties: false },
+    { id: 'D', title: 'повторные команды', steps: ['TERM', 'TERM', 'RESTORE', 'RESTORE', 'ADD_C'], maxDeliv: 2, ties: false },
+    { id: 'A=', title: 'как A, но соседние действия могут попасть в один тик', steps: ['TERM', 'ADD_W', 'RESTORE', 'ADD_C'], maxDeliv: 1, ties: true }
+  ];
+
+  function toAction(stepName, moduleKey, s, sameTick) {
+    if (stepName === 'TERM') return { type: 'terminate', sameTick };
+    if (stepName === 'RESTORE') return { type: 'restore', sameTick };
+    if (moduleKey === 'access') return { type: 'addMembership', sameTick };
+    if (stepName === 'ADD_W') return { type: 'commitConnection', consent: s.consents[0].id, sameTick };
+    return { type: 'connect', sameTick };
+  }
+
+  const tickTag = (s) => 'т' + s.tick + ': ';
+
+  function violations(rule, s, moduleKey) {
+    const out = [];
+    const ctx = ctxOf(s);
+    for (const r of s[moduleKey].records) {
+      const d = decide(rule, r, ctx);
+      const exp = expected(s, r);
+      const who = r.kind === 'connection' ? 'запрос агента через «' + r.label + '»' : 'запрос Анны к «' + r.label + '»';
+      if (d.ok && !exp) {
+        if (!s.emp.active) out.push({ o: 'O1', text: who + ': входной слой пропускает, а доступ прекращён' });
+        else if (r.period === null) out.push({ o: 'O2', text: who + ': входной слой пропускает, хотя запись добавлена, пока доступ был прекращён' });
+        else out.push({ o: 'O3', text: who + ': входной слой пропускает запись из прошлого периода доступа' });
+      } else if (!d.ok && exp) {
+        out.push({ o: 'O4', text: who + ': входной слой отклоняет (' + d.why + '), а запись добавлена в текущем периоде и должна работать' });
+      }
+    }
+    return out;
+  }
+
+  function ghosts(rule, s, moduleKey) {
+    const ctx = ctxOf(s);
+    return s[moduleKey].records.filter((r) => r.endedAt === null && !decide(rule, r, ctx).ok)
+      .map((r) => 'итог после доставки всех событий: «' + r.label + '» хранится действующей, но входной слой её не пропускает (' + decide(rule, r, ctx).why + ')');
+  }
+
+  function explore(rule, moduleKey, sc) {
+    const found = {};
+    let traces = 0;
+    const take = (o, trace) => { if (!found[o] || trace.length < found[o].length) found[o] = trace; };
+    let s0 = initialState();
+    const prefix = [];
+    if (moduleKey === 'conns' && sc.steps.includes('ADD_W')) {
+      s0 = step(rule, s0, { type: 'consent' });
+      prefix.push(tickTag(s0) + 'Анна подтверждает подключение агента, входной слой проверил: учётная запись активна');
+    }
+    const describe = (ns, a) => {
+      if (a.type === 'deliver') return '  ' + ns.last.text;
+      return tickTag(ns) + ns.last.text;
+    };
+    const dfs = (s, i, trace) => {
+      for (const v of violations(rule, s, moduleKey)) take(v.o, trace.concat(['  Запрос в т' + s.tick + ': ' + v.text]));
+      const all = s.events.every((e) => e.delivered[moduleKey] >= 1);
+      if (i === sc.steps.length && all) {
+        traces++;
+        for (const g of ghosts(rule, s, moduleKey)) take('G', trace.concat(['  ' + g]));
+      }
+      if (i < sc.steps.length) {
+        for (const same of (sc.ties && i > 0 ? [false, true] : [false])) {
+          const a = toAction(sc.steps[i], moduleKey, s, same);
+          const ns = step(rule, s, a);
+          const line = describe(ns, a) + (same ? ' [тот же тик, что и предыдущее действие]' : '');
+          const repeated = (a.type === 'terminate' && !s.emp.active) || (a.type === 'restore' && s.emp.active);
+          if (repeated && JSON.stringify([ns.emp, ns.events, ns[moduleKey]]) !== JSON.stringify([s.emp, s.events, s[moduleKey]])) take('O5', trace.concat([line, '  повторная команда изменила состояние']));
+          dfs(ns, i + 1, trace.concat([line]));
+        }
+      }
+      for (const e of s.events) {
+        const d = e.delivered[moduleKey];
+        if (d < sc.maxDeliv) {
+          const a = { type: 'deliver', module: moduleKey, eventId: e.id, sameTick: true };
+          const ns = step(rule, s, a);
+          const line = describe(ns, a);
+          if (d >= 1 && ns.last.changed) take('O5', trace.concat([line, '  повторная доставка изменила хранимые записи']));
+          dfs(ns, i, trace.concat([line]));
+        }
+      }
+    };
+    dfs(s0, 0, prefix);
+    return { found, traces };
+  }
+
+  // Returns { [rule]: { [moduleKey]: { [outcome]: {trace, scenario} | null } } } for the given scenario set.
+  function checkAll(scenarioIds) {
+    const res = {}; let total = 0;
+    for (const rule of Object.keys(RULES)) {
+      res[rule] = {};
+      for (const mk of ['access', 'conns']) {
+        const cell = {};
+        for (const o of Object.keys(OUTCOMES)) cell[o] = null;
+        for (const sc of SCENARIOS.filter((x) => scenarioIds.includes(x.id))) {
+          const { found, traces } = explore(rule, mk, sc);
+          total += traces;
+          for (const o of Object.keys(found)) {
+            if (!cell[o] || found[o].length < cell[o].trace.length) cell[o] = { trace: found[o], scenario: sc };
+          }
+        }
+        res[rule][mk] = cell;
+      }
+    }
+    return { res, total };
+  }
+
+  return { RULES, OUTCOMES, SCENARIOS, initialState, step, replay, decide, expected, ctxOf, evName, checkAll };
+})();
+if (typeof module !== 'undefined') module.exports = AccessPeriodModel;
+</script>
+
+<!-- ===================== Throwaway page shell ===================== -->
+<script>
+const M = AccessPeriodModel;
+let rule = 'R2';
+let log = [];
+const $ = (id) => document.getElementById(id);
+const esc = (x) => String(x).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+
+function renderRules() {
+  $('rules').innerHTML = Object.entries(M.RULES).map(([k, r]) =>
+    '<label class="' + (k === rule ? 'sel' : '') + '"><input type="radio" name="rule" value="' + k + '"' + (k === rule ? ' checked' : '') + '> <b>' + esc(r.name) + '</b><div class="muted">' + esc(r.text) + '</div></label>').join('');
+  document.querySelectorAll('input[name=rule]').forEach((el) => el.onchange = () => { rule = el.value; render(); });
+}
+
+function recordTable(s, mk) {
+  const m = s[mk];
+  const ctx = M.ctxOf(s);
+  const rows = m.records.map((r) => {
+    const d = M.decide(rule, r, ctx);
+    const exp = M.expected(s, r);
+    const stored = r.endedAt === null ? '<span class="ok">действует</span>' : 'завершена в т' + r.endedAt + '<div class="muted">' + esc(r.endedBy) + '</div>';
+    const origin = r.period === null ? '<span class="pill">добавлена, пока доступ прекращён</span>' : '<span class="pill">период ' + r.period + '</span>';
+    return '<tr class="' + (d.ok !== exp ? 'mismatch' : '') + '"><td>' + esc(r.label) + origin + '</td><td>т' + r.createdAt + '</td>' +
+      (rule === 'R1' ? '<td>' + r.gen + '</td>' : '') +
+      '<td>' + stored + '</td><td class="' + (d.ok ? 'ok' : 'bad') + '">' + (d.ok ? 'пропустит' : 'отклонит') + '<div class="muted">' + esc(d.why) + '</div></td>' +
+      '<td>' + (exp ? 'пропустить' : 'отклонить') + '</td><td><button data-req="' + mk + '|' + r.id + '">Запрос</button></td></tr>';
+  }).join('');
+  return '<table><tr><th>Запись</th><th>Создана</th>' + (rule === 'R1' ? '<th>Поколение</th>' : '') + '<th>Хранение</th><th>Входной слой сейчас</th><th>По требованиям</th><th></th></tr>' + rows + '</table>';
+}
+
+function render() {
+  renderRules();
+  const s = M.replay(rule, log);
+  $('last').innerHTML = '<b>Что произошло:</b> ' + esc(s.last.text);
+  const e = s.emp;
+  const evRows = s.events.map((ev) => '<tr><td>' + esc(M.evName(ev)) + '</td><td>' + ev.delivered.access + '</td><td>' + ev.delivered.conns + '</td></tr>').join('') || '<tr><td colspan="3" class="muted">событий нет</td></tr>';
+  const mism = ['access', 'conns'].some((mk) => s[mk].records.some((r) => M.decide(rule, r, M.ctxOf(s)).ok !== M.expected(s, r)));
+  $('state').innerHTML =
+    '<div class="grid"><div class="card"><h3>Часы</h3><div class="kv"><span>Сейчас</span>т' + s.tick + '</div>' +
+    '<h3>Модуль Сотрудники: учётная запись Анны</h3>' +
+    '<div class="kv"><span>Состояние</span>' + (e.active ? '<span class="ok">активна</span>' : '<span class="bad">неактивна</span>') + '</div>' +
+    '<div class="kv"><span>Поколение (R1)</span>' + e.gen + '</div>' +
+    '<div class="kv"><span>Начало периода (R2, R4)</span>т' + e.activeSince + '</div>' +
+    '<div class="kv"><span>Доступ прекращён в</span>' + (e.terminatedAt === null ? 'нет' : 'т' + e.terminatedAt) + '</div>' +
+    '<div class="muted">Входной слой передаёт эти данные в контексте каждого запроса Анны или её агента.</div></div>' +
+    '<div class="card"><h3>Outbox Сотрудников и доставка</h3><table><tr><th>Событие</th><th>Доставлено в Доступ</th><th>в Подключения</th></tr>' + evRows + '</table>' +
+    (s.consents.length ? '<h3>Подтверждения подключения</h3>' + s.consents.map((k) => '<div>' + k.id + ': проверено в т' + k.at + (k.used ? ', подключение сохранено' : ', ещё не сохранено') + '</div>').join('') : '') +
+    '</div></div>' +
+    '<div class="card" style="margin-top:14px"><h3>Модуль Доступ' + (rule === 'R1' ? ' <span class="pill">знает поколение: ' + s.access.proj + '</span>' : '') + '</h3>' + recordTable(s, 'access') +
+    '<h3>Модуль Подключения агентов' + (rule === 'R1' ? ' <span class="pill">знает поколение: ' + s.conns.proj + '</span>' : '') + '</h3>' + recordTable(s, 'conns') +
+    '<div class="muted" style="margin-top:6px">' + (mism ? '<span class="bad">Красные строки: входной слой отвечает не так, как требуют принятые исходы.</span> ' : '') +
+    '«По требованиям» считает прототип: запись должна работать, только если учётная запись активна и запись создана в текущем периоде доступа.</div>' +
+    (s.requests.length ? '<h3>Запросы</h3><ol class="log">' + s.requests.map((q) => '<li class="' + (q.ok === q.expected ? '' : 'bad') + '">т' + q.tick + ': ' + esc(q.text) + '</li>').join('') + '</ol>' : '') + '</div>';
+  document.querySelectorAll('[data-req]').forEach((b) => b.onclick = () => { const [module, record] = b.dataset.req.split('|'); push({ type: 'request', module, record }); });
+
+  $('consentButtons').innerHTML = s.consents.filter((k) => !k.used).map((k) => '<button data-commit="' + k.id + '">Сохранить подключение по ' + k.id + '</button>').join('');
+  document.querySelectorAll('[data-commit]').forEach((b) => b.onclick = () => push({ type: 'commitConnection', consent: b.dataset.commit }));
+  $('deliverButtons').innerHTML = s.events.map((ev) => '<div>' + esc(M.evName(ev)) + ': ' +
+    ['access', 'conns'].map((mk) => '<button data-deliver="' + mk + '|' + ev.id + '">' + (ev.delivered[mk] ? 'повторно ' : '') + 'в ' + (mk === 'access' ? 'Доступ' : 'Подключения') + '</button>').join('') + '</div>').join('') || 'Событий пока нет.';
+  document.querySelectorAll('[data-deliver]').forEach((b) => b.onclick = () => { const [module, eventId] = b.dataset.deliver.split('|'); push({ type: 'deliver', module, eventId }); });
+
+  let acc = M.initialState();
+  $('log').innerHTML = log.map((a) => { acc = M.step(rule, acc, a); return '<li>т' + acc.tick + ': ' + esc(acc.last.text) + '</li>'; }).join('');
+  renderTab();
+}
+
+function push(a) {
+  if ($('sameTick').checked && !a.sameTick) a = Object.assign({}, a, { sameTick: true });
+  $('sameTick').checked = false;
+  log.push(a);
+  render();
+}
+document.querySelectorAll('[data-act]').forEach((b) => b.onclick = () => push({ type: b.dataset.act }));
+$('undo').onclick = () => { log.pop(); render(); };
+$('reset').onclick = () => { log = []; render(); };
+
+// ----- Guided walkthroughs -----
+const d = (module, eventId, label) => ({ a: { type: 'deliver', module, eventId }, label });
+const req = (module, record, label) => ({ a: { type: 'request', module, record }, label });
+const WALKS = [
+  { title: '1. Сразу', text: 'Администратор прекращает доступ. События ещё не доставлены, записи в Доступе и Подключениях хранятся действующими, токен не истёк. Смотрите: входной слой всё равно отклоняет и Анну, и её агента, потому что Сотрудники отвечают «неактивна». Так при любом правиле.',
+    steps: [{ a: { type: 'terminate' }, label: 'Прекратить доступ Анны' }, req('access', 'm-А', 'Анна запрашивает «Проект А»'), req('access', 'adm', 'Анна открывает управление'), req('conns', 'c-1', 'Агент через «Подключение 1»')] },
+  { title: '2. Добавлено в окне', text: 'Анна подтвердила подключение агента до прекращения, а запись сохранилась после него. Второй администратор добавил Анну в «Проект Б» уже после прекращения, но до доставки события. Потом доступ восстановили. Смотрите: «Проект Б» и «Подключение 2» не должны заработать после восстановления. Сравните R2 и R3.',
+    steps: [{ a: { type: 'consent' }, label: 'Анна подтверждает подключение' }, { a: { type: 'terminate' }, label: 'Прекратить доступ' }, { a: { type: 'addMembership', letter: 'Б' }, label: 'Второй администратор добавляет в «Проект Б»' },
+      { a: { type: 'commitConnection', consent: 'k-1' }, label: 'Подключение сохраняется' }, d('access', 'e1', '«Прекращён» в Доступ'), d('conns', 'e1', '«Прекращён» в Подключения'),
+      { a: { type: 'restore' }, label: 'Восстановить доступ' }, req('access', 'm-Б', 'Запрос к «Проект Б»'), req('conns', 'c-2', 'Агент через «Подключение 2»'), d('access', 'e2', '«Восстановлен» в Доступ'), d('conns', 'e2', '«Восстановлен» в Подключения')] },
+  { title: '3. Без старого', text: 'Доступ прекратили и сразу восстановили, ни одно событие ещё не доставлено. Смотрите: старое участие, права администратора и старое подключение не должны работать ни до, ни после доставки событий. Сравните R3 с остальными.',
+    steps: [{ a: { type: 'terminate' }, label: 'Прекратить доступ' }, { a: { type: 'restore' }, label: 'Восстановить доступ' }, req('access', 'm-А', 'Запрос к «Проект А»'), req('access', 'adm', 'Анна открывает управление'), req('conns', 'c-1', 'Агент через «Подключение 1»'),
+      d('access', 'e2', '«Восстановлен» в Доступ'), d('conns', 'e2', '«Восстановлен» в Подключения'), d('access', 'e1', '«Прекращён» в Доступ (последним)'), d('conns', 'e1', '«Прекращён» в Подключения (последним)')] },
+  { title: '4. Старое событие последним', text: 'Доступ восстановили, администратор добавил Анну в «Проект В», Анна подключила агента. Только потом приходят события, причём «прекращён» последним. Смотрите: «Проект В» и новое подключение должны пережить всё. R1 теряет «Проект В», R3 и R2b завершают его поздним событием.',
+    steps: [{ a: { type: 'terminate' }, label: 'Прекратить доступ' }, { a: { type: 'restore' }, label: 'Восстановить доступ' }, { a: { type: 'addMembership', letter: 'В' }, label: 'Добавить в «Проект В»' }, { a: { type: 'connect' }, label: 'Анна подключает агента' },
+      req('access', 'm-В', 'Запрос к «Проект В»'), req('conns', 'c-2', 'Агент через «Подключение 2»'), d('access', 'e2', '«Восстановлен» в Доступ'), d('conns', 'e2', '«Восстановлен» в Подключения'),
+      d('access', 'e1', 'Старое «прекращён» в Доступ'), d('conns', 'e1', 'Старое «прекращён» в Подключения'), req('access', 'm-В', 'Запрос к «Проект В»'), req('conns', 'c-2', 'Агент через «Подключение 2»')] },
+  { title: '5. Повторы', text: 'Команды повторяются, события доставляются повторно, в том числе после того, как появился «Проект В». Смотрите: повтор ничего не меняет. Сотрудники игнорируют повторную команду и не публикуют событие. Обработчик проверяем без защиты inbox, то есть в худшем случае.',
+    steps: [{ a: { type: 'terminate' }, label: 'Прекратить доступ' }, { a: { type: 'terminate' }, label: 'Прекратить ещё раз' }, d('access', 'e1', '«Прекращён» в Доступ'), d('access', 'e1', '«Прекращён» в Доступ повторно'),
+      { a: { type: 'restore' }, label: 'Восстановить доступ' }, { a: { type: 'restore' }, label: 'Восстановить ещё раз' }, { a: { type: 'addMembership', letter: 'В' }, label: 'Добавить в «Проект В»' },
+      d('access', 'e1', '«Прекращён» в Доступ ещё раз'), d('access', 'e2', '«Восстановлен» в Доступ'), d('access', 'e2', '«Восстановлен» в Доступ повторно'), req('access', 'm-В', 'Запрос к «Проект В»')] },
+  { title: '6. Один тик', text: 'Второй администратор добавляет Анну в «Проект Б», пока доступ прекращён, и в тот же тик первый администратор восстанавливает доступ, а затем в тот же тик добавляет её в «Проект В». По меткам времени «Б» и «В» неразличимы. R2 (≥) пропускает «Б», хотя не должен. R4 (строго) отклоняет «В»: безопасно, но запись придётся добавить ещё раз.',
+    steps: [{ a: { type: 'terminate' }, label: 'Прекратить доступ' }, { a: { type: 'addMembership', letter: 'Б' }, label: 'Добавить в «Проект Б» (доступ прекращён)' }, { a: { type: 'restore', sameTick: true }, label: 'Восстановить в тот же тик' },
+      { a: { type: 'addMembership', letter: 'В', sameTick: true }, label: 'Добавить в «Проект В» в тот же тик' }, req('access', 'm-Б', 'Запрос к «Проект Б»'), req('access', 'm-В', 'Запрос к «Проект В»'),
+      d('access', 'e1', '«Прекращён» в Доступ'), d('access', 'e2', '«Восстановлен» в Доступ'), req('access', 'm-Б', 'Запрос к «Проект Б»'), req('access', 'm-В', 'Запрос к «Проект В»')] },
+  { title: '7. Не восстановили', text: 'Событие о прекращении доставлено, потом Анну добавили в «Проект Б» и сохранилось подключение по подтверждению до прекращения. Доступ так и не восстановили. Смотрите: эти записи хранятся действующими, хотя входной слой их не пропускает. Это призраки. Они безвредны и при R2/R4 завершаются событием о восстановлении, если оно когда-нибудь будет.',
+    steps: [{ a: { type: 'consent' }, label: 'Анна подтверждает подключение' }, { a: { type: 'terminate' }, label: 'Прекратить доступ' }, d('access', 'e1', '«Прекращён» в Доступ'), d('conns', 'e1', '«Прекращён» в Подключения'),
+      { a: { type: 'addMembership', letter: 'Б' }, label: 'Добавить в «Проект Б»' }, { a: { type: 'commitConnection', consent: 'k-1' }, label: 'Подключение сохраняется' }, req('access', 'm-Б', 'Запрос к «Проект Б»'), req('conns', 'c-2', 'Агент через «Подключение 2»')] }
+];
+let tab = 0, tabPos = 0, tabLogStart = null;
+function renderTab() {
+  $('tabs').innerHTML = WALKS.map((w, i) => '<button data-tab="' + i + '" class="' + (i === tab ? 'active' : '') + '">' + esc(w.title) + '</button>').join('');
+  document.querySelectorAll('[data-tab]').forEach((b) => b.onclick = () => { tab = +b.dataset.tab; tabPos = 0; log = []; render(); });
+  const w = WALKS[tab];
+  if (log.length === 0) tabPos = 0;
+  $('tabpanel').innerHTML = '<p>' + esc(w.text) + '</p><div class="muted">Вкладка начинается с начального состояния. Правило можно переключать на любом шаге.</div><p>' +
+    w.steps.map((st, i) => '<button data-step="' + i + '" class="' + (i < tabPos ? 'done' : i === tabPos ? 'next' : '') + '"' + (i === tabPos ? '' : ' disabled') + '>' + (i + 1) + '. ' + esc(st.label) + '</button>').join('') +
+    '</p><button id="restartTab">Начать сценарий заново</button>';
+  document.querySelectorAll('[data-step]').forEach((b) => b.onclick = () => { const st = w.steps[+b.dataset.step]; tabPos++; log.push(Object.assign({}, st.a)); render(); });
+  $('restartTab').onclick = () => { tabPos = 0; log = []; render(); };
+}
+
+// ----- Checker view -----
+let lastCheck = null;
+function runCheck() {
+  $('checkInfo').textContent = 'Считаю...';
+  setTimeout(() => {
+    const t0 = performance.now();
+    const plain = M.checkAll(['A', 'B', 'C', 'D']);
+    const ties = M.checkAll(['A=']);
+    lastCheck = { plain, ties };
+    $('checkInfo').textContent = 'Проверено завершённых трасс: ' + (plain.total + ties.total) + ' за ' + Math.round(performance.now() - t0) + ' мс. Сценарии: ' +
+      M.SCENARIOS.map((s) => s.id + ' (' + s.title + ')').join('; ') + '.';
+    $('check').innerHTML = table('Метки времени всех действий различны (сценарии A, B, C, D)', plain.res, 'plain') + table('Соседние действия могут попасть в один тик (сценарий A=)', ties.res, 'ties');
+    document.querySelectorAll('[data-cx]').forEach((c) => c.onclick = () => showCx(c.dataset.cx));
+  }, 20);
+}
+function table(title, res, key) {
+  const outs = Object.keys(M.OUTCOMES);
+  let h = '<h3>' + esc(title) + '</h3><table><tr><th>Правило</th><th>Модуль</th>' + outs.map((o) => '<th>' + esc(M.OUTCOMES[o]) + '</th>').join('') + '</tr>';
+  for (const r of Object.keys(M.RULES)) for (const mk of ['access', 'conns']) {
+    h += '<tr><td>' + (mk === 'access' ? '<b>' + esc(M.RULES[r].name) + '</b>' : '') + '</td><td>' + (mk === 'access' ? 'Доступ: участие' : 'Подключения агентов') + '</td>' +
+      outs.map((o) => { const c = res[r][mk][o]; return c ? '<td class="bad rescell" data-cx="' + key + '|' + r + '|' + mk + '|' + o + '">✗ ' + c.scenario.id + '</td>' : '<td class="ok">✓</td>'; }).join('') + '</tr>';
+  }
+  return h + '</table>';
+}
+function showCx(k) {
+  const [key, r, mk, o] = k.split('|');
+  const c = lastCheck[key].res[r][mk][o];
+  $('counter').innerHTML = '<h3>Контрпример: ' + esc(M.RULES[r].name) + ', ' + (mk === 'access' ? 'модуль Доступ' : 'модуль Подключения агентов') + ', исход «' + esc(M.OUTCOMES[o]) + '»</h3>' +
+    '<div class="muted">Сценарий ' + c.scenario.id + ': ' + esc(c.scenario.title) + '. Начало: учётная запись создана в т0, «Проект А», права администратора и «Подключение 1» созданы в т1.</div>' +
+    '<ol class="trace">' + c.trace.map((l) => '<li>' + esc(l.trim()) + '</li>').join('') + '</ol>';
+  $('counter').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+$('runCheck').onclick = runCheck;
+
+render();
+runCheck();
+</script>
+</main>
+</body>
+</html>
