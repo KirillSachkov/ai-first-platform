@@ -6,7 +6,7 @@ Use `ship` to deliver a reviewed branch as a verified PR. Use `pr` to write its 
 
 The target branch for independent work is `main`; a spec uses an integration branch for its tickets. Follow [worktrees.md](worktrees.md) for bases and ownership. Each implementation issue links to a PR. A single integration PR may close the spec and several tickets. Discussion/research issues without repository changes may resolve with an answer rather than a PR.
 
-For a small implementation, the draft PR follows local verification and committed independent review. A spec's draft follows its first integrated result. A ready PR requires checks and review covering the current change.
+For a small implementation, the draft PR follows local verification and committed independent review. A spec's draft follows its first integrated result. A ready PR requires checks and review covering the current change. Return a ready PR to draft while material revisions need verification; mark it ready again only when those criteria hold.
 
 Keep issue delivery state explicit. Link the final PR with closing keywords and retain issues until delivery criteria are met, normally by merge. An integrated child commit may unblock dependent work inside the authorized spec run without pretending that its issue has shipped. Record integration progress in the parent issue or draft PR.
 
@@ -43,3 +43,5 @@ GitHub enforces PR-only squash merge, linear history, an up-to-date branch, and 
 ## Human handoff
 
 Follow [human-review.md](human-review.md) for selecting and presenting human checks. Retain the PR worktree for acceptance.
+
+Delivery ends at owner handoff. Deployment and automatic merge are outside this project procedure.

@@ -1,31 +1,15 @@
 # Project skills
 
-## Agent Kit selection
+## Managed procedures
 
-The current managed subset, immutable source and update procedure are in [AGENT-KIT.md](AGENT-KIT.md). The manifest owns only those selected folders. The predecessor receipts and local adaptation notes below remain provenance for the other folders; an older whole-set sync recipe does not apply to the managed subset.
-
-
-The 27 upstream-derived skill directories are copies of [mattpocock/skills](https://github.com/mattpocock/skills)
-at commit `a496f5513d4a4cf889bc48e189e579f4b0bdf6aa` (upstream `main` on 2026-10-31). `ship` is project-authored.
-The upstream MIT license is in `LICENSE.mattpocock`. Each project owns its harness (owner decision, 2026-10-31).
+All 28 existing engineering procedures are now pinned Agent Kit copies. [AGENT-KIT.md](AGENT-KIT.md) records the source, selection, reconciliation and update path. The manifest owns the selected whole folders; edit project policy in root `AGENTS.md` and `docs/agents/`, then update procedures through the installer rather than patching locked files.
 
 ## Runtime
 
-Codex and OpenCode discover project skills in `.agents/skills`; `.claude/skills` points here for Claude Code.
-Root `AGENTS.md` and `docs/agents/` own project rules; a skill reaches them through a pointer line. Reading a `SKILL.md` file is not proof of automatic discovery.
+Codex and OpenCode discover `.agents/skills`; `.claude/skills` is the relative alias `../.agents/skills` for Claude Code. `ask` replaces `ask-matt`; use `/ask`. No live references to the old folder remain. Native metadata is shipped unchanged; automatic discovery is distinct from reading a file. Implementation still requires the owner's explicit selection of `implement` or `implement-spec`, regardless of implicit discovery metadata.
 
-## Project adaptations
+## Provenance
 
-Every upstream-derived file matches upstream except the lines below. Project rules live in `docs/agents/`;
-a skill adds at most a pointer line to them. Keep these lines when syncing.
+The predecessor was 27 adaptations of mattpocock/skills at `a496f5513d4a4cf889bc48e189e579f4b0bdf6aa` plus project-authored `ship`. Twelve folders were previously adopted via Agent Harness `5e051a49287724bff80a2568d73512d9b334d692` and pinned to Agent Kit `b0570c6006289437cd587a362d26b4594c987e26`. The remaining 16 variants were semantically reconciled, verified against exact tracked whole-folder bytes and modes at the starting commit, explicitly adopted with a private temporary catalog, then updated normally. That private catalog is not a consumer dependency.
 
-| Skill | Adaptation |
-| --- | --- |
-| `implement` | One added line: project rules win; commit before review, testing levels, [review and delivery rules](../../docs/agents/delivery.md#review-and-corrections) |
-| `implement-spec` | One added line: project rules win; no reset of foreign work, delivery through `ship`, safe cleanup |
-| `pr` | One added line: project [PR report rules](../../docs/agents/pr.md) extend the template |
-| `to-spec` | One added line: content and owner-confirmation rules before publishing |
-| `diagnosing-bugs` | One added paragraph: diagnosis alone ends after Phase 4 |
-| `code-review` | Immutable base and head SHAs, a bounded issue as a spec source, human checkpoints in the Spec prompt, and the finding format with re-review |
-
-To check a sync, run `diff -r <upstream>/skills/<group>/<skill> .agents/skills/<skill>`: only the lines above may differ.
+The original root `LICENSE.mattpocock` remains. Each selected folder includes complete provider notices, attribution, native metadata and supporting files; optional legal and design references are preserved with their folder.

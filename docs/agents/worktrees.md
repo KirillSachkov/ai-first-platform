@@ -25,3 +25,7 @@ Separate Compose projects, ports, volumes, or service launchers are future infra
 ## Finish
 
 Retain the PR worktree for owner review. Remove only owned child worktrees after their commits are integrated and no active worker needs them. Check for uncommitted/untracked work and preserve evidence first. Cleanup is not permission to force-delete resources or stop another session's services.
+
+## Exploratory evidence
+
+Retain prototypes on an owned `prototype/<name>` branch outside main, with the verdict and an immutable source pointer in the implementation issue. Preserve all variants as primary evidence; only an explicitly started implementation folds validated decisions into product code. Wayfinder research uses an owned `research/<name>` branch, pushed with a pointer from its decision ticket and no PR; keep that evidence branch unmerged. Ordinary research follows its assigned persistence scope. Domain boards retain their separate `design/<slug>` policy in [domain.md](domain.md). These artifact rules do not authorize implementation, shared-service operations or publication beyond the assignment.
