@@ -12,6 +12,7 @@ A **seam** is the public boundary a test calls the system through and observes t
 | Module            | The module's public contract through its token, called as another module calls it      | none, real database                                 | none yet: arrives with the first contract other modules call (first «Доступ» contract)                                                                                       |
 | Integration       | HTTP API of the app started in process, requests through Fastify `inject`              | external services, time                             | [`health.int.test.ts`](../../apps/api/src/system/health/health.int.test.ts), [`get-system-status.int.test.ts`](../../apps/api/src/system/get-system-status/get-system-status.int.test.ts) |
 | Integration, edge | The same, with a test-only module                                                       | as integration                                      | [`edge.int.test.ts`](../../apps/api/src/edge/edge.int.test.ts)                                                                                                                |
+| Infrastructure    | Test resource lifecycle helpers on an owned real RabbitMQ container                    | none                                                | [`rabbitmq.int.test.ts`](../../apps/api/test/rabbitmq.int.test.ts) |
 | Event             | A feature publishes an integration event; the test observes the subscriber's result   | none, real RabbitMQ                                 | none yet: arrives with the first feature that publishes an event (ADR-0003)                                                                                                  |
 | Architecture      | dependency-cruiser, Steiger, OpenAPI drift check                                        | —                                                   | already in `pnpm check`                                                                                                                                                      |
 | Unit (frontend)   | Pure functions and entity models                                                        | none                                                | none yet: no frontend unit code exists                                                                                                                                       |
@@ -20,6 +21,28 @@ A **seam** is the public boundary a test calls the system through and observes t
 | Smoke             | The running stack: readiness, PostgreSQL outage, recovery                               | —                                                   | [`scripts/smoke.mjs`](../../scripts/smoke.mjs)                                                                                                                               |
 
 Start a new test from the sample of its kind. Specs cite these samples as prior art in Testing Decisions.
+
+### RabbitMQ cleanup boundary (#75)
+
+The owner approved this bounded infrastructure seam on 14 November 2026, relayed by
+coordinator Codex from Orca Home/Agent Kit question 12 (reply: «да всё разрешаю»).
+The [recorded Testing Decision](https://github.com/KirillSachkov/ai-first-platform/issues/75#issuecomment-6881419268)
+owns its scope. `apps/api/test/*.int.test.ts` run in the `infrastructure` Vitest project
+against an owned, non-reused broker, including foreign-name fixtures. They exercise
+`createVhost`/`deleteVhosts` directly: concurrent cleanup, selection/namespace isolation,
+and error propagation with lock release. Application integration tests retain their HTTP seam.
+
+RabbitMQ 4.4.0 lists names before loading each vhost; concurrent deletion can yield an entry
+without `name`. Keep strict response parsing and serialize the entire cleanup sweep with
+`withMachineLock`. All participating cleanup writers must use this helper; old checkouts
+and external DELETE requests do not follow the lock. The existing lock is non-reentrant,
+releases in `finally`, and considers holders stale after five minutes. Do not acquire it
+around a caller that already invokes cleanup. Container startup releases it before the stale sweep.
+
+The regression observes overlap from the selection callback through completed deletion
+and checks the remaining real vhosts. It does not deterministically force RabbitMQ's internal
+list/read race. The recorded raw HTTP stress reproduction establishes that mechanism;
+a passing stress rerun alone is not causal proof.
 
 ### Choosing the kind
 

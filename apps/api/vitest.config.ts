@@ -10,6 +10,10 @@ export default defineConfig({
     projects: [
       {
         extends: true,
+        test: { name: "infrastructure", include: ["test/**/*.int.test.ts"] },
+      },
+      {
+        extends: true,
         test: {
           name: "unit",
           include: ["src/**/*.test.ts"],

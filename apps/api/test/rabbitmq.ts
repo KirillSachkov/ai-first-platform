@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { connectionUrl, namePrefix } from "./infra.js";
 import type { RabbitMqServer } from "./infra.js";
+import { withMachineLock } from "./machine-lock.js";
 
 type ManagementRequest = Readonly<{
   method: "GET" | "PUT" | "DELETE";
@@ -43,15 +44,21 @@ export async function deleteVhosts(
   server: RabbitMqServer,
   select: (name: string) => boolean,
 ): Promise<void> {
-  const response = await management(server, { method: "GET", path: "/vhosts?columns=name" });
-  const vhosts = z.array(z.object({ name: z.string() })).parse(await response.json());
-  await Promise.all(
-    vhosts
-      .filter(({ name }) => name.startsWith(namePrefix) && select(name))
-      .map(async ({ name }) =>
-        management(server, { method: "DELETE", path: `/vhosts/${encodeURIComponent(name)}` }),
-      ),
-  );
+  // RabbitMQ enumerates names before reading vhost info. Another cleanup deleting a vhost
+  // between those steps can produce a nameless entry. Coordinate the entire sweep across
+  // participating files/worktrees; external writers and old checkouts do not take this lock.
+  // Callers must not already hold the non-reentrant machine lock.
+  await withMachineLock(async () => {
+    const response = await management(server, { method: "GET", path: "/vhosts?columns=name" });
+    const vhosts = z.array(z.object({ name: z.string() })).parse(await response.json());
+    await Promise.all(
+      vhosts
+        .filter(({ name }) => name.startsWith(namePrefix) && select(name))
+        .map(async ({ name }) =>
+          management(server, { method: "DELETE", path: `/vhosts/${encodeURIComponent(name)}` }),
+        ),
+    );
+  });
 }
 
 export function amqpUrl(server: RabbitMqServer, vhost: string): string {
