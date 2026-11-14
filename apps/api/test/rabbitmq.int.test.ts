@@ -60,6 +60,26 @@ describe("test resource cleanup on RabbitMQ", () => {
     await expect(vhostNames()).resolves.toStrictEqual(["/", "foreign", "it_another_run"]);
   }, 30_000);
 
+  it("finishes all attempted deletions before reporting a RabbitMQ failure and releasing the lock", async () => {
+    const protectedName = "it_error_00_protected";
+    const deletable = Array.from({ length: 16 }, (_value, item) => `it_error_remove_${item}`);
+    await Promise.all(
+      [protectedName, ...deletable].map(async (name) => createVhost(broker(), name)),
+    );
+    // The real broker refuses DELETE with HTTP 412 while this protection is enabled.
+    await expect(protection(protectedName, "POST")).resolves.toBe(204);
+    await expect(deleteVhosts(broker(), (name) => name.startsWith("it_error_"))).rejects.toThrow(
+      /RabbitMQ/u,
+    );
+    const names = await vhostNames();
+    expect(names.filter((name) => name.startsWith("it_error_"))).toStrictEqual([
+      "it_error_00_protected",
+    ]);
+    await expect(protection(protectedName, "DELETE")).resolves.toBe(204);
+    await deleteVhosts(broker(), (name) => name === protectedName);
+    await expect(vhostNames()).resolves.not.toContain(protectedName);
+  });
+
   it("propagates selection errors and releases the lock for the next cleanup", async () => {
     await createVhost(broker(), "it_failure");
     await expect(
@@ -95,4 +115,19 @@ function broker(): RabbitMqServer {
     throw new Error("The owned test broker has not started");
   }
   return running.server;
+}
+
+async function protection(name: string, method: "POST" | "DELETE"): Promise<number> {
+  const server = broker();
+  const response = await fetch(
+    `http://${server.host}:${server.managementPort}/api/vhosts/${encodeURIComponent(name)}/deletion/protection`,
+    {
+      method,
+      headers: {
+        authorization: `Basic ${Buffer.from(`${user.name}:${user.password}`).toString("base64")}`,
+      },
+    },
+  );
+  await response.text();
+  return response.status;
 }

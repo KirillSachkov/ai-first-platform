@@ -51,13 +51,21 @@ export async function deleteVhosts(
   await withMachineLock(async () => {
     const response = await management(server, { method: "GET", path: "/vhosts?columns=name" });
     const vhosts = z.array(z.object({ name: z.string() })).parse(await response.json());
-    await Promise.all(
+    const results = await Promise.allSettled(
       vhosts
         .filter(({ name }) => name.startsWith(namePrefix) && select(name))
         .map(async ({ name }) =>
           management(server, { method: "DELETE", path: `/vhosts/${encodeURIComponent(name)}` }),
         ),
     );
+    // A failed DELETE must not release the lock while sibling deletions are still running.
+    const failures = results.filter((result) => result.status === "rejected");
+    if (failures.length > 0) {
+      throw new AggregateError(
+        failures.map((failure): unknown => failure.reason),
+        "RabbitMQ vhost cleanup failed",
+      );
+    }
   });
 }
 
