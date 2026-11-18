@@ -1,15 +1,11 @@
 # Project skills
 
-## Managed procedures
+[Agent Kit](https://github.com/KirillSachkov/agent-kit) supplies the procedures. The [manifest](../skills-manifest.json) pins their revisions and the [lock](../skills-lock.json) records installed content. Codex discovers this directory directly. Claude uses the relative alias at `.claude/skills`.
 
-All 28 existing engineering procedures are now pinned Agent Kit copies. [AGENT-KIT.md](AGENT-KIT.md) records the source, selection, reconciliation and update path. The manifest owns the selected whole folders; edit project policy in root `AGENTS.md` and `docs/agents/`, then update procedures through the installer rather than patching locked files.
+From the project root, with a checkout of Agent Kit at the selected revision, run:
 
-## Runtime
+```sh
+python3 "$AGENT_KIT/tools/skills.py" check --project .
+```
 
-Codex and OpenCode discover `.agents/skills`; `.claude/skills` is the relative alias `../.agents/skills` for Claude Code. `ask` replaces `ask-matt`; use `/ask`. No live references to the old folder remain. Native metadata is shipped unchanged; automatic discovery is distinct from reading a file. Implementation still requires the owner's explicit selection of `implement` or `implement-spec`, regardless of implicit discovery metadata.
-
-## Provenance
-
-The predecessor was 27 adaptations of mattpocock/skills at `a496f5513d4a4cf889bc48e189e579f4b0bdf6aa` plus project-authored `ship`. Twelve folders were previously adopted via Agent Harness `5e051a49287724bff80a2568d73512d9b334d692` and pinned to Agent Kit `b0570c6006289437cd587a362d26b4594c987e26`. The remaining 16 variants were semantically reconciled, verified against exact tracked whole-folder bytes and modes at the starting commit, explicitly adopted with a private temporary catalog, then updated normally. That private catalog is not a consumer dependency.
-
-The original root `LICENSE.mattpocock` remains. Each selected folder includes complete provider notices, attribution, native metadata and supporting files; optional legal and design references are preserved with their folder.
+Set `AGENT_KIT` to that checkout. To update, follow the [distribution instructions](https://github.com/KirillSachkov/agent-kit/blob/94c236f63240a78e209b14012ff2143f22cfbda8/docs/distribution.md): select the intended skills and full SHA, preview, install, and check. Update the provider checkout ref in CI together with the manifest. Keep project-specific policy in the root AGENTS.md.

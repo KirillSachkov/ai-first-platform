@@ -1,9 +1,3 @@
-# One workflow, two levels (issue #19, section "CI").
-# Pull request: static checks and gitleaks on the diff always; the tests of the changed parts only
-# (scripts/changed-parts.mjs decides); E2E only the @smoke set, and `pnpm smoke` only when the smoke
-# script changes.
-# Push to main and manual runs: everything, gitleaks over the whole history; a failure on main opens
-# or comments a `bug` issue. Branch protection requires one check, `ci-ok`.
 name: CI
 
 on:
@@ -13,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       simulate_failure:
-        description: Fail the static job on purpose to test the failure report.
+        description: Fail the harness job on purpose to test the failure report.
         type: boolean
         default: false
 
@@ -31,147 +25,23 @@ env:
   FULL: ${{ github.event_name != 'pull_request' }}
 
 jobs:
-  changes:
+  harness:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
-    outputs:
-      api: ${{ steps.parts.outputs.api }}
-      web: ${{ steps.parts.outputs.web }}
-      e2e: ${{ steps.parts.outputs.e2e }}
-      smoke: ${{ steps.parts.outputs.smoke }}
-      lockfile: ${{ steps.parts.outputs.lockfile }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          fetch-depth: 0
-      - uses: ./.github/actions/setup
-        with:
-          install: "false"
-      - id: parts
-        env:
-          BASE: ${{ github.event.pull_request.base.sha }}
-          HEAD: ${{ github.event.pull_request.head.sha }}
+          repository: KirillSachkov/agent-kit
+          ref: 94c236f63240a78e209b14012ff2143f22cfbda8
+          path: .agent-kit-ci
+          persist-credentials: false
+      - name: Check project harness
         run: |
-          if [ "$FULL" = true ]; then
-            printf 'api=true\nweb=true\ne2e=true\nsmoke=true\nlockfile=true\n' | tee -a "$GITHUB_OUTPUT"
-          else
-            git diff --name-only "$BASE...$HEAD" | node scripts/changed-parts.mjs | tee -a "$GITHUB_OUTPUT"
-          fi
-
-  static:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: ./.github/actions/setup
-      - run: pnpm check
-      - run: pnpm test:scripts
-      - if: inputs.simulate_failure
-        run: |
-          echo "Failing on purpose: workflow_dispatch with simulate_failure."
-          exit 1
-
-  test-api:
-    needs: changes
-    if: needs.changes.outputs.api == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - name: Pull Testcontainers images in the background
-        run: |
-          for image in postgres:18.6-alpine3.24 rabbitmq:4.4.0-management-alpine testcontainers/ryuk:0.14.0; do
-            docker pull --quiet "$image" &
-          done > /dev/null
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: ./.github/actions/setup
-      # CI is set, so every run gets its own containers.
-      - run: pnpm --filter @platform/api test
-
-  test-web:
-    needs: changes
-    if: needs.changes.outputs.web == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: ./.github/actions/setup
-      # Browsers are not cached (issue #19).
-      - run: pnpm --filter @platform/web exec playwright install --with-deps chromium
-      - run: pnpm --filter @platform/web test
-      - if: failure()
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: vitest-browser-screenshots
-          path: apps/web/.vitest/
-          if-no-files-found: ignore
-
-  e2e:
-    needs: changes
-    if: needs.changes.outputs.e2e == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    env:
-      # The workflow builds and starts the stack itself: the Playwright global setup does nothing,
-      # and `pnpm smoke` reuses the built images instead of building again without the cache.
-      E2E_STACK: external
-    steps:
-      - name: Pull infrastructure images in the background
-        run: |
-          for image in postgres:18.6-alpine3.24 rabbitmq:4.4.0-management-alpine; do
-            docker pull --quiet "$image" &
-          done > /dev/null
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: ./.github/actions/setup
-      - run: cp .env.example .env
-      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
-      # Builds the Compose images with the layer cache in the GitHub Actions cache. The tags are the
-      # names Compose gives built images, so `docker compose up` uses them instead of building again.
-      - uses: docker/bake-action@59cb1203cd42bcefd40a1b6d73b589e48c86040e # v7.5.0
-        with:
-          source: .
-          files: compose.yaml
-          load: true
-          set: |
-            api.tags=ai-first-platform-api
-            api.cache-from=type=gha,scope=api
-            api.cache-to=type=gha,mode=max,scope=api
-            migrate.tags=ai-first-platform-migrate
-            migrate.cache-from=type=gha,scope=api
-            web.tags=ai-first-platform-web
-            web.cache-from=type=gha,scope=web
-            web.cache-to=type=gha,mode=max,scope=web
-      - run: docker compose up --detach --wait
-      - run: pnpm --filter @platform/e2e exec playwright install --with-deps chromium
-      - if: env.FULL != 'true'
-        run: pnpm test:e2e --grep @smoke
-      - if: env.FULL == 'true'
-        run: pnpm test:e2e
-      # On a pull request smoke runs only when the smoke script or its lock changes.
-      - if: needs.changes.outputs.smoke == 'true'
-        run: pnpm smoke
-      - if: failure()
-        run: docker compose logs --no-color > compose.log
-      - if: failure()
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: e2e-report
-          path: |
-            e2e/playwright-report/
-            e2e/test-results/
-            compose.log
-          if-no-files-found: ignore
-
-  audit:
-    needs: changes
-    if: needs.changes.outputs.lockfile == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: ./.github/actions/setup
-        with:
-          install: "false"
-      - run: pnpm audit --audit-level high
+          python3 .agent-kit-ci/tools/skills.py check --project .
+          test -s BRIEF.md
+      - name: Exercise the failure report
+        if: inputs.simulate_failure
+        run: exit 1
 
   gitleaks:
     runs-on: ubuntu-latest
@@ -196,26 +66,18 @@ jobs:
         if: env.FULL == 'true'
         run: ./gitleaks git --redact --no-banner .
 
-  # The only required check. Green only when every job succeeded or was skipped by its condition.
   ci-ok:
+    needs: [harness, gitleaks]
     if: always()
-    needs: [changes, static, test-api, test-web, e2e, audit, gitleaks]
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
-      - env:
-          NEEDS: ${{ toJSON(needs) }}
-        run: |
-          echo "$NEEDS" | jq --compact-output 'map_values(.result)'
-          # changes, static and gitleaks always run. On the full level every job must run.
-          echo "$NEEDS" | jq --exit-status --argjson full "$FULL" '
-            (map_values(.result) | to_entries | all(.value == "success" or .value == "skipped"))
-            and ([.changes, .static, .gitleaks] | all(.result == "success"))
-            and (($full | not) or (map_values(.result) | all(. == "success")))
-          ' > /dev/null
+      - run: test "$HARNESS" = success && test "$GITLEAKS" = success
+        env:
+          HARNESS: ${{ needs.harness.result }}
+          GITLEAKS: ${{ needs.gitleaks.result }}
 
   report-main-failure:
-    needs: [changes, static, test-api, test-web, e2e, audit, gitleaks]
+    needs: [harness, gitleaks]
     if: failure() && (github.ref == 'refs/heads/main' || inputs.simulate_failure)
     runs-on: ubuntu-latest
     timeout-minutes: 5

@@ -1,9 +1,0 @@
-{
-  "extends": "@platform/typescript-config/react.json",
-  "compilerOptions": {
-    "paths": { "@/*": ["./src/*"] },
-    // vitest.config.ts imports vite.config.ts with its extension: Vite loads config files natively.
-    "allowImportingTsExtensions": true
-  },
-  "include": ["src", "test", "vite.config.ts", "vitest.config.ts", "steiger.config.ts"]
-}

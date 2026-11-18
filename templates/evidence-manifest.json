@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "task": "<issue, specification, or agreed task reference>",
+  "revision": "<full verified commit or tree SHA>",
+  "verdict": "not_exercised",
+  "notes": "Both rows are examples. Replace them and the verdict with actual verification results.",
+  "scenarios": [
+    {
+      "id": "example-saved-state",
+      "actor": "Test editor",
+      "action": "Save the test note",
+      "expected": "The note shows a saved state.",
+      "observed": "The test note displayed a saved status.",
+      "result": "pass",
+      "artifacts": [
+        {
+          "kind": "screenshot",
+          "file": "saved-state.png",
+          "source": "Synthetic data in the test project",
+          "caption": "Saved status after the editor saves the test note."
+        }
+      ]
+    },
+    {
+      "id": "<task scenario identifier>",
+      "actor": "<role>",
+      "action": "<action>",
+      "expected": "<expected outcome>",
+      "observed": null,
+      "result": "not_exercised",
+      "notes": "<reason the scenario was not exercised>",
+      "artifacts": []
+    }
+  ]
+}
