@@ -1,25 +1,20 @@
-## Project context
+# AI-first Platform
 
-Before planning or implementing project work, read the agreed first-version scope linked from the notes of [map #1](https://github.com/KirillSachkov/ai-first-platform/issues/1) and the issue or spec of the task.
+Read [the product brief](BRIEF.md) before discussing the project. Start discovery from the brief and the owner's current input. The previous implementation, closed issues and historical decisions are archival. Consult them only if the owner asks for history.
 
-## Language
+## Project decisions
 
-Team language: Russian (`ru`). Write human-facing titles, headings, issues, specs, product requirements, PRs, and reports in this language. Write agent instructions, skills, and tool descriptions in English. Preserve executable syntax, identifiers, and established technical terms. Shared requirements prefer the human reader. This section owns the language setting.
+- Write replies, issues, specs and PRs in Russian. Write instructions for agents in English.
+- Use GitHub Issues for new agreed work. See [tracker conventions](docs/agents/issue-tracker.md) and [triage labels](docs/agents/triage-labels.md).
+- Start implementation only when the owner selects `implement` or `implement-spec`. Discussion and diagnosis stay within their assigned scope. Ask the owner before changing requirements.
+- Use a separate branch and worktree per implementation. Check for existing work, record the task and exact base, and preserve other writers' changes.
+- During discovery, use the installed [skills](.agents/skills/README.md). Record agreed vocabulary in GLOSSARY.md and architectural decisions under docs/adr/ when the first terms or decisions are settled.
+- Before a PR, check the pinned skills as described in the skill index and run checks for the changed behavior. Record commands, outcomes and evidence on the PR. Required CI is `ci-ok` on the current head. Add product-specific checks alongside the first implementation.
+- Owner-attention classification is disabled. The owner accepts each PR. Report the full head SHA; merge only after explicit owner approval of the handed-off head. Record the approval source and SHA on the PR, then use squash merge with `--match-head-commit`. A changed head needs fresh approval. Deployment requires a separate assignment.
 
-## Start and authority
+## Task workflow
 
-Implementation starts when the owner explicitly selects `implement` or `implement-spec`, including ordinary language that names the skill. If an implementation request names neither, propose the entrypoint and wait for selection. Issues, readiness labels, preparation, and review comments do not start implementation. An authorized spec run may delegate its agreed tickets without separate manual starts. If the client cannot invoke a skill (no Skill tool, or a user-only skill the owner names), read its `SKILL.md` and references and follow them as the assignment; an agent never selects a user-only entrypoint itself.
-
-Apply the assignment boundary to every skill: diagnosis alone does not authorize a fix; research and prototypes authorize only their agreed scope. Within a started implementation, routine commits, push, PR updates, and confirmed review/CI fixes may proceed. Requirements changes need the owner's decision. Merge permission is defined in [delivery](docs/agents/delivery.md).
-
-## Context pointers
-
-This file and `docs/agents/` own project rules. Where skill text differs from them, the project rules win.
-
-- Before preparing a task/spec or starting implementation, read [requirements](docs/agents/requirements.md) and [human participation](docs/agents/human-review.md).
-- Before writing repository files or using shared services, read [worktree ownership](docs/agents/worktrees.md).
-- Before domain design, exploration, implementation, or review, read [domain guidance](docs/agents/domain.md).
-- Before tests, Testing Decisions, or review, read [testing](docs/agents/testing.md).
-- Before implementation, a review round, or delivery, read [delivery](docs/agents/delivery.md). `README.md` is for people; agent rules live here and in `docs/agents/`.
-- Before issue/PR operations, read [tracker](docs/agents/issue-tracker.md). Before triage, read [label mappings](docs/agents/triage-labels.md).
-- Before editing or syncing skills, read [skill provenance and adaptations](.agents/skills/README.md).
+1. Agree on the outcome, scope, scenarios and decisions reserved for the owner. Link the task or record the assignment on the PR.
+2. Implement, run the affected checks and commit. Use independent Standards and Spec reviewers in parallel on the immutable diff. Record findings, make one correction pass and rerun affected checks.
+3. When an observed scenario is required, have a fresh verifier exercise it on the corrected revision. Record actor, action, expected and observed results and revision on the PR. For evidence files use the [manifest template](templates/evidence-manifest.json) with synthetic data.
+4. Deliver through a PR to main after verification. Keep the worktree for owner acceptance. Before authorized cleanup, verify integration or explicit disposition, preserve evidence and check for active writers or unpublished changes.

@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: "Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes: Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/spec asked for?). Runs both reviews in parallel sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, or asks to \"review since X\"."
+description: "Review branches, PRs or uncommitted work since a fixed point, with independent Standards and Spec reviewers. Use for change reviews or \"review since X\"."
 ---
 
 Two-axis review of the diff between an immutable reviewed head and a fixed point the caller supplies:
@@ -9,6 +9,9 @@ Two-axis review of the diff between an immutable reviewed head and a fixed point
 - **Spec**: does the code faithfully implement the originating issue / spec?
 
 Both axes run as **parallel sub-agents** so they don't pollute each other's context, then this skill aggregates their findings. Start every sub-agent with a fresh context window.
+
+Each invocation runs one review pass and returns its findings for one fix pass by the caller.
+A project may require another `code-review` invocation through its own rule.
 
 Read target root `AGENTS.md` and its review, testing, tracker and human-participation pointers. The rules may be inline or linked; do not require a particular `docs/agents` layout. A supplied specification can support review without a tracker.
 
@@ -34,8 +37,9 @@ commit/review order:
 
 Validate the endpoints and nonempty diff before delegation. Read surrounding files
 from the pinned commit/tree when the working directory differs. After pre-commit
-review, verify that the delivered commit tree matches the snapshot; changed content
-needs affected checks and review again. Record the reviewed tree and delivered commit
+review, compare the delivered commit tree with the snapshot; record corrections
+separately and run affected checks on changed content. Verify the delivered commit
+matches the frozen final content. Record the reviewed tree and delivered commit
 separately. Do not force an early branch commit to bypass the project's order.
 
 ### 2. Identify the spec source
@@ -92,7 +96,7 @@ If the spec is missing, follow the target project's review policy. When it requi
 
 ### 5. Aggregate
 
-Name checked base/head and requirement sources. For each finding, give a stable reference, triggering condition, source rule, location, and consequence. Distinguish blocking defects from optional suggestions. On re-review, read the earlier report and check corrections, affected interactions, and closure of earlier findings. Broaden the review when requirements or wider interactions change. Return the reports to the caller; reviewers remain read-only.
+Name checked base/head and requirement sources. For each finding, give a stable reference, triggering condition, source rule, location, and consequence. Distinguish blocking defects from optional suggestions. Return the reports to the caller; reviewers remain read-only.
 
 Present the two reports under `## Standards` and `## Spec` headings, verbatim or lightly cleaned. Do **not** merge or rerank findings, because the two axes are deliberately separate (see _Why two axes_).
 

@@ -1,9 +1,0 @@
-{
-  "extends": "@platform/typescript-config/node.json",
-  "compilerOptions": {
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "noEmit": true
-  },
-  "include": ["src", "scripts", "test", "vitest.config.ts"]
-}
