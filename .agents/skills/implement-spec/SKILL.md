@@ -1,11 +1,13 @@
 ---
 name: implement-spec
 description: "Execute an assigned specification and its dependency graph under the target project's start, delegation and delivery rules. Use when the owner assigns a whole spec and the project's required start is satisfied."
+disable-model-invocation: true
 ---
 
 Read root `AGENTS.md` and its requirements, worktree, testing, human-participation,
-tracker and delivery pointers. Satisfy its start rule before writing. Confirm the
-approved spec, tickets, criteria, blockers and human checkpoints. An authorized
+tracker and delivery pointers. Satisfy its start rule before writing. Read the
+approved spec and check its tickets, criteria, blockers and agreed human checkpoints.
+Ask the owner when a missing or conflicting decision blocks a ticket. An authorized
 spec run covers its agreed child tasks, not new requirements.
 
 The goal is the assigned spec delivered in the project's selected mode: ticket

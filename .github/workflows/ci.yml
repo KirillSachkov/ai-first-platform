@@ -32,7 +32,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: KirillSachkov/agent-kit
-          ref: 94c236f63240a78e209b14012ff2143f22cfbda8
+          ref: 0850d3732fd5181b0bbd7272228c2b92d3b8d0a4
           path: .agent-kit-ci
           persist-credentials: false
       - name: Check project harness
